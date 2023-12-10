@@ -1,13 +1,11 @@
-import './App.css';
-import Login from '@pages/Login';
+import React from "react";
 
-function App() {
+const App = () => {
   return (
     <>
-      <h1 className='text-4xl font-bold'>React Boilerplate</h1>
-      <Login />
+      <h1 className="text-4xl font-bold">React Boilerplate</h1>
     </>
   );
-}
+};
 
 export default App;
