@@ -1,4 +1,4 @@
-function init({ baseURL = BASE_URL, axiosOptions = { headers: {} } } = {}) {
+const init = ({ baseURL = BASE_URL, axiosOptions = { headers: {} } } = {}) => {
   api = axios.create({
     baseURL,
     ...axiosOptions,
@@ -30,4 +30,4 @@ function init({ baseURL = BASE_URL, axiosOptions = { headers: {} } } = {}) {
       return Promise.reject(error);
     }
   );
-}
+};
