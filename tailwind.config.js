@@ -4,6 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
+        primary: {
+          50: "#f3f7fb",
+          100: "#e3eef6",
+          200: "#cde2f0",
+          300: "#abcee5",
+          400: "#83b4d7",
+          500: "#669acb",
+          600: "#5382bd",
+          700: "#4870ad",
+          800: "#3f5d8e",
+          900: "#374e71",
+          950: "#253146",
+        },
         categoryBlue: "#6298CA",
         categoryGreen: "#92C046",
         categoryTurquoise: "#62B7CA",
