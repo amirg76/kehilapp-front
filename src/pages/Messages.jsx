@@ -1,5 +1,17 @@
 import React from "react";
 
-export const Messages = () => {
-  return <div>Messages</div>;
+import Sidebar from "@features/sidebar/components/Sidebar";
+
+const Messages = () => {
+  return (
+    <div>
+      {/* sidebar & content split side by side */}
+      <div className="flex">
+        <Sidebar />
+        <h1 className="uppercase">Message Cards goes here Placeholder</h1>
+      </div>
+    </div>
+  );
 };
+
+export default Messages;
