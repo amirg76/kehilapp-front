@@ -5,7 +5,7 @@ const CategoryTag = ({ category }) => {
 
     const { color, title } = category
     return (
-        <div className='h-[69px] relative right-[45px]'>
+        <div className='h-[50px] relative right-[45px] bottom-[15px]'>
             <div className='flex items-center justify-center relative top-[38px] text-center'>
             <CategoryIcon categoryTitle={title}/>
             <h6 className='font-semibold mr-2'>{title}</h6>

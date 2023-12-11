@@ -6,9 +6,9 @@ const MessagePreview = ({ message }) => {
 
     const { title, text } = message
     return (
-        <div className='w-[270px] h-[435px] border-solid border border-black border-opacity-[0.1] rounded-[30px] bg-white shadow-0 shadow-md shadow-2 shadow-opacity-10 mx-3 my-8'>
-            <div className='flex flex-col h-[485px] p-[15px] relative bottom-[50px]'>
-            <img className='rounded-[10px] h-[195px]' src="https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg" alt="demo-img" />
+        <div className='w-[270px] h-[415px] border-solid border border-black border-opacity-[0.1] rounded-[30px] bg-white shadow-0 shadow-md shadow-2 shadow-opacity-10 mx-3 my-9'>
+            <div className='flex flex-col h-[465px] p-[15px] relative bottom-[50px]'>
+            <img className='rounded-[10px] h-[195px] object-cover' src="https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg" alt="demo-img" />
             <div className='flex flex-col flex-1 mt-[10px]'>
                 <h1 className='text-[20px] font-semibold mb-[2px]'>{title}</h1>
                 <p className='font-light flex-1'>{text}</p>
