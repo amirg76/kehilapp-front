@@ -27,7 +27,7 @@ const Sidebar = () => {
 
         {/* New Message Button */}
         <button
-          className="p-2 rounded-md mx-10 bg-primary-700 hover:bg-primary-600 text-white"
+          className="p-2 rounded-md mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
           onClick={() => {
             // TODO: open a new message model on click
             console.log("Open New Message Modal");
