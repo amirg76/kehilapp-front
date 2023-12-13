@@ -16,6 +16,7 @@ const Messages = () => {
       <div className="flex">
         <Sidebar />
         {/* //TODO: Change to message cards components */}
+        <h1>HERO Section</h1>
         <h1 className="uppercase">Message Cards goes here Placeholder</h1>
       </div>
     </div>
