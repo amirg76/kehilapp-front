@@ -28,5 +28,16 @@ export default {
       },
     },
   },
+  safelist: [
+    //categories active sidebar gradient
+    "bg-gradient-to-r  from-categoryBlue",
+    "bg-gradient-to-r  from-categoryGreen",
+    "bg-gradient-to-r  from-categoryTurquoise",
+    "bg-gradient-to-r  from-categoryOrange",
+    "bg-gradient-to-r  from-categoryPurple",
+    "bg-gradient-to-r  from-categoryYellow",
+    "bg-gradient-to-r  from-categoryDarkGreen",
+    "bg-gradient-to-r  from-categoryPink",
+  ],
   plugins: [],
 };

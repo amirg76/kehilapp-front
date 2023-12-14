@@ -7,14 +7,6 @@ const SidebarItem = ({ title, color, link, icon }) => {
   //get current location
   let location = useLocation();
 
-  //returns the class name for tailwind, based on tailwind's documentation
-  const gradientActiveColorClass = (color) => {
-    if (!color) {
-      return "";
-    }
-    return `bg-gradient-to-r  from-${color}`;
-  };
-
   return (
     <li>
       <Link
@@ -22,7 +14,7 @@ const SidebarItem = ({ title, color, link, icon }) => {
         // if link is clicked apply color, otherwise apply gray bg on hover
         className={`flex text-l items-center p-2 pe-3 ${
           location.pathname === link
-            ? gradientActiveColorClass(color)
+            ? `bg-gradient-to-r  from-${color}`
             : "hover:font-bold hover:bg-gray-200"
         }`}
       >
