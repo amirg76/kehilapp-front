@@ -29,6 +29,12 @@ export default {
         categoryDarkGreen: "#62CAA5",
         categoryPink: "#CA62B3",
       },
+      boxShadow: {
+        navShadow: "0px 4px 10px 0px rgba(0,0,0,0.11)",
+      },
+      borderRadius: {
+        rightHeroImg: "5% 50% 66% 54% / 10% 61% 49% 90%  ",
+      }
     },
   },
   safelist: [

@@ -74,7 +74,7 @@ const HeroSectionLeftSvg = ({ imgfile }) => {
           id="image0_397_1762"
           width="768"
           height="512"
-          xlinkHref={`img/${imgfile}`}
+          xlinkHref="../../img/image1.png"
         />
       </defs>
     </svg>

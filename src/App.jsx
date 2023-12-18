@@ -8,8 +8,8 @@ import Navbar from "./components/navbar/Navbar";
 
 const App = () => {
   return (
-    <>
-      <Navbar/>
+    <div className="w-screen">
+      <Navbar />
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
       <Routes>
         {routeConfig.map((route, index) => (
@@ -21,7 +21,7 @@ const App = () => {
           />
         ))}
       </Routes>
-    </>
+    </div>
   );
 };
 

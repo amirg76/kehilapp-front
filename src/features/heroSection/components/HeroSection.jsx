@@ -3,7 +3,7 @@ import HeroSectionLeftSvg from "./SvgFiles/HeroSectionLeftSvg";
 import HeroSectionRightSvg from "./SvgFiles/HeroSectionRightSvg";
 const HeroSection = () => {
   return (
-    <div className="relative h-fit flex justify-between  bg-[#efefef] mr-[20rem]">
+    <div className="relative h-fit flex justify-between  bg-[#efefef]">
       <div className="h-auto w-auto ">
         <img
           className="mt-10 bg-cover bg-no-repeat"

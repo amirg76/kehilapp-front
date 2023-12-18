@@ -8,7 +8,7 @@ const Navbar = () => {
     <Disclosure as="nav">
       {({ open }) => (
         <>
-          <div className="mx-auto  max-w-8xl px-2 sm:px-6 lg:px-10 border-[#0000001a] border-solid shadow-navShadow">
+          <div className="mx-auto max-w-8xl px-2 sm:px-6 lg:px-10 border-[#0000001a] border-solid shadow-navShadow">
             <div className="relative flex h-24 items-center justify-between">
               <NavBarLogo />
               <NavBarContact />
