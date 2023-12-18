@@ -1,10 +1,11 @@
 import React from "react";
 
 const HeroSectionLeftSvg = ({ imgfile }) => {
+  // width="926"
+  // height="489"
   return (
     <svg
-      width="926"
-      height="489"
+      className="w-full h-full"
       viewBox="0 0 926 489"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -3,10 +3,11 @@ import image1 from '../../img/image1.png'
 import image2 from '../../img/image2.png'
 
 const HeroSectionRightSvg = ({ imgfile }) => {
+  // width="486"
+  // height="297"
   return (
     <svg
-      width="486"
-      height="297"
+      className="w-full h-full"
       viewBox="0 0 486 297"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
