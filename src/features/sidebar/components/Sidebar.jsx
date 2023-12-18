@@ -8,8 +8,8 @@ import categories from "@demo-data/demoCategories.json";
 
 const Sidebar = () => {
   return (
-    <aside className="h-screen w-80">
-      <nav className="h-full flex flex-col bg-white-500 border-e shadow-sm w1/2">
+    <aside>
+      <nav className="h-full flex flex-col bg-white-500 border-e shadow-sm w-[230px]">
         <h3 className="text-xl ms-3 mb-2 mt-2">קטגוריה</h3>
         {/* nav links */}
         <ul className="mb-5 ms-2">

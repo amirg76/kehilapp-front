@@ -8,7 +8,7 @@ import Navbar from "./components/navbar/Navbar";
 
 const App = () => {
   return (
-    <div className="w-screen">
+    <div className="w-screen flex flex-col">
       <Navbar />
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
       <Routes>

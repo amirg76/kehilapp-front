@@ -13,7 +13,7 @@ const Messages = () => {
   }, [categoryName]);
 
   return (
-    <div className="flex">
+    <div className="flex flex-1">
       {/* sidebar & content split side by side */}
       <Sidebar />
       <div className="flex flex-col bg-[#efefef]">
