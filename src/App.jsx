@@ -8,6 +8,7 @@ import routeConfig from "@routes/routeConfig";
 const App = () => {
   return (
     <>
+    {/* //TODO: replcae div component with Navbar*/}
       <div className="h-[64px] bg-gray-500">NAVBAR COMPONENT</div>
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
       <Routes>

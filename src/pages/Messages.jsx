@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Sidebar from "@features/sidebar/components/Sidebar";
+import MessageList from '../features/messages/components/MessageList'
 
 const Messages = () => {
   let { categoryName } = useParams();
@@ -17,7 +18,7 @@ const Messages = () => {
         <Sidebar />
         {/* //TODO: Change to message cards components */}
         <h1>HERO Section</h1>
-        <h1 className="uppercase">Message Cards goes here Placeholder</h1>
+        <MessageList />
       </div>
     </div>
   );

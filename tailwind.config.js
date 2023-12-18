@@ -2,6 +2,9 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
+    fontFamily: {
+      sans: ['Assistant', 'sans-serif'],
+    },
     extend: {
       colors: {
         primary: {
