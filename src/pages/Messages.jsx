@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Sidebar from "@features/sidebar/components/Sidebar";
 import MessageList from '../features/messages/components/MessageList'
+import HeroSection from "../features/heroSection/components/HeroSection";
 
 const Messages = () => {
   let { categoryName } = useParams();
@@ -12,12 +13,11 @@ const Messages = () => {
   }, [categoryName]);
 
   return (
-    <div>
+    <div className="flex">
       {/* sidebar & content split side by side */}
-      <div className="flex">
-        <Sidebar />
-        {/* //TODO: Change to message cards components */}
-        <h1>HERO Section</h1>
+      <Sidebar />
+      <div className="flex flex-col">
+        <HeroSection />
         <MessageList />
       </div>
     </div>
