@@ -1,4 +1,6 @@
 import React from "react";
+import image1 from '../../img/image1.png'
+import image2 from '../../img/image2.png'
 
 const HeroSectionRightSvg = ({ imgfile }) => {
   return (
@@ -75,7 +77,7 @@ const HeroSectionRightSvg = ({ imgfile }) => {
           width="768"
           height="512"
           // xlinkHref={`img/${imgfile}`}
-          xlinkHref="img/tree.png"
+          xlinkHref={image2}
         />
       </defs>
     </svg>

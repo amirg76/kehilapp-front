@@ -16,7 +16,7 @@ const Messages = () => {
     <div className="flex">
       {/* sidebar & content split side by side */}
       <Sidebar />
-      <div className="flex flex-col">
+      <div className="flex flex-col bg-[#efefef]">
         <HeroSection />
         <MessageList />
       </div>
