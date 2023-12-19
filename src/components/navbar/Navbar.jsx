@@ -5,7 +5,7 @@ import NavBarButton from "./NavBarButton";
 
 const Navbar = () => {
   return (
-    <Disclosure as="nav">
+    <Disclosure as="nav" className=" sticky top-0 right-0 z-20 bg-white">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-8xl px-2 sm:px-6 lg:px-10 border-[#0000001a] border-solid shadow-navShadow">

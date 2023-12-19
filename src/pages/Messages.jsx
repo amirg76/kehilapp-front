@@ -13,10 +13,10 @@ const Messages = () => {
   }, [categoryName]);
 
   return (
-    <div className="flex flex-1 w-full">
+    <div className="flex flex-1 w-full bg-[#efefef]">
       {/* sidebar & content split side by side */}
       <Sidebar />
-      <div className="flex flex-col bg-[#efefef]">
+      <div className="flex flex-col">
         <HeroSection />
         <MessageList />
       </div>
