@@ -12,7 +12,7 @@ const HeroSection = () => {
         src={logoKisufim}
         alt="Your Company"
       />
-     <div>
+     <div className="w-full h-full">
         <div className="absolute bottom-0 left-[60%] h-1/2 w-2/5 z-10">
           <HeroSectionRightSvg imgfile="tree.png" />
         </div>
