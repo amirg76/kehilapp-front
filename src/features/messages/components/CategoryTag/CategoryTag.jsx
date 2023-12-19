@@ -7,7 +7,7 @@ const CategoryTag = ({ category }) => {
     return (
         <div className='h-[50px] relative right-[45px] bottom-[15px]'>
             <div className='flex items-center justify-center relative top-[38px] text-center'>
-            <CategoryIcon categoryTitle={title}/>
+            <CategoryIcon categoryTitle={title} color="white"/>
             <h6 className='font-semibold mr-2'>{title}</h6>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" width="106" height="69" viewBox="0 0 106 69" fill="none">
