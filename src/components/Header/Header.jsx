@@ -8,7 +8,7 @@ import NavBarContact from './NavBarContact';
 import NavBarButton from './NavBarButton';
 import Sidebar from '../../features/sidebar/components/Sidebar';
 
-export function Header() {
+const Header = () => {
 
     const [open, setOpen] = useState(false)
 
@@ -40,16 +40,4 @@ export function Header() {
     )
 }
 
-// .links{
-//     flex-direction  : column;
-//         position        : fixed;
-//         right           : 0;
-//         top             : 0;
-//         background-color: rgba(255, 255, 255, .9);
-//         height          : 100vh;
-//         border-left     : 1px solid #ebebeb;
-//         box-shadow      : 0px 0px 10px rgba(0, 0, 0, .16);
-//         transform       : translateX(100%);
-//         transition      : transform .6s;
-//         z-index         : 2;
-// }
+export default Header;
