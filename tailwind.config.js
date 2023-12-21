@@ -6,6 +6,7 @@ export default {
       sans: ['Assistant', 'sans-serif'],
     },
     screens: {
+      'xs': '500px',
       'sm': '640px',
       // => @media (min-width: 640px) { ... }
 
