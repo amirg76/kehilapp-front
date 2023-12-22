@@ -1,6 +1,7 @@
 const getEnvVariable = (varName) => {
+  console.log(varName);
   let value = import.meta.env[varName];
-
+  console.log(value);
   if (process.env.NODE_ENV === "production") {
     value = process.env[varName];
   }
@@ -12,5 +13,5 @@ const getEnvVariable = (varName) => {
 };
 
 export const getBaseUrl = () => {
-  return getEnvVariable("REACT_APP_VITE_REACT_APP_BASE_URL");
+  return getEnvVariable("VITE_REACT_APP_BASE_URL");
 };
