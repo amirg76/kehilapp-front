@@ -1,5 +1,6 @@
 const getEnvVariable = (varName) => {
-  const value = import.meta.env[varName];
+  let value = import.meta.env[varName];
+
   if (process.env.NODE_ENV === "production") {
     value = process.env[varName];
   }
