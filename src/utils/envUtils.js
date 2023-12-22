@@ -8,5 +8,5 @@ const getEnvVariable = (varName) => {
 };
 
 export const getBaseUrl = () => {
-  return getEnvVariable("VITE_REACT_APP_BASE_URL");
+  return getEnvVariable("REACT_APP_VITE_REACT_APP_BASE_URL");
 };
