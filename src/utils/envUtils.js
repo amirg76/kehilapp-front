@@ -1,11 +1,7 @@
 const getEnvVariable = (varName) => {
   console.log(varName);
   let value = import.meta.env[varName];
-  console.log("DEV:" + value);
-  if (process.env.NODE_ENV === "production") {
-    value = process.env[varName];
-    console.log("PROD" + value);
-  }
+  console.log("BASE-URL:" + value);
 
   if (!value) {
     throw new Error(`${varName} is not defined in .env file`);
