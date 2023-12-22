@@ -1,9 +1,10 @@
 const getEnvVariable = (varName) => {
   console.log(varName);
   let value = import.meta.env[varName];
-  console.log(value);
+  console.log("DEV:" + value);
   if (process.env.NODE_ENV === "production") {
     value = process.env[varName];
+    console.log("PROD" + value);
   }
 
   if (!value) {
