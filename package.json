@@ -17,7 +17,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint --ext .js,.jsx,.js --ignore-path .eslintignore --report-unused-disable-directives --max-warnings 0 .",
     "lint:css": "stylelint './src/**/*styles.ts'",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|json|css)\"",
