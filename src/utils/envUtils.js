@@ -1,7 +1,6 @@
 const getEnvVariable = (varName) => {
   console.log(varName);
   let value = import.meta.env[varName];
-  console.log("BASE-URL:" + value);
 
   if (!value) {
     throw new Error(`${varName} is not defined in .env file`);
