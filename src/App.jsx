@@ -13,7 +13,7 @@ const App = () => {
   return (
     <>
       {/* aws check */}
-      {messages.data && <h1>{messages.data[1].title}</h1>}
+      {messages.data && <h1>{messages.data[0].title}</h1>}
       <h1 className="text-4xl font-bold">React Boilerplate</h1>
     </>
   );
