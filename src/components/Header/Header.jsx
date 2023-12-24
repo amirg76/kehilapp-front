@@ -31,7 +31,7 @@ const Header = () => {
                    ${open ? 'translate-x-0' : 'translate-x-[-100%] md:flex'}`}>
                 </div> */}
                 <Sidebar classes={`max-md:flex flex-column fixed left-0 top-0 bg-white opacity-90
-                   h-screen border-l-[1px]-[#ebebeb] z-30 transition-transform duration-600
+                   h-screen border-l-[1px]-[#ebebeb] z-30 transition-transform duration-600 pt-3
                    ${open ? 'translate-x-0' : 'translate-x-[-100%] md:flex'}`} />
                 {/* <MenuIcon className="hamburger" onClick={onOpenNavbar}></MenuIcon> */}
                 <FontAwesomeIcon className='md:hidden' onClick={onOpenNavbar} icon={faBars} />

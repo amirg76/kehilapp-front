@@ -29,7 +29,7 @@ const MessagePreview = ({ message }) => {
 
     return (
         <div className={`w-[270px] max-sm:w-full border-solid border border-black border-opacity-[0.1] rounded-[30px]
-         bg-white shadow-0 shadow-md shadow-2 shadow-opacity-10 mx-3 my-9`} style={{ height: `${containerHeight}px`, position:'relative', zIndex:'1'}}>
+         bg-white shadow-0 shadow-md shadow-2 shadow-opacity-10 mx-3 my-10`} style={{ height: `${containerHeight}px`, position:'relative', zIndex:'1'}}>
             <div className='flex flex-col p-[15px] relative bottom-[50px]' ref={contentRef}>
                 <img className='rounded-[10px] h-[195px] object-cover' src="https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg" alt="demo-img" />
                 <div className='flex flex-col flex-1 mt-[10px]'>
