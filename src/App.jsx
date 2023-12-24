@@ -3,7 +3,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
 // import Navbar from "./components/navbar/Navbar";
-import Header from "./components/Header/Header";
+import Header from './components/header/Header';
 //components
 //TODO: import NAVBAR
 
