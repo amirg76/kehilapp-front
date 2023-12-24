@@ -8,7 +8,7 @@ import categories from "@demo-data/demoCategories.json";
 
 const Sidebar = ({ classes }) => {
   return (
-    <aside className={`${classes ? classes : 'hidden md:block'}`}>
+    <aside className={`${classes || 'hidden md:block'}`}>
       <nav className="h-full flex flex-col border-e shadow-sm w-[230px] sticky right-0 top-24">
         <h3 className="text-xl ms-3 mb-2 mt-2">קטגוריה</h3>
         {/* nav links */}
