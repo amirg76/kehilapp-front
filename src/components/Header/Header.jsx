@@ -6,7 +6,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import NavBarLogo from './NavBarLogo';
 import NavBarContact from './NavBarContact';
 import NavBarButton from './NavBarButton';
-import Sidebar from '../../features/sidebar/components/Sidebar';
+import Sidebar from '@features/sidebar/components/Sidebar';
 
 const Header = () => {
 
