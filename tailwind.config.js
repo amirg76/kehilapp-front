@@ -5,6 +5,23 @@ export default {
     fontFamily: {
       sans: ['Assistant', 'sans-serif'],
     },
+    screens: {
+      'xs': '500px',
+      'sm': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'md': '825px',
+      // => @media (min-width: 768px) { ... }
+
+      'lg': '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      'xl': '1280px',
+      // => @media (min-width: 1280px) { ... }
+
+      '2xl': '1536px',
+      // => @media (min-width: 1536px) { ... }
+    },
     extend: {
       colors: {
         primary: {
@@ -29,6 +46,12 @@ export default {
         categoryDarkGreen: "#62CAA5",
         categoryPink: "#CA62B3",
       },
+      boxShadow: {
+        navShadow: "0px 4px 10px 0px rgba(0,0,0,0.11)",
+      },
+      borderRadius: {
+        rightHeroImg: "5% 50% 66% 54% / 10% 61% 49% 90%  ",
+      }
     },
   },
   safelist: [

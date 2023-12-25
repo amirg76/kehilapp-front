@@ -1,22 +1,26 @@
 import React from "react";
 import HeroSectionLeftSvg from "./SvgFiles/HeroSectionLeftSvg";
 import HeroSectionRightSvg from "./SvgFiles/HeroSectionRightSvg";
+import logoKisufim from "../img/logo-kibbuttz-transpert.png"
+import rightImg from "../img/image1.png"
+import leftImg from "../img/image2.png"
+
 const HeroSection = () => {
   return (
-    <div className="relative h-fit flex justify-between  bg-[#efefef] mr-[20rem]">
-      <div className="h-auto w-auto ">
-        <img
-          className="mt-10 bg-cover bg-no-repeat"
-          src="img/logo-kibbuttz-transpert.png"
-          alt="Your Company"
-        />
-      </div>
-
-      <div className="absolute bottom-0 right-[20rem]   ">
-        <HeroSectionRightSvg imgfile="tree.png" />
-      </div>
-      <div>
-        <HeroSectionLeftSvg imgfile="eat.png" />
+    <div className="relative sm:h-[50vh] flex flex-col my-5 sm:flex-row sm:justify-between md:mr-5">
+      {/* <div className="w-[10em] h-[5em]"> */}
+      <img
+        className="object-cover w-[10em] h-[5em]"
+        src={logoKisufim}
+        alt="Your Company"
+      />
+      <div className="w-full h-full">
+        <div className="w-full h-full sm:absolute bottom-0 left-[60%] sm:h-1/2 sm:w-2/5 z-10">
+          <HeroSectionRightSvg imgPath={rightImg} />
+        </div>
+        <div className="hidden sm:block h-full relative bottom-0 left-0">
+          <HeroSectionLeftSvg imgPath={leftImg} />
+        </div>
       </div>
     </div>
   );

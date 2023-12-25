@@ -6,10 +6,10 @@ import SidebarItem from "@features/sidebar/components/SidebarItem";
 //demo data
 import categories from "@demo-data/demoCategories.json";
 
-const Sidebar = () => {
+const Sidebar = ({ classes }) => {
   return (
-    <aside className="h-screen w-80">
-      <nav className="h-full flex flex-col bg-white-500 border-e shadow-sm w1/2">
+    <aside className={`${classes || 'hidden md:block'}`}>
+      <nav className="h-full flex flex-col border-e shadow-sm w-[230px] sticky right-0 top-24">
         <h3 className="text-xl ms-3 mb-2 mt-2">קטגוריה</h3>
         {/* nav links */}
         <ul className="mb-5 ms-2">

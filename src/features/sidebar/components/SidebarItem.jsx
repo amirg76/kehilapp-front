@@ -2,6 +2,7 @@ import React from "react";
 import placeholderIcon from "../icons/placeholderIcon.svg";
 //react router
 import { useLocation, Link } from "react-router-dom";
+import CategoryIcon from "../../../components/ui/CategoryIcon/CategoryIcon";
 
 const SidebarItem = ({ title, color, link, icon }) => {
   //get current location
@@ -19,8 +20,9 @@ const SidebarItem = ({ title, color, link, icon }) => {
         }`}
       >
         {/* //TODO: Replace the img tag with a custom component that renders the icon */}
-        {icon && <img src={placeholderIcon} alt="icon" className="me-2" />}
-        {title}
+        {/* {icon && <img src={placeholderIcon} alt="icon" className="me-2" />} */}
+        <CategoryIcon categoryTitle={title} color="#545454"/>
+       <span className="mr-3">{title}</span> 
       </Link>
     </li>
   );

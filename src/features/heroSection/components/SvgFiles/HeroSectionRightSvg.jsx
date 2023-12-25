@@ -1,10 +1,9 @@
 import React from "react";
 
-const HeroSectionRightSvg = ({ imgfile }) => {
+const HeroSectionRightSvg = ({ imgPath }) => {
   return (
     <svg
-      width="486"
-      height="297"
+      className="w-full h-full"
       viewBox="0 0 486 297"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -74,8 +73,7 @@ const HeroSectionRightSvg = ({ imgfile }) => {
           id="image0_397_1763"
           width="768"
           height="512"
-          // xlinkHref={`img/${imgfile}`}
-          xlinkHref="img/tree.png"
+          xlinkHref={imgPath}
         />
       </defs>
     </svg>
