@@ -13,25 +13,23 @@ export default defineConfig({
   ],
 
   resolve: {
-    alias: [
-      {
-        "@": path.resolve(__dirname, "src"),
-        "@components": path.resolve(__dirname, "src/components"),
-        "@features": path.resolve(__dirname, "src/features"),
-        "@pages": path.resolve(__dirname, "src/pages"),
-        "@context": path.resolve(__dirname, "src/context"),
-        "@hooks": path.resolve(__dirname, "src/hooks"),
-        "@utils": path.resolve(__dirname, "src/utils"),
-        "@assets": path.resolve(__dirname, "src/assets"),
-        "@types": path.resolve(__dirname, "src/types"),
-        "@api": path.resolve(__dirname, "src/api"),
-        "@routes": path.resolve(__dirname, "src/routes"),
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      "@components": path.resolve(__dirname, "src/components"),
+      "@features": path.resolve(__dirname, "src/features"),
+      "@pages": path.resolve(__dirname, "src/pages"),
+      "@context": path.resolve(__dirname, "src/context"),
+      "@hooks": path.resolve(__dirname, "src/hooks"),
+      "@utils": path.resolve(__dirname, "src/utils"),
+      "@assets": path.resolve(__dirname, "src/assets"),
+      "@types": path.resolve(__dirname, "src/types"),
+      "@api": path.resolve(__dirname, "src/api"),
+      "@routes": path.resolve(__dirname, "src/routes"),
 
-        // ... add more aliases as needed. Dont forget to add it to the tsconfig as well
-        find: "./runtimeConfig",
-        replacement: "./runtimeConfig.browser",
-      },
-    ],
+      // ... add more aliases as needed. Dont forget to add it to the tsconfig as well
+      find: "./runtimeConfig",
+      replacement: "./runtimeConfig.browser",
+    },
   },
   build: {
     outDir: "build",
