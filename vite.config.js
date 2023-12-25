@@ -25,6 +25,7 @@ export default defineConfig({
       "@types": path.resolve(__dirname, "src/types"),
       "@api": path.resolve(__dirname, "src/api"),
       "@routes": path.resolve(__dirname, "src/routes"),
+      "@demo-data": path.resolve(__dirname, "src/demo-data"),
 
       // ... add more aliases as needed. Dont forget to add it to the tsconfig as well
       find: "./runtimeConfig",
