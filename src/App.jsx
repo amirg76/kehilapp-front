@@ -2,8 +2,7 @@ import React from "react";
 //routing
 import { Routes, Route } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
-// import Navbar from "./components/navbar/Navbar";
-import Header from './components/header/Header';
+import Header from "@components/header/Header";
 //components
 //TODO: import NAVBAR
 
