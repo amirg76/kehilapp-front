@@ -11,10 +11,10 @@ const SidebarItem = ({ title, color, link, icon }) => {
   return (
     <li>
       <Link
-        to={`${link}`}
+        to={`${link}/`}
         // if link is clicked apply color, otherwise apply gray bg on hover
         className={`flex text-l items-center p-2 pe-3 ${
-          location.pathname === link
+          location.pathname === `${link}/`
             ? `bg-gradient-to-r  from-${color}`
             : "hover:font-bold hover:bg-gray-200"
         }`}
