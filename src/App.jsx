@@ -10,7 +10,6 @@ import Header from './components/header/Header';
 const App = () => {
   return (
     <div className="w-screen flex flex-col">
-      {/* <Navbar /> */}
       <Header />
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
       <Routes>

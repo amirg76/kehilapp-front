@@ -2,6 +2,8 @@ import React from "react";
 import HeroSectionLeftSvg from "./SvgFiles/HeroSectionLeftSvg";
 import HeroSectionRightSvg from "./SvgFiles/HeroSectionRightSvg";
 import logoKisufim from "../img/logo-kibbuttz-transpert.png"
+import rightImg from "../img/image1.png"
+import leftImg from "../img/image2.png"
 
 const HeroSection = () => {
   return (
@@ -14,10 +16,10 @@ const HeroSection = () => {
       />
       <div className="w-full h-full">
         <div className="w-full h-full sm:absolute bottom-0 left-[60%] sm:h-1/2 sm:w-2/5 z-10">
-          <HeroSectionRightSvg imgfile="tree.png" />
+          <HeroSectionRightSvg imgPath={rightImg} />
         </div>
         <div className="hidden sm:block h-full relative bottom-0 left-0">
-          <HeroSectionLeftSvg imgfile="eat.png" />
+          <HeroSectionLeftSvg imgPath={leftImg} />
         </div>
       </div>
     </div>

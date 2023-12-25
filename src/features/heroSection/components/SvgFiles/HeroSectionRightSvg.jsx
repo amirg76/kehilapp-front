@@ -1,10 +1,6 @@
 import React from "react";
-import image1 from '../../img/image1.png'
-import image2 from '../../img/image2.png'
 
-const HeroSectionRightSvg = ({ imgfile }) => {
-  // width="486"
-  // height="297"
+const HeroSectionRightSvg = ({ imgPath }) => {
   return (
     <svg
       className="w-full h-full"
@@ -77,8 +73,7 @@ const HeroSectionRightSvg = ({ imgfile }) => {
           id="image0_397_1763"
           width="768"
           height="512"
-          // xlinkHref={`img/${imgfile}`}
-          xlinkHref={image2}
+          xlinkHref={imgPath}
         />
       </defs>
     </svg>
