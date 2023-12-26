@@ -3,15 +3,20 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
 import Header from "@components/Header/Header";
+import MessageForm from "@features/messageForm/components/MessageForm/MessageForm";
+
 //components
 //TODO: import NAVBAR
 
 const App = () => {
   return (
-    <div className="w-screen flex flex-col">
+    <div className="w-screen flex flex-col ">
       <Header />
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
-      <Routes>
+      <div className=" flex flex-col items-center">
+        <MessageForm />
+      </div>
+      {/* <Routes>
         {routeConfig.map((route, index) => (
           <Route
             key={index}
@@ -20,7 +25,7 @@ const App = () => {
             exact={route.exact}
           />
         ))}
-      </Routes>
+      </Routes> */}
     </div>
   );
 };
