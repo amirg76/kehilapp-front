@@ -10,17 +10,17 @@ const routeConfig = [
   {
     // Main Page - Redirect to the messages page if user
     path: ROOT,
-    element: <Navigate to={MESSAGES + MAIN_CATEGORY} />,
+    element: <Navigate to={MESSAGES} />,
     exact: true,
   },
   {
     // messages page, redirects to the main category
     path: MESSAGES,
-    element: <Navigate to={MESSAGES + MAIN_CATEGORY} />,
+    element: <Messages />,
     exact: true,
   },
   {
-    path: `${MESSAGES}/:categoryName`,
+    path: `${MESSAGES}/:categoryId`,
     element: <Messages />,
     exact: true,
   },
