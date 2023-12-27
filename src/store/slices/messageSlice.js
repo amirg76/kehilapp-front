@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import demoMessages from '../../demo-data/demoData.json'
 
 const initialState = {
-    messages: demoMessages,
-    isWriting: false
+    messages: [],
 }
 
 const messageSlice = createSlice({
@@ -30,3 +28,4 @@ const messageSlice = createSlice({
 })
 
 export const messageReducer = messageSlice.reducer
+export const messageActions = messageSlice.actions

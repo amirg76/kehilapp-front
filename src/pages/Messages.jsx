@@ -4,14 +4,18 @@ import { useSelector, useDispatch } from 'react-redux'
 import Sidebar from "@features/sidebar/components/Sidebar";
 import MessageList from '../features/messages/components/MessageList'
 import HeroSection from "../features/heroSection/components/HeroSection";
+import demoMessages from '../demo-data/demoData.json'
+import { messageActions } from '../store/slices/messageSlice'
 
 const Messages = () => {
   let { categoryName } = useParams();
 
   const messages = useSelector(state => state.message.messages)
+  const dispatch = useDispatch()
 
   //TODO: fetch messages based on the "categoryName" to the API
   useEffect(() => {
+    dispatch(messageActions.loadMessages(demoMessages))
     console.log(`fetching ${categoryName} messages!`);
   }, [categoryName]);
 
