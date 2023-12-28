@@ -13,10 +13,8 @@ const App = () => {
     <div className="w-screen flex flex-col ">
       <Header />
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
-      <div className=" flex flex-col items-center">
-        <MessageForm />
-      </div>
-      {/* <Routes>
+      <div className=" flex flex-col items-center">{/* <MessageForm /> */}</div>
+      <Routes>
         {routeConfig.map((route, index) => (
           <Route
             key={index}
@@ -25,7 +23,7 @@ const App = () => {
             exact={route.exact}
           />
         ))}
-      </Routes> */}
+      </Routes>
     </div>
   );
 };
