@@ -5,18 +5,24 @@ import Sidebar from "@features/sidebar/components/Sidebar";
 import MessageList from "../features/messages/components/MessageList";
 import HeroSection from "../features/heroSection/components/HeroSection";
 // api url
-import { MESSAGES_URL } from "@api/apiConstants.js";
+import {
+  LATEST_MESSAGES_URL,
+  MESSAGES_BY_CATEGORY_URL,
+} from "@api/apiConstants.js";
 const Messages = () => {
   let { categoryId } = useParams();
   const [messages, setMessages] = useState(null);
-  //TODO: fetch messages based on the "categoryName" to the API
+
   useEffect(() => {
     //! demo fetch, to be used only as demo, replace with react query.
     const getData = async () => {
+      let url;
       if (!categoryId) {
-        categoryId = "all";
+        url = LATEST_MESSAGES_URL;
+      } else {
+        url = `${MESSAGES_BY_CATEGORY_URL}/${categoryId}`;
       }
-      const response = await fetch(`${MESSAGES_URL}/category/${categoryId}`);
+      const response = await fetch(url);
       if (response.ok) {
         let json = await response.json();
         setMessages(json.data);
