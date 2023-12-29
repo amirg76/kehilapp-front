@@ -1,13 +1,24 @@
 import React, { useState } from "react";
 import MessageFormHeader from "../MessageFormHeader";
 import MessageFormSection from "../MessageFormSection";
+import ModalDialog from "../../../../components/ui/ModalDialog/ModalDialog";
 
-const MessageForm = () => {
+const MessageForm = ({ isModalOpen, setIsModalOpen }) => {
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
-    <div className="bg-[#EFEFEF] my-8 p-8 rounded-3xl shadow-md md:w-1/3">
-      <MessageFormHeader />
-      <MessageFormSection />
-    </div>
+    <>
+      <ModalDialog
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      >
+        <div className="bg-[#EFEFEF] my-8 p-8 rounded-3xl shadow-md mx-5 xs:mx-14 lg:mx-0 lg:max-w-screen-md ">
+          <MessageFormHeader closeModal={closeModal} />
+          <MessageFormSection />
+        </div>
+      </ModalDialog>
+    </>
   );
 };
 

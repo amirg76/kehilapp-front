@@ -1,11 +1,16 @@
 import React from "react";
 
-const MessageFormHeader = () => {
+const MessageFormHeader = ({ closeModal }) => {
   return (
     <div className="flex justify-between items-center ">
       <h2 className="text-2xl text-gray-500 font-semibold">כתיבת הודעה</h2>
       {/* Close Button */}
-      <button className="text-gray-400 hover:text-gray-800 cursor-pointer mb-10">
+      <button
+        className="text-gray-400 hover:text-gray-800 cursor-pointer mb-10 "
+        onClick={() => {
+          closeModal();
+        }}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"
