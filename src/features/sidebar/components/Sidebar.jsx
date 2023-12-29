@@ -1,25 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // routes
 import { MESSAGES } from "@routes/routeConstants";
 // components
 import SidebarItem from "@features/sidebar/components/SidebarItem";
-//demo data
-import categories from "@demo-data/demoCategories.json";
+// api url
+import { CATEGORY_URL } from "@api/apiConstants.js";
 
 const Sidebar = ({ classes }) => {
+  const [categories, setCategories] = useState(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      //! demo fetch, to be used only as demo, replace with react query.
+      const response = await fetch(CATEGORY_URL);
+      if (response.ok) {
+        let json = await response.json();
+        setCategories(json.data);
+      }
+    };
+    getData();
+  }, []);
+
   return (
-    <aside className={`${classes || 'hidden md:block'}`}>
+    <aside className={`${classes || "hidden md:block"}`}>
       <nav className="h-full flex flex-col border-e shadow-sm w-[230px] sticky right-0 top-24">
         <h3 className="text-xl ms-3 mb-2 mt-2">קטגוריה</h3>
         {/* nav links */}
         <ul className="mb-5 ms-2">
+          <SidebarItem
+            key="0"
+            title="ראשי"
+            color="categoryBlue"
+            link={`${MESSAGES}`}
+            icon="ראשי"
+          />
+
           {categories &&
             categories.map((category) => (
               <SidebarItem
                 key={category._id}
                 title={category.title}
-                color={category.color}
-                link={`${MESSAGES}/${category.link}`}
+                color={category.categoryColor}
+                link={`${MESSAGES}/${category._id}`}
                 icon={category.icon}
               />
             ))}
