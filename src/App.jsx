@@ -5,9 +5,6 @@ import routeConfig from "@routes/routeConfig";
 import Header from "@components/Header/Header";
 import MessageForm from "@features/messageForm/components/MessageForm/MessageForm";
 
-//components
-//TODO: import NAVBAR
-
 const App = () => {
   return (
     <div className="w-screen flex flex-col ">
