@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // routes
 import { MESSAGES } from "@routes/routeConstants";
 // components
@@ -10,6 +10,19 @@ import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
 const Sidebar = ({ classes }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [categories, setCategories] = useState(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      //! demo fetch, to be used only as demo, replace with react query.
+      const response = await fetch(CATEGORY_URL);
+      if (response.ok) {
+        let json = await response.json();
+        setCategories(json.data);
+      }
+    };
+    getData();
+  }, []);
   return (
     <aside className={`${classes || "hidden md:block"}`}>
       <nav className="h-full flex flex-col border-e shadow-sm w-[230px] sticky right-0 top-24">
