@@ -2,7 +2,7 @@ import React from "react";
 // routing
 import { Navigate } from "react-router-dom";
 // routes constants
-import { ROOT, MESSAGES, MAIN_CATEGORY } from "@routes/routeConstants.js";
+import { ROOT, MESSAGES } from "@routes/routeConstants.js";
 // pages
 import Messages from "@pages/Messages.jsx";
 
