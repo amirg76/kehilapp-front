@@ -6,7 +6,13 @@ import SidebarItem from "@features/sidebar/components/SidebarItem";
 // api url
 import { CATEGORY_URL } from "@api/apiConstants.js";
 
+import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
+
 const Sidebar = ({ classes }) => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
   const [categories, setCategories] = useState(null);
 
   useEffect(() => {
@@ -20,8 +26,7 @@ const Sidebar = ({ classes }) => {
     };
     getData();
   }, []);
-
-  return (
+ return (
     <aside className={`${classes || "hidden md:block"}`}>
       <nav className="h-full flex flex-col border-e shadow-sm w-[230px] sticky right-0 top-24">
         <h3 className="text-xl ms-3 mb-2 mt-2">קטגוריה</h3>
@@ -53,10 +58,17 @@ const Sidebar = ({ classes }) => {
           onClick={() => {
             // TODO: open a new message model on click
             console.log("Open New Message Modal");
+            setIsModalOpen(true);
           }}
         >
           הוסף הודעה
         </button>
+        {isModalOpen && (
+          <MessageForm
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+          />
+        )}
         <hr className="mt-5" />
       </nav>
     </aside>
