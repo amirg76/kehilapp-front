@@ -4,9 +4,6 @@ import { Routes, Route } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
 import Header from "@components/Header/Header";
 
-//components
-//TODO: import NAVBAR
-
 const App = () => {
   return (
     <div className="w-screen flex flex-col ">
