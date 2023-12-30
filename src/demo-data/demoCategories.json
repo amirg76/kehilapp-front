@@ -1,0 +1,51 @@
+[
+  {
+    "_id": "1",
+    "title": "ראשי",
+    "color": "categoryBlue",
+    "link": "main",
+    "icon": "icon name"
+  },
+  {
+    "_id": "3",
+    "title": "בריאות",
+    "color": "categoryTurquoise",
+    "link": "health",
+    "icon": "icon name"
+  },
+  {
+    "_id": "4",
+    "title": "חינוך",
+    "color": "categoryOrange",
+    "link": "education",
+    "icon": "icon name"
+  },
+  {
+    "_id": "5",
+    "title": "תרבות",
+    "color": "categoryPurple",
+    "link": "culture",
+    "icon": "icon name"
+  },
+  {
+    "_id": "6",
+    "title": "טיפולים אלטרנטיביים",
+    "color": "categoryYellow",
+    "link": "therapies",
+    "icon": "icon name"
+  },
+  {
+    "_id": "7",
+    "title": "זכויות",
+    "color": "categoryDarkGreen",
+    "link": "rights",
+    "icon": "icon name"
+  },
+  {
+    "_id": "8",
+    "title": "דור צעיר",
+    "color": "categoryPink",
+    "link": "young",
+    "icon": "icon name"
+  }
+]
