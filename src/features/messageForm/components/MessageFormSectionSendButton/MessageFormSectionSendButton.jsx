@@ -1,6 +1,6 @@
 import React from "react";
 
-const MessageFormSectionSendButton = () => {
+const MessageFormSectionSendButton = ({ formData }) => {
   return (
     <>
       {/* Send Button */}

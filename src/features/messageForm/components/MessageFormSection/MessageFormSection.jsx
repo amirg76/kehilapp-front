@@ -3,15 +3,20 @@ import MessageFormSectionCategory from "../MessageFormSectionCategory/MessageFor
 import MessageFormSectionTextArea from "../MessageFormSectionTextArea/MessageFormSectionTextArea";
 import MessageFormSectionFile from "../MessageFormSectionFile";
 import MessageFormSectionSendButton from "../MessageFormSectionSendButton/MessageFormSectionSendButton";
+import MessageFormSectionTitle from "../MessageFormSectionTitle";
 
-const MessageFormSection = () => {
+const MessageFormSection = ({ categories }) => {
   const [formData, setFormData] = useState({
-    category: "",
-    content: "כתיבת הודעה...",
+    categorie: "",
+    title: "",
+    content: "",
     imgLink: "",
   });
 
   const handleChange = (e) => {
+    console.log(e.target.name);
+    console.log(e.target.value);
+
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -25,15 +30,24 @@ const MessageFormSection = () => {
       onSubmit={handleSubmit}
       className="grid justify-items-stretch "
     >
-      <MessageFormSectionCategory />
+      <MessageFormSectionTitle
+        handleChange={handleChange}
+        title={formData.title}
+      />
       <MessageFormSectionTextArea
         handleChange={handleChange}
-        formData={formData}
+        content={formData.content}
+      />
+      <MessageFormSectionCategory
+        categories={categories}
+        handleChange={handleChange}
+        categorie={formData.categorie}
       />
       <MessageFormSectionFile
         handleChange={handleChange}
         formData={formData}
       />
+
       <MessageFormSectionSendButton />
     </form>
   );
