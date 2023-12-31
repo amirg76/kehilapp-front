@@ -3,12 +3,12 @@ import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import CategoryIcon from "../../../components/ui/CategoryIcon/CategoryIcon";
 
-const SidebarItem = ({ title, color, icon, link }) => {
+const SidebarItem = ({ title, color, icon, link, onCloseNavbar }) => {
   //get current location
   let location = useLocation();
 
   return (
-    <li>
+    <li onClick={onCloseNavbar}>
       <Link
         to={`${link}`}
         // if link is clicked apply color, otherwise apply gray bg on hover

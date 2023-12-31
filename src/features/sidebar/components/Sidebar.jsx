@@ -8,7 +8,7 @@ import { CATEGORY_URL } from "@api/apiConstants.js";
 
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
-const Sidebar = ({ classes }) => {
+const Sidebar = ({ classes, onCloseNavbar }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [categories, setCategories] = useState(null);
@@ -36,6 +36,7 @@ const Sidebar = ({ classes }) => {
             color="categoryBlue"
             link={`${MESSAGES}`}
             icon="ראשי"
+            onCloseNavbar={onCloseNavbar}
           />
 
           {categories &&
@@ -46,6 +47,7 @@ const Sidebar = ({ classes }) => {
                 color={category.categoryColor}
                 link={`${MESSAGES}/${category._id}`}
                 icon={category.icon}
+                onCloseNavbar={onCloseNavbar}
               />
             ))}
         </ul>
