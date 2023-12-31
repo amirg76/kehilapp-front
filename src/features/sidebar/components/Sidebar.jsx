@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import { MESSAGES } from "@routes/routeConstants";
 // components
 import SidebarItem from "@features/sidebar/components/SidebarItem";
-//demo data
-import categories from "@demo-data/demoCategories.json";
+// api url
+import { CATEGORY_URL } from "@api/apiConstants.js";
 
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
-const Sidebar = ({ classes }) => {
+const Sidebar = ({ classes, onCloseNavbar }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [categories, setCategories] = useState(null);
 
   useEffect(() => {
@@ -29,14 +30,24 @@ const Sidebar = ({ classes }) => {
         <h3 className="text-xl ms-3 mb-2 mt-2">קטגוריה</h3>
         {/* nav links */}
         <ul className="mb-5 ms-2">
+          <SidebarItem
+            key="0"
+            title="ראשי"
+            color="categoryBlue"
+            link={`${MESSAGES}`}
+            icon="ראשי"
+            onCloseNavbar={onCloseNavbar}
+          />
+
           {categories &&
             categories.map((category) => (
               <SidebarItem
                 key={category._id}
                 title={category.title}
-                color={category.color}
-                link={`${MESSAGES}/${category.link}`}
+                color={category.categoryColor}
+                link={`${MESSAGES}/${category._id}`}
                 icon={category.icon}
+                onCloseNavbar={onCloseNavbar}
               />
             ))}
         </ul>
@@ -46,16 +57,17 @@ const Sidebar = ({ classes }) => {
           className="p-2 rounded-md mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
           onClick={() => {
             // TODO: open a new message model on click
-            console.log("Open New Message Modal");
+
             setIsModalOpen(true);
           }}
         >
           הוסף הודעה
         </button>
-        {isModalOpen && (
+        {isModalOpen && categories && (
           <MessageForm
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
+            categories={categories}
           />
         )}
         <hr className="mt-5" />

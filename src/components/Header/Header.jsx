@@ -15,6 +15,13 @@ const Header = () => {
     setOpen(true);
   };
 
+  const onCloseNavbar = () => {
+    console.log("close");
+    setTimeout(() => {
+      setOpen(false);
+    }, 300)
+  };
+
   return (
     <header className="sticky top-0 right-0 z-20 bg-white border-[#0000001a] border-solid shadow-navShadow">
       <div
@@ -36,6 +43,7 @@ const Header = () => {
           classes={`max-md:flex flex-column fixed left-0 top-0 bg-white opacity-90
                    h-screen border-l-[1px]-[#ebebeb] z-30 transition-transform duration-600 pt-3
                    ${open ? "translate-x-0" : "translate-x-[-100%] md:flex"}`}
+          onCloseNavbar={onCloseNavbar}
         />
         <FontAwesomeIcon
           className="md:hidden"
