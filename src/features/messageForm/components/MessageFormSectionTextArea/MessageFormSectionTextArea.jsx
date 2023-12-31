@@ -1,15 +1,15 @@
 import React from "react";
 
-const MessageFormSectionTextArea = ({ handleChange, content }) => {
+const MessageFormSectionTextArea = ({ handleChange, text }) => {
   return (
     <>
       {/* Text Area */}
       <div className="mb-5">
         <textarea
-          id="content"
-          name="content"
+          id="text"
+          name="text"
           onChange={handleChange}
-          value={content}
+          value={text}
           placeholder="כתיבת הודעה..."
           maxLength="250"
           rows="10"

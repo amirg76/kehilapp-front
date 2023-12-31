@@ -4,13 +4,15 @@ import MessageFormSectionTextArea from "../MessageFormSectionTextArea/MessageFor
 import MessageFormSectionFile from "../MessageFormSectionFile";
 import MessageFormSectionSendButton from "../MessageFormSectionSendButton/MessageFormSectionSendButton";
 import MessageFormSectionTitle from "../MessageFormSectionTitle";
+// api url
+import { MESSAGES_URL } from "@api/apiConstants.js";
 
-const MessageFormSection = ({ categories }) => {
+const MessageFormSection = ({ categories, closeModal }) => {
   const [formData, setFormData] = useState({
-    categorie: "",
+    categoryId: "",
+    senderId: "099",
     title: "",
-    content: "",
-    imgLink: "",
+    text: "",
   });
 
   const handleChange = (e) => {
@@ -24,6 +26,22 @@ const MessageFormSection = ({ categories }) => {
     e.preventDefault();
     // Add your form submission logic here
     console.log("Form submitted:", formData);
+    const postData = async (formData) => {
+      const response = await fetch(MESSAGES_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        let json = await response.json();
+        console.log("Post created:", json);
+        // setMessages(json.data);
+      }
+    };
+    postData(formData);
+    closeModal();
   };
   return (
     <form
@@ -36,12 +54,12 @@ const MessageFormSection = ({ categories }) => {
       />
       <MessageFormSectionTextArea
         handleChange={handleChange}
-        content={formData.content}
+        text={formData.text}
       />
       <MessageFormSectionCategory
         categories={categories}
         handleChange={handleChange}
-        categorie={formData.categorie}
+        categoryId={formData.categoryId}
       />
       <MessageFormSectionFile
         handleChange={handleChange}
