@@ -1,30 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux'
+//components
 import Sidebar from "@features/sidebar/components/Sidebar";
-import MessageList from '../features/messages/components/MessageList'
-import HeroSection from "../features/heroSection/components/HeroSection";
-import demoMessages from '../demo-data/demoData.json'
-import { messageActions } from '../store/slices/messageSlice'
+import MessageList from "../features/messages/components/MessageList";
+import Hero from "../features/heroSection/components/Hero";
 
+// api url
+import {
+  LATEST_MESSAGES_URL,
+  MESSAGES_BY_CATEGORY_URL,
+} from "@api/apiConstants.js";
 const Messages = () => {
-  let { categoryName } = useParams();
+  let { categoryId } = useParams();
+  const [messages, setMessages] = useState(null);
 
-  const messages = useSelector(state => state.message.messages)
-  const dispatch = useDispatch()
-
-  //TODO: fetch messages based on the "categoryName" to the API
   useEffect(() => {
-    dispatch(messageActions.loadMessages(demoMessages))
-    console.log(`fetching ${categoryName} messages!`);
-  }, [categoryName]);
+    //! demo fetch, to be used only as demo, replace with react query.
+    const getData = async () => {
+      let url;
+      if (!categoryId) {
+        url = LATEST_MESSAGES_URL;
+      } else {
+        url = `${MESSAGES_BY_CATEGORY_URL}/${categoryId}`;
+      }
+      const response = await fetch(url);
+      if (response.ok) {
+        let json = await response.json();
+        setMessages(json.data);
+      }
+    };
+    getData();
+  }, [categoryId]);
 
   return (
     <div className="flex flex-1 w-full bg-[#efefef]">
       {/* sidebar & content split side by side */}
       <Sidebar />
-      <div className="flex flex-col">
-        <HeroSection />
+      <div className="w-full h-full">
+        <Hero />
         <MessageList messages={messages} />
       </div>
     </div>
