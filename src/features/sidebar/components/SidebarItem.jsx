@@ -12,14 +12,17 @@ const SidebarItem = ({ title, color, icon, link, onCloseNavbar }) => {
       <Link
         to={`${link}`}
         // if link is clicked apply color, otherwise apply gray bg on hover
-        className={`flex text-l items-center p-2 pe-3 ${
+        className={`flex text-l items-center p-2 pe-3 mb-3 ${
           location.pathname === link
             ? `bg-gradient-to-r  from-${color}`
             : "hover:font-bold hover:bg-gray-200"
         }`}
       >
-        <CategoryIcon categoryTitle={icon} color="#545454" />
-        <span className="mr-3">{title}</span>
+        <CategoryIcon
+          categoryTitle={icon}
+          color="#545454"
+        />
+        <span className="mr-6">{title}</span>
       </Link>
     </li>
   );
