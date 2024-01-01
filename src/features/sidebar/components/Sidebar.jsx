@@ -8,7 +8,8 @@ import { CATEGORY_URL } from "@api/apiConstants.js";
 
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
-const Sidebar = ({ classes }) => {
+const Sidebar = ({ classes, onCloseNavbar }) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [categories, setCategories] = useState(null);
@@ -36,6 +37,7 @@ const Sidebar = ({ classes }) => {
             color="categoryBlue"
             link={`${MESSAGES}`}
             icon="ראשי"
+            onCloseNavbar={onCloseNavbar}
           />
 
           {categories &&
@@ -46,6 +48,7 @@ const Sidebar = ({ classes }) => {
                 color={category.categoryColor}
                 link={`${MESSAGES}/${category._id}`}
                 icon={category.icon}
+                onCloseNavbar={onCloseNavbar}
               />
             ))}
         </ul>
@@ -55,16 +58,17 @@ const Sidebar = ({ classes }) => {
           className="p-2 rounded-md text-lg mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
           onClick={() => {
             // TODO: open a new message model on click
-            console.log("Open New Message Modal");
+
             setIsModalOpen(true);
           }}
         >
           הוסף הודעה
         </button>
-        {isModalOpen && (
+        {isModalOpen && categories && (
           <MessageForm
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
+            categories={categories}
           />
         )}
         <hr className="mt-5" />
