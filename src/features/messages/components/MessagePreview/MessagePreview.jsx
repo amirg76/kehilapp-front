@@ -39,7 +39,7 @@ const MessagePreview = ({ message }) => {
         ref={contentRef}
       >
         <img
-          className="rounded-[10px] h-[195px] object-cover"
+          className="rounded-[20px] h-[195px] object-cover"
           src="https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg"
           alt="demo-img"
         />
@@ -49,7 +49,8 @@ const MessagePreview = ({ message }) => {
             txt={text}
             isLongTxtShown={isLongTextShown}
             toggleLongText={toggleLongText}
-            classes="font-light mb-[15px] flex-1"
+            baseClasses="text-preview"
+            expandedClasses="text-preview expanded"
           />
           <section className="flex items-center">
             <Avatar classes="ml-[17px]" />
