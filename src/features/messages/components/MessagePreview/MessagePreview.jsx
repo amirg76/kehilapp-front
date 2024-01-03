@@ -55,7 +55,7 @@ const MessagePreview = ({ message }) => {
           <section className="flex items-center">
             <Avatar classes="ml-[17px]" />
             <h6 className="w-fit">
-              מאת <span className="font-semibold text-[18px]">אורן קליין</span>
+              <span className="font-semibold text-[18px]">אורן קליין</span>
             </h6>
           </section>
           <div className="flex items-end justify-between">
