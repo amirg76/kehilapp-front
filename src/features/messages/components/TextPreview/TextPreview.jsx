@@ -13,7 +13,6 @@ const TextPreview = ({ txt, isLongTxtShown, toggleLongText, baseClasses, expande
         } else {
             setIsOverflowed(false);
         }
-        console.log(isOverflowed);
     }, [txt]);
 
     return (
