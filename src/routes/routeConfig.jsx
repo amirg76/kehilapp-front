@@ -8,18 +8,18 @@ import Messages from "@pages/Messages.jsx";
 import Login from "@pages/Login";
 
 const routeConfig = [
-  {
-    // Root Page - Redirect to the login page
-    path: ROOT,
-    element: <Navigate to={LOGIN} />,
-    exact: true,
-  },
-  {
-    // Login Page
-    path: LOGIN,
-    element: <Login />,
-    exact: true,
-  },
+  // {
+  //   // Root Page - Redirect to the login page
+  //   path: ROOT,
+  //   element: <Navigate to={LOGIN} />,
+  //   exact: true,
+  // },
+  // {
+  //   // Login Page
+  //   path: LOGIN,
+  //   element: <Login />,
+  //   exact: true,
+  // },
   // {
   //   // Main Page - Redirect to the messages page if user
   //   path: ROOT,

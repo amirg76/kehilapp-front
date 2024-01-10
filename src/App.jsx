@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 //routing
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
+// routes constants
+import { ROOT, LOGIN, MESSAGES } from "@routes/routeConstants.js";
+// redux
+import { useSelector } from "react-redux";
 import Header from "@components/Header/Header";
-import { ROOT, LOGIN } from "@routes/routeConstants.js";
+//pages
 import Login from "@pages/Login";
-import { Navigate } from "react-router-dom";
+import Messages from "@pages/Messages";
 
 const App = () => {
+  const user = useSelector((state) => state.user.currentUser);
   const [isAuthenticated, setAuthenticated] = useState(false);
 
   // Simulate authentication logic (replace with your actual authentication logic)
@@ -29,16 +34,42 @@ const App = () => {
     <div className="w-screen flex flex-col ">
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
 
-      <Header />
+      {isAuthenticated && <Header />}
       <Routes>
-        {routeConfig.map((route, index) => (
+        <Route
+          path={ROOT}
+          element={<Navigate to={LOGIN} />}
+          exact:true
+        />
+        <Route
+          path={LOGIN}
+          element={
+            isAuthenticated ? (
+              <Navigate to={MESSAGES} />
+            ) : (
+              <Login onLogin={authenticateUser} />
+            )
+          }
+          exact:true
+        />
+        <Route
+          path={MESSAGES}
+          element={isAuthenticated ? <Messages /> : <Navigate to={LOGIN} />}
+          exact:true
+        />
+        <Route
+          path={`${MESSAGES}/:categoryId`}
+          element={isAuthenticated ? <Messages /> : <Navigate to={LOGIN} />}
+          exact:true
+        />
+        {/* {routeConfig.map((route, index) => (
           <Route
             key={index}
             path={route.path}
-            element={route.element}
+            element={isAuthenticated ? route.element : <Navigate to={LOGIN} />}
             exact={route.exact}
           />
-        ))}
+        ))} */}
       </Routes>
     </div>
   );
