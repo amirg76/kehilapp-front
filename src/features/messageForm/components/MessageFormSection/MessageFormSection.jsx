@@ -4,6 +4,7 @@ import MessageFormSectionTextArea from "../MessageFormSectionTextArea/MessageFor
 import MessageFormSectionFile from "../MessageFormSectionFile";
 import MessageFormSectionSendButton from "../MessageFormSectionSendButton/MessageFormSectionSendButton";
 import MessageFormSectionTitle from "../MessageFormSectionTitle";
+
 // api url
 import { MESSAGES_URL } from "@api/apiConstants.js";
 
@@ -26,6 +27,7 @@ const MessageFormSection = ({ categories, closeModal }) => {
     e.preventDefault();
     // Add your form submission logic here
     console.log("Form submitted:", formData);
+
     const postData = async (formData) => {
       const response = await fetch(MESSAGES_URL, {
         method: "POST",
