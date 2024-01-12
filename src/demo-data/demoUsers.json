@@ -1,0 +1,44 @@
+[
+    {
+        "firstName": "אורן",
+        "lastName": "קליין",
+        "email": "orenk@gmail.com",
+        "password": 12345678,
+        "isAdmin": false
+    },
+    {
+        "firstName": "יעקב",
+        "lastName": "כהן",
+        "email": "yaakovc@gmail.com",
+        "password": 12345678,
+        "isAdmin": false
+    },
+    {
+        "firstName": "יוסי",
+        "lastName": "לוי",
+        "email": "yossyl@gmail.com",
+        "password": 12345678,
+        "isAdmin": false
+    },
+    {
+        "firstName": "הדס",
+        "lastName": "קליין",
+        "email": "hadas@gmail.com",
+        "password": 12345678,
+        "isAdmin": false
+    },
+    {
+        "firstName": "שרה",
+        "lastName": "כהן",
+        "email": "sarak@gmail.com",
+        "password": 12345678,
+        "isAdmin": false
+    },
+    {
+        "firstName": "אורלי",
+        "lastName": "לוי",
+        "email": "orlyl@gmail.com",
+        "password": 12345678,
+        "isAdmin": false
+    }
+]

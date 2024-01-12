@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import Avatar from "@components/ui/Avatar/Avatar";
 import CategoryTag from "../CategoryTag/CategoryTag";
 import TextPreview from "../TextPreview/TextPreview";
+import { useFormattedDate } from "../../../../hooks/useFormattedDate";
 
 const MessagePreview = ({ message }) => {
-  const [isLongTextShown, setIsLongTextShown] = useState(false);
 
+  const formattedDate = useFormattedDate(message.createdAt)
+  const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
   const [containerHeight, setContainerHeight] = useState(0);
 
@@ -13,16 +15,12 @@ const MessagePreview = ({ message }) => {
     if (contentRef.current) {
       setContainerHeight(contentRef.current.offsetHeight - 50);
     }
-  }, [isLongTextShown]);
+  }, [isLongTextShown, contentRef?.current?.offsetHeight]);
 
   const toggleLongText = () => {
     if (isLongTextShown) setIsLongTextShown(false);
     else setIsLongTextShown(true);
   };
-
-  const { title, text } = message;
-  let timestamp = message.createdAt.split("T");
-  let date = timestamp[0];
 
   return (
     <div
@@ -39,28 +37,29 @@ const MessagePreview = ({ message }) => {
         ref={contentRef}
       >
         <img
-          className="rounded-[10px] h-[195px] object-cover"
+          className="rounded-[20px] h-[195px] object-cover"
           src="https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg"
           alt="demo-img"
         />
         <div className="flex flex-col flex-1 mt-[10px]">
-          <h1 className="text-[20px] font-semibold mb-[2px]">{title}</h1>
+          <h1 className="text-[20px] font-semibold mb-[2px]">{message.title}</h1>
           <TextPreview
-            txt={text}
+            txt={message.text}
             isLongTxtShown={isLongTextShown}
             toggleLongText={toggleLongText}
-            classes="font-light mb-[15px] flex-1"
+            baseClasses="text-preview"
+            expandedClasses="text-preview expanded"
           />
           <section className="flex items-center">
             <Avatar classes="ml-[17px]" />
             <h6 className="w-fit">
-              מאת <span className="font-semibold text-[18px]">אורן קליין</span>
+              <span className="font-semibold text-[18px]">אורן קליין</span>
             </h6>
           </section>
           <div className="flex items-end justify-between">
             <section className="flex w-fit">
-              <h6 className="ml-[15px]">{date}</h6>
-              <h6 className="font-light">10:30</h6>
+              <h6 className="ml-[15px]">{formattedDate.date}</h6>
+              <h6 className="font-light">{formattedDate.time}</h6>
             </section>
             <CategoryTag category={{ title: "ראשי", color: "#A3CA62" }} />
           </div>
