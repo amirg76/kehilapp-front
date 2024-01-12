@@ -8,9 +8,7 @@ const LoginImage = () => {
     <div
       className="md:w-1/2 bg-cover bg-center"
       style={{ backgroundImage: `url(${leftImg})` }}
-    >
-      {/* <img src={leftImg} /> */}
-    </div>
+    ></div>
   );
 };
 
