@@ -19,6 +19,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
       const response = await fetch(CATEGORY_URL);
       if (response.ok) {
         let json = await response.json();
+
         setCategories(json.data);
       }
     };
