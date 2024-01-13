@@ -27,10 +27,10 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
   }, []);
   return (
     <aside className={`${classes || "hidden md:block"}`}>
-      <nav className="h-full flex flex-col border-e shadow-sm w-[230px] sticky right-0 top-24">
-        <h3 className="text-xl ms-3 mb-2 mt-2">קטגוריה</h3>
+      <nav className="h-full flex flex-col border-e shadow-sm w-80 sticky right-0 top-24">
+        <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
         {/* nav links */}
-        <ul className="mb-5 ms-2">
+        <ul className="mb-5 ms-6 text-lg">
           <SidebarItem
             key="0"
             title="ראשי"
@@ -55,7 +55,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
 
         {/* New Message Button */}
         <button
-          className="p-2 rounded-md mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
+          className="p-2 rounded-md text-lg mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
           onClick={() => {
             // TODO: open a new message model on click
 
