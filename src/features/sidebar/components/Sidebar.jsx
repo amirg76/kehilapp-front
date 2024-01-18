@@ -5,13 +5,17 @@ import { MESSAGES } from "@routes/routeConstants";
 import SidebarItem from "@features/sidebar/components/SidebarItem";
 // api url
 import { CATEGORY_URL } from "@api/apiConstants.js";
+//redux use functions
+import { useDispatch, useSelector } from "react-redux";
 
+//redux actions
+import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
 const Sidebar = ({ classes, onCloseNavbar }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [categories, setCategories] = useState(null);
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.category.categories);
 
   useEffect(() => {
     const getData = async () => {
@@ -19,8 +23,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
       const response = await fetch(CATEGORY_URL);
       if (response.ok) {
         let json = await response.json();
-
-        setCategories(json.data);
+        dispatch(categoryActions.loadCategories(json.data));
       }
     };
     getData();

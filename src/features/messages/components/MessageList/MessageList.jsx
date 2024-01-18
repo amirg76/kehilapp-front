@@ -1,12 +1,10 @@
 import React from "react";
 import MessagePreview from "../MessagePreview/MessagePreview";
-import SearchMessages from "@features/searchMessages/components/searchMessages/searchMessages";
 
 const MessageList = ({ messages }) => {
   //TODO - what is the best practice to get the sender's name? from where should i send the request to the backend?
   return (
     <div className="mx-5">
-      <SearchMessages />
       <h1 className="text-3xl mb-5 font-semibold opacity-75">הודעות הקיבוץ</h1>
       <div className="flex flex-wrap justify-center">
         {messages &&

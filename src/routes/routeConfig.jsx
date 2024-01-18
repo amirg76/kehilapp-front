@@ -20,12 +20,12 @@ const routeConfig = [
   //   element: <Login />,
   //   exact: true,
   // },
-  // {
-  //   // Main Page - Redirect to the messages page if user
-  //   path: ROOT,
-  //   element: <Navigate to={MESSAGES} />,
-  //   exact: true,
-  // },
+  {
+    // Main Page - Redirect to the messages page if user
+    path: ROOT,
+    element: <Navigate to={MESSAGES} />,
+    exact: true,
+  },
   {
     // messages page, redirects to the main category
     path: MESSAGES,

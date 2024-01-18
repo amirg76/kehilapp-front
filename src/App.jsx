@@ -34,9 +34,9 @@ const App = () => {
     <div className="w-screen flex flex-col ">
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
 
-      {isAuthenticated && <Header />}
+      {/* {isAuthenticated && <Header />} */}
       <Routes>
-        <Route
+        {/* <Route
           path={ROOT}
           element={<Navigate to={LOGIN} />}
           exact:true
@@ -61,15 +61,21 @@ const App = () => {
           path={`${MESSAGES}/:categoryId`}
           element={isAuthenticated ? <Messages /> : <Navigate to={LOGIN} />}
           exact:true
-        />
-        {/* {routeConfig.map((route, index) => (
+        /> */}
+        {routeConfig.map((route, index) => (
+          // <Route
+          //   key={index}
+          //   path={route.path}
+          //   element={isAuthenticated ? route.element : <Navigate to={LOGIN} />}
+          //   exact={route.exact}
+          // />
           <Route
             key={index}
             path={route.path}
-            element={isAuthenticated ? route.element : <Navigate to={LOGIN} />}
+            element={route.element}
             exact={route.exact}
           />
-        ))} */}
+        ))}
       </Routes>
     </div>
   );
