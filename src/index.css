@@ -18,6 +18,16 @@
   }
 }
 
+.text-preview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+}
+.text-preview.expanded {
+  -webkit-line-clamp: unset;
+}
+
 .top-clip {
   clip-path: polygon(
     96.982% 58.418%,
