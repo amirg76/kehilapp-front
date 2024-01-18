@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from 'react-query';
 
@@ -33,40 +33,17 @@ const Messages = () => {
     }
   }, [fetchedMessages, dispatch]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  // useEffect(() => {
-  //   //! demo fetch, to be used only as demo, replace with react query.
-  //   const getData = async () => {
-  //     let url;
-  //     if (!categoryId) {
-  //       url = LATEST_MESSAGES_URL;
-  //     } else {
-  //       url = `${MESSAGES_BY_CATEGORY_URL}/${categoryId}`;
-  //     }
-  //     const response = await fetch(url);
-  //     if (response.ok) {
-  //       let json = await response.json();
-  //       // setMessages(json.data);
-  //       dispatch(messageActions.loadMessages(json.data))
-  //     }
-  //   };
-  //   getData();
-  // }, [categoryId]);
-
   return (
     <div className="flex flex-1 w-full bg-[#efefef]">
       {/* sidebar & content split side by side */}
       <Sidebar />
       <div className="w-full h-full">
         <Hero />
-        {messages.length && <MessageList messages={fetchedMessages} />}
+        {/* //TODO: add a loader component */}
+        {isLoading && <p>Loading...</p>}
+        {/* //TODO: add an error modal? */}
+        {error && <p>Error: {error.message}</p>}
+        {messages.length && <MessageList messages={messages} />}
       </div>
     </div>
   );
