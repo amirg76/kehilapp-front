@@ -1,9 +1,9 @@
 import React from "react";
 import HeroSectionLeftSvg from "./SvgFiles/HeroSectionLeftSvg";
 import HeroSectionRightSvg from "./SvgFiles/HeroSectionRightSvg";
-import logoKisufim from "../img/logo-kibbuttz-transpert.png"
-import rightImg from "../img/image1.png"
-import leftImg from "../img/image2.png"
+import logoKisufim from "../img/logo-kibbuttz-transpert.png";
+import rightImg from "../img/image1.png";
+import leftImg from "../img/image2.png";
 
 const HeroSection = () => {
   return (
@@ -14,6 +14,7 @@ const HeroSection = () => {
         src={logoKisufim}
         alt="Your Company"
       />
+
       <div className="w-full h-full">
         <div className="w-full h-full sm:absolute bottom-0 left-[60%] sm:h-1/2 sm:w-2/5 z-10">
           <HeroSectionRightSvg imgPath={rightImg} />

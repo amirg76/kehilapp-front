@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 //components
 import Sidebar from "@features/sidebar/components/Sidebar";
 import MessageList from "../features/messages/components/MessageList";
 import Hero from "../features/heroSection/components/Hero";
-import { messageActions } from "../store/slices/messageSlice";
-import { useDispatch, useSelector } from "react-redux"
 
+//redux use functions
+import { useDispatch, useSelector } from "react-redux";
+//redux actions
+import { messageActions } from "@store/slices/messageSlice";
 // api url
 import {
   LATEST_MESSAGES_URL,
@@ -14,10 +16,11 @@ import {
 } from "@api/apiConstants.js";
 const Messages = () => {
   let { categoryId } = useParams();
-  // const [messages, setMessages] = useState(null);
-  const messages = useSelector(state => state.message.messages)
-  const dispatch = useDispatch()
-  
+
+
+  const dispatch = useDispatch();
+  const messages = useSelector((state) => state.message.messages);
+
   useEffect(() => {
     //! demo fetch, to be used only as demo, replace with react query.
     const getData = async () => {
@@ -30,8 +33,8 @@ const Messages = () => {
       const response = await fetch(url);
       if (response.ok) {
         let json = await response.json();
-        // setMessages(json.data);
         dispatch(messageActions.loadMessages(json.data))
+
       }
     };
     getData();
