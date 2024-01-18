@@ -4,6 +4,7 @@ export default {
   theme: {
     fontFamily: {
       sans: ["Assistant", "sans-serif"],
+      zen: ["Zen Kaku Gothic Antique"],
     },
     screens: {
       xs: "500px",
@@ -52,7 +53,7 @@ export default {
       borderRadius: {
         rightHeroImg: "5% 50% 66% 54% / 10% 61% 49% 90%  ",
       },
-    },
+    }
   },
   safelist: [
     //categories active sidebar gradient
