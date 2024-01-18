@@ -5,26 +5,30 @@ import { MESSAGES } from "@routes/routeConstants";
 import SidebarItem from "@features/sidebar/components/SidebarItem";
 // api url
 import { CATEGORY_URL } from "@api/apiConstants.js";
+import { useQuery } from 'react-query';
+import { httpService } from "../../../services/httpService";
 
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
 const Sidebar = ({ classes, onCloseNavbar }) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [categories, setCategories] = useState(null);
+  const { data: fetchedCategories, isLoading, error } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => {
+      return httpService.get(CATEGORY_URL);
+    }
+  });
 
-  useEffect(() => {
-    const getData = async () => {
-      //! demo fetch, to be used only as demo, replace with react query.
-      const response = await fetch(CATEGORY_URL);
-      if (response.ok) {
-        let json = await response.json();
+  //TODO: imlemet redux for categories
+  // useEffect(() => {
+  //   console.log(fetchedCategories);
+  //   if (fetchedCategories) {
+  //     dispatch(messageActions.loadMessages(fetchedMessages));
+  //   }
+  // }, [fetchedCategories, dispatch]);
 
-        setCategories(json.data);
-      }
-    };
-    getData();
-  }, []);
   return (
     <aside className={`${classes || "hidden md:block"}`}>
       <nav className="h-full flex flex-col border-e shadow-sm w-80 sticky right-0 top-24">
@@ -40,8 +44,8 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
             onCloseNavbar={onCloseNavbar}
           />
 
-          {categories &&
-            categories.map((category) => (
+          {fetchedCategories?.length &&
+            fetchedCategories.map((category) => (
               <SidebarItem
                 key={category._id}
                 title={category.title}
