@@ -20,7 +20,7 @@ const Messages = () => {
   const dispatch = useDispatch()
 
   const { data: fetchedMessages, isLoading, error } = useQuery({
-    queryKey: ['messages', categoryId],
+    queryKey: ['messages', categoryId, filterBy],
     queryFn: () => {
       return httpService.get(`${MESSAGES_URL}?filterBy=${encodeURIComponent(JSON.stringify(filterBy))}`);
     }
@@ -43,7 +43,7 @@ const Messages = () => {
         {isLoading && <p>Loading...</p>}
         {/* //TODO: add an error modal? */}
         {error && <p>Error: {error.message}</p>}
-        {messages.length && <MessageList messages={messages} />}
+        {messages?.length ? <MessageList messages={messages} /> : <div>לא נמצאו הודעות</div>}
       </div>
     </div>
   );
