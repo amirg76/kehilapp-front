@@ -28,6 +28,9 @@ const Messages = () => {
 
   useEffect(() => {
     console.log(fetchedMessages);
+    if (categoryId) {
+      dispatch(messageActions.setFilterBy({ ...filterBy, categoryId, latest: false }));
+    }
     if (fetchedMessages) {
       dispatch(messageActions.loadMessages(fetchedMessages));
     }
