@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 //components
 import Sidebar from "@features/sidebar/components/Sidebar";
-import MessageList from "../features/messages/components/MessageList";
-import Hero from "../features/heroSection/components/Hero";
+import MessageList from "@features/messages/components/MessageList";
+import Hero from "@features/heroSection/components/Hero";
 
 //redux use functions
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,6 @@ import {
 } from "@api/apiConstants.js";
 const Messages = () => {
   let { categoryId } = useParams();
-
 
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.message.messages);
@@ -33,8 +32,7 @@ const Messages = () => {
       const response = await fetch(url);
       if (response.ok) {
         let json = await response.json();
-        dispatch(messageActions.loadMessages(json.data))
-
+        dispatch(messageActions.loadMessages(json.data));
       }
     };
     getData();
