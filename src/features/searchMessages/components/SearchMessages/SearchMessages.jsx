@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import CategoryIcon from "@components/ui/CategoryIcon/CategoryIcon";
-import useFetchData from "../UseFetchData/useFetchData";
+import useFetchData from "../UseFetchData/UseFetchData";
 
 const SearchMessages = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [data, isLoading] = useFetchData(searchTerm);
+  useFetchData(searchTerm);
 
   return (
     <div className="flex items-center w-1/2 md:w-1/3 sm:1/4 border border-gray-300 rounded-xl bg-white ">
@@ -18,8 +18,6 @@ const SearchMessages = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-
-      {/* {console.log(data)} */}
     </div>
   );
 };
