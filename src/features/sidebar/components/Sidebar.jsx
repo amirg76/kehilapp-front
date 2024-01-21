@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // routes
 import { MESSAGES } from "@routes/routeConstants";
 // components
@@ -9,17 +9,30 @@ import { useQuery } from 'react-query';
 import { httpService } from "../../../services/httpService";
 
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
+import { useDispatch, useSelector } from "react-redux"
+import { messageActions } from "../../../store/slices/messageSlice";
 
 const Sidebar = ({ classes, onCloseNavbar }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const filterBy = useSelector(state => state.message.filterBy)
+  const dispatch = useDispatch()
 
   const { data: fetchedCategories, isLoading, error } = useQuery({
     queryKey: ['categories'],
     queryFn: () => {
       return httpService.get(CATEGORY_URL);
+
     }
   });
+
+  const setFilterBy = (categoryId) => {
+    if (categoryId) {
+      dispatch(messageActions.setFilterBy({ ...filterBy, categoryId, latest: false }))
+    } else {
+      dispatch(messageActions.setFilterBy({ searchTerm:"", categoryId: "", latest: true }))
+    }
+  }
 
   //TODO: imlemet redux for categories
   // useEffect(() => {
@@ -42,6 +55,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
             link={`${MESSAGES}`}
             icon="ראשי"
             onCloseNavbar={onCloseNavbar}
+            setFilterBy={setFilterBy}
           />
 
           {fetchedCategories?.length &&
@@ -53,6 +67,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
                 link={`${MESSAGES}/${category._id}`}
                 icon={category.icon}
                 onCloseNavbar={onCloseNavbar}
+                setFilterBy={() => setFilterBy(category._id)}
               />
             ))}
         </ul>
@@ -68,11 +83,11 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
         >
           הוסף הודעה
         </button>
-        {isModalOpen && categories && (
+        {isModalOpen && fetchedCategories && (
           <MessageForm
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-            categories={categories}
+            categories={fetchedCategories}
           />
         )}
         <hr className="mt-5" />

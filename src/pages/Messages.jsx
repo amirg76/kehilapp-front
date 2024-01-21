@@ -10,19 +10,19 @@ import { messageActions } from "../store/slices/messageSlice";
 import { useDispatch, useSelector } from "react-redux"
 
 // api url
-import { LATEST_MESSAGES_URL, MESSAGES_BY_CATEGORY_URL } from "@api/apiConstants.js";
 import { httpService } from "../services/httpService";
+import { MESSAGES_URL } from "../api/apiConstants";
 
 const Messages = () => {
   const { categoryId } = useParams();
   const messages = useSelector(state => state.message.messages)
+  const filterBy = useSelector(state => state.message.filterBy)
   const dispatch = useDispatch()
 
   const { data: fetchedMessages, isLoading, error } = useQuery({
     queryKey: ['messages', categoryId],
     queryFn: () => {
-      let url = categoryId ? `${MESSAGES_BY_CATEGORY_URL}/${categoryId}` : LATEST_MESSAGES_URL;
-      return httpService.get(url);
+      return httpService.get(`${MESSAGES_URL}?filterBy=${encodeURIComponent(JSON.stringify(filterBy))}`);
     }
   });
 
