@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import MessageFormSectionCategory from "../MessageFormSectionCategory/MessageFormSectionCategory";
-import MessageFormSectionSendButton from "../MessageFormSectionSendButton/MessageFormSectionSendButton";
 import InputCmp from '@components/form/InputCmp/InputCmp'
 import TextareaCmp from '@components/form/TextareaCmp/TextareaCmp'
+import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp"
 import FileLinkSvg from "../../icons/FileLinkSvg";
 
 // api url
@@ -44,6 +44,7 @@ const MessageFormSection = ({ categories, closeModal }) => {
     postData(formData);
     closeModal();
   };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -65,9 +66,9 @@ const MessageFormSection = ({ categories, closeModal }) => {
       <InputCmp type="file" name="file" label="הוסף קובץ" formData={formData} onChange={handleChange}
         children={<FileLinkSvg />} containerStyle="mb-4 flex flex-row-reverse justify-end items-center pr-3"
         labelStyle="text-lg text-gray-400 underline underline-offset-4 mb-2 mr-2"
-        inputStyle="hidden"/>
+        inputStyle="hidden" />
 
-      <MessageFormSectionSendButton />
+      <ButtonCmp label="שלח" style="w-1/5 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white text-lg justify-self-end font-medium text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none" />
     </form>
   );
 };
