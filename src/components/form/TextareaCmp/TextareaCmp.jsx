@@ -1,10 +1,10 @@
 import React from 'react'
 
-const TextareaCmp = ({ label, lableStyle, name, value, onChange, placeholder, style, ...otherProps }) => {
+const TextareaCmp = ({ label, labelStyle, name, value, onChange, placeholder, style, ...otherProps }) => {
 
     return (
         <div>
-            {label && <label htmlFor={name} className={lableStyle}>{label}</label>}
+            {label && <label htmlFor={name} className={labelStyle}>{label}</label>}
             <textarea
                 name={name}
                 value={value}

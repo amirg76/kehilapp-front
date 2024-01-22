@@ -3,6 +3,7 @@ import MessageFormSectionCategory from "../MessageFormSectionCategory/MessageFor
 import InputCmp from '@components/form/InputCmp/InputCmp'
 import TextareaCmp from '@components/form/TextareaCmp/TextareaCmp'
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp"
+import SelectCmp from "@components/form/SelectCmp/SelectCmp";
 import FileLinkSvg from "../../icons/FileLinkSvg";
 
 // api url
@@ -50,11 +51,8 @@ const MessageFormSection = ({ categories, closeModal }) => {
       onSubmit={handleSubmit}
       className="grid justify-items-stretch "
     >
-      <MessageFormSectionCategory
-        categories={categories}
-        handleChange={handleChange}
-        categoryId={formData.categoryId}
-      />
+
+      <SelectCmp options={categories} onChange={handleChange} defaultOption="קטגוריה" containerStyle="relative w-1/2 mb-5"/>
 
       <InputCmp name="title" placeholder="כותרת" value={formData.title} onChange={handleChange}
         inputStyle="w-1/2 px-3 py-2 mb-5" />
