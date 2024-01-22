@@ -1,7 +1,7 @@
 import React from "react";
 
-import CategoryTag from "../messages/components/CategoryTag/CategoryTag";
-import TextPreview from "../messages/components/TextPreview/TextPreview";
+import CategoryTag from "../../../features/messages/components/CategoryTag/CategoryTag";
+import TextPreview from "../../../features/messages/components/TextPreview/TextPreview";
 const SkeletonLoading = () => {
   return (
     <div
