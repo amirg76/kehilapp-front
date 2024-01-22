@@ -9,6 +9,7 @@ import Hero from "@features/heroSection/components/Hero";
 import { useDispatch, useSelector } from "react-redux";
 //redux actions
 import { messageActions } from "@store/slices/messageSlice";
+import { loadingActions } from "@store/slices/loadingSlice";
 // api url
 import {
   LATEST_MESSAGES_URL,
@@ -29,10 +30,12 @@ const Messages = () => {
       } else {
         url = `${MESSAGES_BY_CATEGORY_URL}/${categoryId}`;
       }
+      dispatch(loadingActions.toggle());
       const response = await fetch(url);
       if (response.ok) {
         let json = await response.json();
         dispatch(messageActions.loadMessages(json.data));
+        dispatch(loadingActions.toggle());
       }
     };
     getData();
