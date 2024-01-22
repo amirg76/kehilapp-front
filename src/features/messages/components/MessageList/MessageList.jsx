@@ -1,6 +1,6 @@
 import React from "react";
 import MessagePreview from "../MessagePreview/MessagePreview";
-import skeletonLoading from "@features/skeletonLoading/skeletonLoading";
+
 //redux use functions
 import { useDispatch, useSelector } from "react-redux";
 //SkeletonLoading
