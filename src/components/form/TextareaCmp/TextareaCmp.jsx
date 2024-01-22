@@ -10,7 +10,7 @@ const TextareaCmp = ({ label, lableStyle, name, value, onChange, placeholder, st
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                className={style}
+                className={`border border-gray-300 text-gray-400 rounded-md resize-none focus:outline-none focus:border-primary-700 ${style}`}
                 {...otherProps}
             />
         </div>

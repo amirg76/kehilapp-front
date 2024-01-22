@@ -57,18 +57,18 @@ const MessageFormSection = ({ categories, closeModal }) => {
       />
 
       <InputCmp name="title" placeholder="כותרת" value={formData.title} onChange={handleChange}
-        inputStyle="w-1/2 border border-gray-300 text-gray-400 px-3 py-2 mb-5 rounded-md focus:outline-none focus:border-blue-500" />
+        inputStyle="w-1/2 px-3 py-2 mb-5" />
 
       <TextareaCmp name="message-text" placeholder="כתיבת הודעה..."
         maxLength="250" rows="10" onChange={handleChange}
-        style="w-full border border-gray-300 text-gray-400 px-3 py-2 rounded-md resize-none focus:outline-none focus:border-blue-500" />
+        style="w-full px-3 py-2" />
 
       <InputCmp type="file" name="file" label="הוסף קובץ" formData={formData} onChange={handleChange}
-        children={<FileLinkSvg />} containerStyle="mb-4 flex flex-row-reverse justify-end items-center pr-3"
-        labelStyle="text-lg text-gray-400 underline underline-offset-4 mb-2 mr-2"
+        children={<FileLinkSvg />} containerStyle="mb-4 flex flex-row-reverse justify-end items-center cursor-pointer"
+        labelStyle="text-lg text-gray-400 underline underline-offset-4 mb-2 mr-2 cursor-pointer"
         inputStyle="hidden" />
 
-      <ButtonCmp label="שלח" style="w-1/5 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white text-lg justify-self-end font-medium text-white p-2 rounded-md hover:bg-blue-700 focus:outline-none" />
+      <ButtonCmp label="שלח" style="w-1/5 justify-self-end p-2" />
     </form>
   );
 };
