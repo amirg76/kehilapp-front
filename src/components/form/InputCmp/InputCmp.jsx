@@ -12,7 +12,7 @@ const InputCmp = ({ type = 'text', label, labelStyle, name, value, onChange, pla
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
-                className={`border border-gray-300 text-gray-400 px-3 py-2 rounded-md focus:outline-none focus:border-primary-700 ${inputStyle}`}
+                className={`border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-primary-700 ${inputStyle}`}
                 onBlur={onBlur}
                 {...otherProps}
             />

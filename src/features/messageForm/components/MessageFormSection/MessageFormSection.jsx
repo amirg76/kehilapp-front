@@ -84,7 +84,7 @@ const MessageFormSection = ({ categories, closeModal }) => {
       className="grid justify-items-stretch">
 
       <SelectCmp name="categoryId" options={categories} onChange={handleChange} defaultOption="* קטגוריה"
-        onBlur={validateForm}
+        onBlur={validateForm} value={message.categoryId}
         containerStyle="relative w-1/2 mb-1" />
 
       <ErrorMessage msg={error.categoryId} style="h-[20px] mb-3" />
