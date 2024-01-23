@@ -4,7 +4,7 @@ import MessagePreview from "../MessagePreview/MessagePreview";
 //redux use functions
 import { useDispatch, useSelector } from "react-redux";
 //SkeletonLoading
-import SkeletonLoading from "@components/ui/skeletonLoading/SkeletonLoading";
+import SkeletonLoading from "@components/ui/SkeletonLoading/SkeletonLoading";
 const MessageList = ({ messages }) => {
   //TODO - what is the best practice to get the sender's name? from where should i send the request to the backend?
   const dispatch = useDispatch();
@@ -22,10 +22,7 @@ const MessageList = ({ messages }) => {
           ? SkeletonLoadingArray.map((_, i) => <SkeletonLoading key={i} />)
           : messages &&
             messages.map((message) => (
-              <MessagePreview
-                key={message._id}
-                message={message}
-              />
+              <MessagePreview key={message._id} message={message} />
             ))}
       </div>
     </div>
