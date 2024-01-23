@@ -18,7 +18,7 @@ const MessageFormSection = ({ categories, closeModal }) => {
     text: "",
   });
 
-  const [error, setError] = useState({ title: "", categoryId: "" })
+  const [error, setError] = useState({ title: null, categoryId: null })
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
   const handleChange = (ev) => {
@@ -28,7 +28,7 @@ const MessageFormSection = ({ categories, closeModal }) => {
   };
 
   useEffect(() => {
-    setIsButtonDisabled(Object.keys(error).length !== 0)
+    setIsButtonDisabled(Object.values(error).some(value => value?.length > 0 || value === null))
   }, [error])
 
 
@@ -85,14 +85,14 @@ const MessageFormSection = ({ categories, closeModal }) => {
 
       <SelectCmp name="categoryId" options={categories} onChange={handleChange} defaultOption="* קטגוריה"
         onBlur={validateForm}
-        containerStyle="relative w-1/2 mb-5" />
+        containerStyle="relative w-1/2 mb-1" />
 
-      <ErrorMessage msg={error.categoryId} />
+      <ErrorMessage msg={error.categoryId} style="h-[20px] mb-3" />
 
       <InputCmp name="title" placeholder="* כותרת" value={message.title} onChange={handleChange}
-        onBlur={validateForm} inputStyle="w-1/2 px-3 py-2 mb-5" />
+        onBlur={validateForm} inputStyle="w-1/2 mb-1" />
 
-      <ErrorMessage msg={error.title} />
+      <ErrorMessage msg={error.title} style="h-[20px] mb-3" />
 
       <TextareaCmp name="message-text" placeholder="כתיבת הודעה..."
         maxLength="250" rows="10" onChange={handleChange}
