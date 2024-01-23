@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import MessageFormSectionCategory from "../MessageFormSectionCategory/MessageFormSectionCategory";
+import React, { useEffect, useState } from "react";
 import InputCmp from '@components/form/InputCmp/InputCmp'
 import TextareaCmp from '@components/form/TextareaCmp/TextareaCmp'
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp"
@@ -19,12 +18,19 @@ const MessageFormSection = ({ categories, closeModal }) => {
     text: "",
   });
 
-  const [error, setError] = useState({})
+  const [error, setError] = useState({ title: "", categoryId: "" })
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
   const handleChange = (ev) => {
     const { name, value } = ev.target
     setMessage({ ...message, [name]: value });
+    validateForm(ev)
   };
+
+  useEffect(() => {
+    setIsButtonDisabled(Object.keys(error).length !== 0)
+  }, [error])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,40 +55,45 @@ const MessageFormSection = ({ categories, closeModal }) => {
     closeModal();
   };
 
-  const validateForm = (formData) => {
-    const errors = {};
+  const validateForm = (ev) => {
+    const { name, value } = ev.target
 
-    // Title validation
-    if (!formData.title || formData.title.length < 2 || formData.title.length > 25) {
-      errors.title = 'חובה לכתוב כותרת. אורכה יהיה בין 2-25 תווים';
+    switch (name) {
+      case 'title':
+        if (!value || value.length < 2 || value.length > 25) {
+          setError(prevErrors => ({ ...prevErrors, title: 'חובה לכתוב כותרת. אורכה יהיה בין 2-25 תווים' }))
+        } else {
+          setError(prevErrors => ({ ...prevErrors, title: '' }))
+        }
+        break;
+      case 'categoryId':
+        if (!value || value.length < 2 || value.length > 25) {
+          setError(prevErrors => ({ ...prevErrors, categoryId: 'חובה לבחור קטגוריה' }))
+        } else {
+          setError(prevErrors => ({ ...prevErrors, categoryId: '' }))
+        }
+      default:
+        break;
     }
-
-    // Text validation
-    if (formData.text && formData.text.length > 250) {
-      errors.text = 'הטקסט מכיל לכל היותר כ-250 תווים';
-    }
-
-    // Category validation
-    if (!formData.category) {
-      errors.category = 'חובה לבחור קטגוריה';
-    }
-
-    setError(errors)
-    return errors;
   };
 
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid justify-items-stretch "
-    >
+      className="grid justify-items-stretch">
 
-      <SelectCmp options={categories} onChange={handleChange} defaultOption="קטגוריה" containerStyle="relative w-1/2 mb-5" />
-      <ErrorMessage msg={error.category} />
-      <InputCmp name="title" placeholder="כותרת" value={message.title} onChange={handleChange}
-        inputStyle="w-1/2 px-3 py-2 mb-5" />
+      <SelectCmp name="categoryId" options={categories} onChange={handleChange} defaultOption="* קטגוריה"
+        onBlur={validateForm}
+        containerStyle="relative w-1/2 mb-5" />
+
+      <ErrorMessage msg={error.categoryId} />
+
+      <InputCmp name="title" placeholder="* כותרת" value={message.title} onChange={handleChange}
+        onBlur={validateForm} inputStyle="w-1/2 px-3 py-2 mb-5" />
+
       <ErrorMessage msg={error.title} />
+
       <TextareaCmp name="message-text" placeholder="כתיבת הודעה..."
         maxLength="250" rows="10" onChange={handleChange}
         style="w-full px-3 py-2" />
@@ -92,7 +103,9 @@ const MessageFormSection = ({ categories, closeModal }) => {
         labelStyle="text-lg text-gray-400 underline underline-offset-4 mb-2 mr-2 cursor-pointer"
         inputStyle="hidden" />
 
-      <ButtonCmp label="שלח" style="w-1/5 justify-self-end p-2" isDisabled={Object.keys(error).length === 0}/>
+      <div>* שדות המסומנים בכוכבית הם שדות חובה</div>
+
+      <ButtonCmp label="שלח" style="w-1/5 justify-self-end p-2" isDisabled={isButtonDisabled} />
     </form>
   );
 };

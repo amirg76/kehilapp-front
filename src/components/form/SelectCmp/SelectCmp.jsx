@@ -1,14 +1,14 @@
 import React from 'react'
 
-const SelectCmp = ({ label, labelStyle, name, options, defaultOption, value, onChange, style, containerStyle, ...otherProps }) => {
+const SelectCmp = ({ label, labelStyle, name, options, defaultOption, value, onChange, onBlur, style, containerStyle, ...otherProps }) => {
 
     return (
         <div className={containerStyle}>
             {label && <label htmlFor={name} className={labelStyle}>{label}</label>}
-            <select value={value} onChange={onChange} className={`appearance-none w-full bg-white focus:shadow-outline border border-gray-300 text-gray-400 px-3 py-2 rounded-md focus:outline-none focus:border-primary-700 ${style}`} {...otherProps}>
-                <option value="">{defaultOption}</option>
+            <select name={name} value={value} onChange={onChange} onBlur={onBlur} className={`appearance-none w-full bg-white focus:shadow-outline border border-gray-300 text-gray-400 px-3 py-2 rounded-md focus:outline-none focus:border-primary-700 ${style}`} {...otherProps}>
+                <option value="" onBlur={onBlur}>{defaultOption}</option>
                 {options.map((option) => (
-                    <option key={option._id} value={option._id}>
+                    <option key={option._id} value={option._id} onBlur={onBlur}>
                         {option.title}
                     </option>
                 ))}
