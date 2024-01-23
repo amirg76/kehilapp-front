@@ -9,7 +9,7 @@ const MessageList = ({ messages }) => {
   //TODO - what is the best practice to get the sender's name? from where should i send the request to the backend?
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.loading.active);
-  // const loading = true;
+
   const SkeletonLoadingArray = Array.from({ length: 4 });
   return (
     <div className="mx-auto max-w-7xl">
