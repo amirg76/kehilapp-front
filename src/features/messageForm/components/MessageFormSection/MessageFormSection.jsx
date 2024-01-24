@@ -88,18 +88,18 @@ const MessageFormSection = ({ categories, closeModal }) => {
       <ErrorMessage msg={error.categoryId} style="h-[20px] mb-3" />
 
       <InputCmp name="title" placeholder="* כותרת" value={message?.title} onChange={handleChange}
-        onBlur={validateForm} maxLength="25" inputStyle="w-full sm:w-[350px] mb-1" 
+        onBlur={validateForm} maxLength="25" inputStyle="w-full sm:w-[350px] mb-1"
         containerStyle="flex flex-col sm:w-fit"
-        >
+      >
         <CharsCount currCount={message?.title?.length} total="25" style="relative self-end left-[15px] bottom-[35px]" />
       </InputCmp>
 
-      <ErrorMessage msg={error.title} style="h-[20px] mb-3" />
+      <ErrorMessage msg={error.title} style="h-[20px] mb-3 relative bottom-[20px]" />
 
       <TextareaCmp name="text" placeholder="כתיבת הודעה..." value={message?.text} onChange={handleChange}
-        rows="10" maxLength="350" style="w-full px-3 py-2" 
+        rows="10" maxLength="350" style="w-full px-3 py-2"
         containerStyle="flex flex-col"
-        >
+      >
         <CharsCount currCount={message?.text?.length} total="350" style="self-end relative left-[15px] bottom-[30px]" />
       </TextareaCmp>
 
