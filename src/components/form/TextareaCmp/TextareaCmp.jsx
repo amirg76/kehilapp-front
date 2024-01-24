@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { Children } from 'react'
 
-const TextareaCmp = ({ label, labelStyle, name, value, onChange, placeholder, style, ...otherProps }) => {
+const TextareaCmp = ({ label, labelStyle, name, value, onChange, placeholder, style, maxLength, rows, children, ...otherProps }) => {
+
+    const { containerStyle } = otherProps
 
     return (
-        <div>
+        <div className={`mb-3 ${containerStyle}`}>
             {label && <label htmlFor={name} className={labelStyle}>{label}</label>}
             <textarea
                 name={name}
@@ -11,8 +13,11 @@ const TextareaCmp = ({ label, labelStyle, name, value, onChange, placeholder, st
                 onChange={onChange}
                 placeholder={placeholder}
                 className={`border border-gray-300 rounded-md resize-none focus:outline-none focus:border-primary-700 ${style}`}
+                maxLength={maxLength}
+                rows={rows}
                 {...otherProps}
             />
+            {children}
         </div>
     );
 }

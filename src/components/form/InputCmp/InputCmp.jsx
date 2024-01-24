@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Children } from 'react'
 
-const InputCmp = ({ type = 'text', label, labelStyle, name, value, onChange, placeholder, onBlur, inputStyle, children, ...otherProps }) => {
+const InputCmp = ({ type = 'text', label, labelStyle, name, value, onChange, placeholder, onBlur, inputStyle, maxLength, children, ...otherProps }) => {
+
     const { containerStyle, onContainerClick } = otherProps
 
     return (
@@ -14,6 +15,7 @@ const InputCmp = ({ type = 'text', label, labelStyle, name, value, onChange, pla
                 placeholder={placeholder}
                 className={`border border-gray-300 px-3 py-2 rounded-md focus:outline-none focus:border-primary-700 ${inputStyle}`}
                 onBlur={onBlur}
+                maxLength={maxLength}
                 {...otherProps}
             />
             {children}
