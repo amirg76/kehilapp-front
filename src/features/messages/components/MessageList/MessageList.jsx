@@ -10,7 +10,7 @@ const MessageList = ({ messages }) => {
 
   const loading = useSelector((state) => state.loading.active);
 
-  const SkeletonLoadingArray = Array.from({ length: 4 });
+  const SkeletonLoadingArray = Array.from({ length: 12 });
   return (
     <div className="mx-auto max-w-7xl">
       <h1 className="text-3xl mr-10 mb-5 font-semibold opacity-75">
