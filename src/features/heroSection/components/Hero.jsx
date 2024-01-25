@@ -3,8 +3,6 @@ import React from "react";
 import logoKisufim from "../img/logo-kibbuttz-transpert.png";
 import bottomImg from "../img/image1.png";
 import topImg from "../img/image2.png";
-import SearchMessages from "../../searchMessages/components/SearchMessages/SearchMessages";
-
 import SearchMessages from "@features/searchMessages/components/SearchMessages/SearchMessages";
 function Hero() {
   return (
@@ -17,7 +15,6 @@ function Hero() {
           className="mt-10 ms-5 w-[35%] lg:w-[15%] aspect-[16/9]"
         />
       </div>
-      <SearchMessages />
       {/* images */}
       <div className="">
         <img
