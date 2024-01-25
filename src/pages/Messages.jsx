@@ -24,9 +24,6 @@ const Messages = () => {
   const filterBy = useSelector(state => state.message.filterBy)
   const dispatch = useDispatch()
 
-  const dispatch = useDispatch();
-  const messages = useSelector((state) => state.message.messages);
-
   const { data: fetchedMessages, isLoading, error } = useQuery({
     queryKey: ['messages', categoryId, filterBy],
     queryFn: () => {
