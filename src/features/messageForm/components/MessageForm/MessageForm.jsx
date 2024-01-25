@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MessageFormHeader from "../MessageFormHeader";
 import MessageFormSection from "../MessageFormSection";
-import ModalDialog from "../../../../components/ui/ModalDialog/ModalDialog";
+import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 
 const MessageForm = ({ isModalOpen, setIsModalOpen, categories }) => {
   const closeModal = () => {
