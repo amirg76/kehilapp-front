@@ -5,6 +5,7 @@ import routeConfig from "@routes/routeConfig";
 // routes constants
 import { LOGIN } from "@routes/routeConstants.js";
 // redux
+
 import { useSelector } from "react-redux";
 //components
 import Header from "@components/Header/Header";
@@ -13,13 +14,16 @@ const App = () => {
   // const user = useSelector((state) => state.user.currentUser);
   const { pathname } = useLocation(); //* temp fix for hiding header on login screen
 
+
   return (
     <div className="w-screen flex flex-col ">
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
+
       {/* //TODO: when logged out, disable Header component */}
       {/* {isAuthenticated && <Header />} */}
       {pathname !== LOGIN && <Header />}
       {/*
+
         <Route
           path={MESSAGES}
           element={isAuthenticated ? <Messages /> : <Navigate to={LOGIN} />}

@@ -2,6 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     messages: [],
+    filterBy: {
+        latest: true,
+        categoryId: "",
+        searchTerm: ""
+    }
 }
 
 const messageSlice = createSlice({
@@ -23,9 +28,12 @@ const messageSlice = createSlice({
         },
         removeMessage(state, action) {
             state.messages = state.messages.filter(message => message._id !== action.payload.messageId)
-        }
+        },
+        setFilterBy(state, action) {
+            state.filterBy = action.payload
+        },
     }
 })
 
-export const messageReducer = messageSlice.reducer
-export const messageActions = messageSlice.actions
+export const messageReducer = messageSlice.reducer;
+export const messageActions = messageSlice.actions;
