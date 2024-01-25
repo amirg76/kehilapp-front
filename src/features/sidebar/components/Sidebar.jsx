@@ -5,9 +5,15 @@ import { MESSAGES } from "@routes/routeConstants";
 import SidebarItem from "@features/sidebar/components/SidebarItem";
 // api url
 import { CATEGORY_URL } from "@api/apiConstants.js";
+
 import { useQuery } from 'react-query';
 import { httpService } from "../../../services/httpService";
 
+//redux use functions
+import { useDispatch, useSelector } from "react-redux";
+
+//redux actions
+import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 import { useDispatch, useSelector } from "react-redux"
 import { messageActions } from "../../../store/slices/messageSlice";
@@ -42,6 +48,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
   //     dispatch(messageActions.loadMessages(fetchedMessages));
   //   }
   // }, [fetchedCategories, dispatch]);
+
 
   return (
     <aside className={`${classes || "hidden md:block"}`}>

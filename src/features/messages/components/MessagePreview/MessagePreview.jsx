@@ -5,8 +5,7 @@ import TextPreview from "../TextPreview/TextPreview";
 import { useFormattedDate } from "../../../../hooks/useFormattedDate";
 
 const MessagePreview = ({ message }) => {
-
-  const formattedDate = useFormattedDate(message.createdAt)
+  const formattedDate = useFormattedDate(message.createdAt);
   const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
   const [containerHeight, setContainerHeight] = useState(0);
@@ -42,7 +41,9 @@ const MessagePreview = ({ message }) => {
           alt="demo-img"
         />
         <div className="flex flex-col flex-1 mt-[10px]">
-          <h1 className="text-[20px] font-semibold mb-[2px]">{message.title}</h1>
+          <h1 className="text-[20px] font-semibold mb-[2px]">
+            {message.title}
+          </h1>
           <TextPreview
             txt={message.text}
             isLongTxtShown={isLongTextShown}

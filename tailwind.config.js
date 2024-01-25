@@ -4,6 +4,7 @@ export default {
   theme: {
     fontFamily: {
       sans: ["Assistant", "sans-serif"],
+      zen: ["Zen Kaku Gothic Antique"],
     },
     screens: {
       xs: "500px",

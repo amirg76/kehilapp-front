@@ -20,8 +20,11 @@ const SidebarItem = ({ title, color, icon, link, onCloseNavbar, setFilterBy }) =
           : "hover:font-bold hover:bg-gray-200"
           }`}
       >
-        <CategoryIcon categoryTitle={icon} color="#545454" />
-        <span className="mr-3">{title}</span>
+        <CategoryIcon
+          categoryTitle={icon}
+          color="#545454"
+        />
+        <span className="mr-6">{title}</span>
       </Link>
     </li>
   );

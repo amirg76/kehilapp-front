@@ -4,11 +4,14 @@ import { useQuery } from 'react-query';
 
 //components
 import Sidebar from "@features/sidebar/components/Sidebar";
-import MessageList from "../features/messages/components/MessageList";
-import Hero from "../features/heroSection/components/Hero";
-import { messageActions } from "../store/slices/messageSlice";
-import { useDispatch, useSelector } from "react-redux"
+import MessageList from "@features/messages/components/MessageList";
+import Hero from "@features/heroSection/components/Hero";
 
+//redux use functions
+import { useDispatch, useSelector } from "react-redux";
+//redux actions
+import { messageActions } from "@store/slices/messageSlice";
+import { loadingActions } from "@store/slices/loadingSlice";
 // api url
 import { httpService } from "../services/httpService";
 import { MESSAGES_URL } from "../api/apiConstants";
@@ -35,6 +38,7 @@ const Messages = () => {
       dispatch(messageActions.loadMessages(fetchedMessages));
     }
   }, [fetchedMessages, dispatch]);
+
 
   return (
     <div className="flex flex-1 w-full bg-[#efefef]">
