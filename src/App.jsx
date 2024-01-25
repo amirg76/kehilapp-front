@@ -5,16 +5,22 @@ import routeConfig from "@routes/routeConfig";
 // routes constants
 import { ROOT, LOGIN, MESSAGES } from "@routes/routeConstants.js";
 // redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+//redux actions
+import { pageLoadingActions } from "@store/slices/pageLoadingSlice";
+//Header
 import Header from "@components/Header/Header";
 //pages
 import Login from "@pages/Login";
 import Messages from "@pages/Messages";
+//LoadingPage
+import LoadingPage from "@components/ui/LoadingPage/LoadingPage";
 
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
   const [isAuthenticated, setAuthenticated] = useState(false);
-
+  const dispatch = useDispatch();
+  const pageLoading = useSelector((state) => state.pageLoading.active);
   // Simulate authentication logic (replace with your actual authentication logic)
   const authenticateUser = (email, password) => {
     // Example: Check if email and password are valid
@@ -26,15 +32,20 @@ const App = () => {
     setAuthenticated(isValidCredentials);
   };
 
+  // useEffect(() => {
+  //   // Optional: Perform any additional actions on authentication status change
+  //   console.log("Authentication status changed:", isAuthenticated);
+  // }, [isAuthenticated]);
   useEffect(() => {
-    // Optional: Perform any additional actions on authentication status change
-    console.log("Authentication status changed:", isAuthenticated);
-  }, [isAuthenticated]);
+    dispatch(pageLoadingActions.toggle());
+  }, []);
+
   return (
     <div className="w-screen flex flex-col ">
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
-
+      {/* {pageLoading && <LoadingPage />} */}
       {/* {isAuthenticated && <Header />} */}
+
       <Routes>
         {/* <Route
           path={ROOT}
