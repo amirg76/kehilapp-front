@@ -13,10 +13,6 @@ const SearchMessages = () => {
     setFilterBy(searchTerm)
   }, [searchTerm])
 
-  useEffect(() => {
-    if (filterBy.latest) setSearchTerm("")
-  }, [filterBy])
-
   const setFilterBy = (searchTerm) => {
     console.log(filterBy);
     if (!searchTerm && !filterBy.categoryId) dispatch(messageActions.setFilterBy({ ...filterBy, searchTerm, latest: true }))

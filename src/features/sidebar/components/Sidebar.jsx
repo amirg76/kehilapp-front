@@ -34,8 +34,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
     if (categoryId) {
       dispatch(messageActions.setFilterBy({ ...filterBy, categoryId, latest: false }))
     } else {
-      //if you click on "ראשי" the search is cancled.
-      dispatch(messageActions.setFilterBy({ searchTerm: "", categoryId: "", latest: true }))
+      dispatch(messageActions.setFilterBy({ ...filterBy, categoryId: "", latest: true }))
     }
   }
 
