@@ -3,6 +3,7 @@ import React from "react";
 import logoKisufim from "../img/logo-kibbuttz-transpert.png";
 import bottomImg from "../img/image1.png";
 import topImg from "../img/image2.png";
+import SearchMessages from "../../searchMessages/components/SearchMessages/SearchMessages";
 
 import SearchMessages from "@features/searchMessages/components/SearchMessages/SearchMessages";
 function Hero() {
@@ -30,6 +31,7 @@ function Hero() {
           className="top-clip sticky md:-mt-10 md:w-[80%] md:ms-[15%]  lg:w-[25%] lg:ms-[28%] lg:-mt-[20%]"
         />
       </div>
+      <SearchMessages />
     </div>
   );
 }

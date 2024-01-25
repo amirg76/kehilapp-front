@@ -1,34 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // routes
 import { MESSAGES } from "@routes/routeConstants";
 // components
 import SidebarItem from "@features/sidebar/components/SidebarItem";
 // api url
 import { CATEGORY_URL } from "@api/apiConstants.js";
+
+import { useQuery } from 'react-query';
+import { httpService } from "../../../services/httpService";
+
 //redux use functions
 import { useDispatch, useSelector } from "react-redux";
 
 //redux actions
 import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
+import { useDispatch, useSelector } from "react-redux"
+import { messageActions } from "../../../store/slices/messageSlice";
 
 const Sidebar = ({ classes, onCloseNavbar }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const dispatch = useDispatch();
-  const categories = useSelector((state) => state.category.categories);
+  const filterBy = useSelector(state => state.message.filterBy)
+  const dispatch = useDispatch()
 
-  useEffect(() => {
-    const getData = async () => {
-      //! demo fetch, to be used only as demo, replace with react query.
-      const response = await fetch(CATEGORY_URL);
-      if (response.ok) {
-        let json = await response.json();
-        dispatch(categoryActions.loadCategories(json.data));
-      }
-    };
-    getData();
-  }, []);
+  const { data: fetchedCategories, isLoading, error } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => {
+      return httpService.get(CATEGORY_URL);
+
+    }
+  });
+
+  const setFilterBy = (categoryId) => {
+    if (categoryId) {
+      dispatch(messageActions.setFilterBy({ ...filterBy, categoryId, latest: false }))
+    } else {
+      //if you click on "ראשי" the search is cancled.
+      dispatch(messageActions.setFilterBy({ searchTerm: "", categoryId: "", latest: true }))
+    }
+  }
+
+  //TODO: imlemet redux for categories
+  // useEffect(() => {
+  //   console.log(fetchedCategories);
+  //   if (fetchedCategories) {
+  //     dispatch(messageActions.loadMessages(fetchedMessages));
+  //   }
+  // }, [fetchedCategories, dispatch]);
+
+
   return (
     <aside className={`${classes || "hidden md:block"}`}>
       <nav className="h-full flex flex-col border-e shadow-sm w-80 sticky right-0 top-24">
@@ -42,10 +63,11 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
             link={`${MESSAGES}`}
             icon="ראשי"
             onCloseNavbar={onCloseNavbar}
+            setFilterBy={setFilterBy}
           />
 
-          {categories &&
-            categories.map((category) => (
+          {fetchedCategories?.length &&
+            fetchedCategories.map((category) => (
               <SidebarItem
                 key={category._id}
                 title={category.title}
@@ -53,6 +75,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
                 link={`${MESSAGES}/${category._id}`}
                 icon={category.icon}
                 onCloseNavbar={onCloseNavbar}
+                setFilterBy={() => setFilterBy(category._id)}
               />
             ))}
         </ul>
@@ -68,11 +91,11 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
         >
           הוסף הודעה
         </button>
-        {isModalOpen && categories && (
+        {isModalOpen && fetchedCategories && (
           <MessageForm
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-            categories={categories}
+            categories={fetchedCategories}
           />
         )}
         <hr className="mt-5" />
