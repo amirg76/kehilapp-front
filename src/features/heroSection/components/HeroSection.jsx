@@ -1,28 +1,13 @@
 import React from "react";
-import HeroSectionLeftSvg from "./SvgFiles/HeroSectionLeftSvg";
-import HeroSectionRightSvg from "./SvgFiles/HeroSectionRightSvg";
-import logoKisufim from "../img/logo-kibbuttz-transpert.png";
-import rightImg from "../img/image1.png";
-import leftImg from "../img/image2.png";
+import SearchMessages from "@features/searchMessages/components/SearchMessages/SearchMessages";
 
 const HeroSection = () => {
   return (
-    <div className="relative sm:h-[50vh] flex flex-col my-5 sm:flex-row sm:justify-between md:mr-5">
-      {/* <div className="w-[10em] h-[5em]"> */}
-      <img
-        className="object-cover w-[10em] h-[5em]"
-        src={logoKisufim}
-        alt="Your Company"
-      />
-
-      <div className="w-full h-full">
-        <div className="w-full h-full sm:absolute bottom-0 left-[60%] sm:h-1/2 sm:w-2/5 z-10">
-          <HeroSectionRightSvg imgPath={rightImg} />
-        </div>
-        <div className="hidden sm:block h-full relative bottom-0 left-0">
-          <HeroSectionLeftSvg imgPath={leftImg} />
-        </div>
-      </div>
+    <div className="h-[270px] sm:h-[40vh] w-full bg-hero rounded-b-3xl bg-cover bg-center flex flex-col items-center mb-10 justify-end">
+      <h1 className="text-6xl font-semibold mb-2 text-white pt-8">
+        הודעות הקיבוץ
+      </h1>
+      <SearchMessages/>
     </div>
   );
 };

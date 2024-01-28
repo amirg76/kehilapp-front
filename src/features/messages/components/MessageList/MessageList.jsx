@@ -13,10 +13,6 @@ const MessageList = ({ messages }) => {
   const SkeletonLoadingArray = Array.from({ length: 12 });
   return (
     <div className="mx-auto max-w-7xl">
-      <h1 className="text-3xl mr-10 mb-5 font-semibold opacity-75">
-        הודעות הקיבוץ
-      </h1>
-    
       <div className="flex flex-wrap justify-center">
         {loading
           ? SkeletonLoadingArray.map((_, i) => <SkeletonLoading key={i} />)

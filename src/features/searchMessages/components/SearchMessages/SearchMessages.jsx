@@ -37,9 +37,8 @@ const SearchMessages = () => {
   }, [fetchedMessages, dispatch]);
 
   return (
-    <div className="flex items-center w-1/2 md:w-1/3 sm:1/4 border border-gray-300 rounded-xl bg-white ">
+    <div className="flex items-center w-[90%] sm:w-[320px] border border-gray-300 rounded-xl bg-white relative top-5 shadow-md">
       <FaSearch className="mr-4 text-gray-400 " />
-
       <input
         type="text"
         placeholder="חיפוש..."
