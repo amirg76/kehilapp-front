@@ -5,7 +5,7 @@ import { MESSAGES } from "@routes/routeConstants";
 import SidebarItem from "@features/sidebar/components/SidebarItem";
 // api url
 import { CATEGORY_URL } from "@api/apiConstants.js";
-import { useQuery } from 'react-query';
+import { useQuery } from "react-query";
 import { httpService } from "../../../services/httpService";
 
 //redux use functions
@@ -14,29 +14,20 @@ import { useDispatch, useSelector } from "react-redux";
 //redux actions
 import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
-import { messageActions } from "../../../store/slices/messageSlice";
 
 const Sidebar = ({ classes, onCloseNavbar }) => {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const filterBy = useSelector(state => state.message.filterBy)
-  const dispatch = useDispatch()
 
-  const { data: fetchedCategories, isLoading, error } = useQuery({
-    queryKey: ['categories'],
+  const {
+    data: fetchedCategories,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["categories"],
     queryFn: () => {
       return httpService.get(CATEGORY_URL);
-
-    }
+    },
   });
-
-  const setFilterBy = (categoryId) => {
-    if (categoryId) {
-      dispatch(messageActions.setFilterBy({ ...filterBy, categoryId, latest: false }))
-    } else {
-      dispatch(messageActions.setFilterBy({ ...filterBy, categoryId: "", latest: true }))
-    }
-  }
 
   //TODO: imlemet redux for categories
   // useEffect(() => {
@@ -45,7 +36,6 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
   //     dispatch(messageActions.loadMessages(fetchedMessages));
   //   }
   // }, [fetchedCategories, dispatch]);
-
 
   return (
     <aside className={`${classes || "hidden md:block"}`}>
@@ -60,7 +50,6 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
             link={`${MESSAGES}`}
             icon="ראשי"
             onCloseNavbar={onCloseNavbar}
-            setFilterBy={setFilterBy}
           />
 
           {fetchedCategories?.length &&
@@ -72,7 +61,6 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
                 link={`${MESSAGES}/${category._id}`}
                 icon={category.icon}
                 onCloseNavbar={onCloseNavbar}
-                setFilterBy={() => setFilterBy(category._id)}
               />
             ))}
         </ul>

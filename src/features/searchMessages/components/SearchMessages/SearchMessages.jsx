@@ -1,23 +1,40 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+// icons
 import { FaSearch } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux"
+// redux
+import { useDispatch } from "react-redux";
 import { messageActions } from "../../../../store/slices/messageSlice";
-
+// api
+import { MESSAGES_URL } from "../../../../api/apiConstants.js";
+import { httpService } from "../../../../services/httpService";
 
 const SearchMessages = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const dispatch = useDispatch()
-  const filterBy = useSelector(state => state.message.filterBy)
+  const dispatch = useDispatch();
+  const { categoryId = "" } = useParams();
+
+  const {
+    data: fetchedMessages,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["messages", searchTerm, categoryId],
+    queryFn: () => {
+      return httpService.get(
+        `${MESSAGES_URL}?searchTerm=${encodeURI(
+          searchTerm
+        )}&categoryId=${encodeURI(categoryId)}`
+      );
+    },
+  });
 
   useEffect(() => {
-    setFilterBy(searchTerm)
-  }, [searchTerm])
-
-  const setFilterBy = (searchTerm) => {
-    console.log(filterBy);
-    if (!searchTerm && !filterBy.categoryId) dispatch(messageActions.setFilterBy({ ...filterBy, searchTerm, latest: true }))
-    else dispatch(messageActions.setFilterBy({ ...filterBy, searchTerm, latest: false }))
-  }
+    if (fetchedMessages) {
+      dispatch(messageActions.loadMessages(fetchedMessages));
+    }
+  }, [fetchedMessages, dispatch]);
 
   return (
     <div className="flex items-center w-1/2 md:w-1/3 sm:1/4 border border-gray-300 rounded-xl bg-white ">
