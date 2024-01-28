@@ -19,7 +19,6 @@ const Messages = () => {
   const messages = useSelector((state) => state.message.messages);
 
   const dispatch = useDispatch();
-
   const {
     data: fetchedMessages,
     isLoading,
@@ -43,11 +42,11 @@ const Messages = () => {
       <Sidebar />
       <div className="w-full h-full">
         <HeroSection />
-        {isLoading && <LoadingPage />}
+        {/* {isLoading && <LoadingPage />} */}
         {/* //TODO: add an error modal? */}
         {error && <p>Error: {error.message}</p>}
         {messages?.length ? (
-          <MessageList messages={messages} />
+          <MessageList messages={messages} isLoading={isLoading} />
         ) : (
           <div>לא נמצאו הודעות</div>
         )}
