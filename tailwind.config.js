@@ -53,6 +53,9 @@ export default {
       borderRadius: {
         rightHeroImg: "5% 50% 66% 54% / 10% 61% 49% 90%  ",
       },
+    },
+    backgroundImage: {
+      hero: "url('./src/features/heroSection/img/image2.png')"
     }
   },
   safelist: [

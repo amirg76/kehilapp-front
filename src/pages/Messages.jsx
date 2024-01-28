@@ -12,6 +12,7 @@ import { messageActions } from "@store/slices/messageSlice";
 // api
 import { httpService } from "../services/httpService";
 import { MESSAGES_URL } from "../api/apiConstants";
+import HeroSection from "../features/heroSection/components/HeroSection";
 
 const Messages = () => {
   const { categoryId = "" } = useParams();
@@ -41,7 +42,7 @@ const Messages = () => {
       {/* sidebar & content split side by side */}
       <Sidebar />
       <div className="w-full h-full">
-        <Hero />
+        <HeroSection />
         {isLoading && <LoadingPage />}
         {/* //TODO: add an error modal? */}
         {error && <p>Error: {error.message}</p>}
