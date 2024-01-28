@@ -42,7 +42,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
       <nav className="h-full flex flex-col border-e shadow-sm w-72 sticky right-0 top-24">
         <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
         {/* nav links */}
-        <ul className="mb-5 ms-6 text-lg">
+        <ul className="mb-5 ms-6 pl-2 text-lg">
           <SidebarItem
             key="0"
             title="ראשי"
