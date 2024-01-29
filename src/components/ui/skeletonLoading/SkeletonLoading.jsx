@@ -33,8 +33,8 @@ const SkeletonLoading = () => {
             <CategoryTag
               category={{
                 title: "ראשי",
-                color: "rgb(148 163 184 / var(--tw-bg-opacity))",
-                fake: true,
+                color: "skeleton",
+                isInSkeleton: true,
               }}
             />
           </div>

@@ -6,8 +6,6 @@ import { useFormattedDate } from "../../../../hooks/useFormattedDate";
 
 const MessagePreview = ({ message }) => {
 
-  console.log(message);
-  
   const formattedDate = useFormattedDate(message.createdAt);
   const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
@@ -57,7 +55,7 @@ const MessagePreview = ({ message }) => {
           <section className="flex items-center">
             <Avatar classes="ml-[17px]" />
             <h6 className="w-fit">
-              <span className="font-semibold text-[18px]">אורן קליין</span>
+              <span className="font-semibold text-[18px]">{message.sender.firstName || "אור"} {message.sender.lastName || "כהן"}</span>
             </h6>
           </section>
           <div className="flex items-end justify-between">
@@ -65,7 +63,7 @@ const MessagePreview = ({ message }) => {
               <h6 className="ml-[15px]">{formattedDate.date}</h6>
               <h6 className="font-light">{formattedDate.time}</h6>
             </section>
-            <CategoryTag category={{ title: "ראשי", color: "#A3CA62" }} />
+            <CategoryTag category={{ title: message.category.title, color: message.category.categoryColor }} />
           </div>
         </div>
       </div>

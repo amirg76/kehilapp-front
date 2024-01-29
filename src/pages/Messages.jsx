@@ -16,6 +16,7 @@ import { categoryActions } from "@store/slices/categorySlice";
 import { httpService } from "../services/httpService";
 import { CATEGORY_URL, MESSAGES_URL, USERS_URL } from "../api/apiConstants";
 import useMessagesDisplay from "../hooks/useMessagesDisplay";
+import SkeletonLoading from "../components/ui/skeletonLoading/SkeletonLoading";
 
 const Messages = () => {
 
