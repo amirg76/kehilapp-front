@@ -1,19 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 //routing
 import { Routes, Route, useLocation } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
 // routes constants
 import { LOGIN } from "@routes/routeConstants.js";
-// redux
 
-import { useSelector } from "react-redux";
 //components
 import Header from "@components/Header/Header";
 
 const App = () => {
-  // const user = useSelector((state) => state.user.currentUser);
   const { pathname } = useLocation(); //* temp fix for hiding header on login screen
-
 
   return (
     <div className="w-screen flex flex-col ">
