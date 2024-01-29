@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 //components
@@ -15,13 +15,13 @@ import { categoryActions } from "@store/slices/categorySlice";
 // api
 import { httpService } from "../services/httpService";
 import { CATEGORY_URL, MESSAGES_URL, USERS_URL } from "../api/apiConstants";
+import useMessagesDisplay from "../hooks/useMessagesDisplay";
 
 const Messages = () => {
-  
-  const { categoryId = "" } = useParams();
-  const messages = useSelector((state) => state.message.messages);
 
+  const { categoryId = "" } = useParams();
   const dispatch = useDispatch();
+
   const { data: fetchedMessages, isLoading, error } = useQuery({
     queryKey: ["messages", categoryId],
     queryFn: () => {
@@ -55,6 +55,12 @@ const Messages = () => {
     }
   }, [fetchedMessages, fetchedUsers, fetchedCategories, dispatch]);
 
+  const messages = useSelector((state) => state.message.messages);
+  const users = useSelector((state) => state.user.users);
+  const categories = useSelector((state) => state.category.categories);
+
+  const messagesToDisplay = useMessagesDisplay(messages, categories, users);
+
   return (
     <div className="flex flex-1 w-full bg-[#efefef]">
       {/* sidebar & content split side by side */}
@@ -64,8 +70,8 @@ const Messages = () => {
         {/* {isLoading && <LoadingPage />} */}
         {/* //TODO: add an error modal? */}
         {error && <p>Error: {error.message}</p>}
-        {messages?.length ? (
-          <MessageList messages={messages} isLoading={isLoading} />
+        {messagesToDisplay?.length ? (
+          <MessageList messages={messagesToDisplay} isLoading={isLoading} />
         ) : (
           <div>לא נמצאו הודעות</div>
         )}

@@ -5,6 +5,9 @@ import TextPreview from "../TextPreview/TextPreview";
 import { useFormattedDate } from "../../../../hooks/useFormattedDate";
 
 const MessagePreview = ({ message }) => {
+
+  console.log(message);
+  
   const formattedDate = useFormattedDate(message.createdAt);
   const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
