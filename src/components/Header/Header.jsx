@@ -6,7 +6,7 @@ import NavBarLogo from "./NavBarLogo";
 import NavBarContact from "./NavBarContact";
 import NavBarButton from "./NavBarButton";
 import Sidebar from "@features/sidebar/components/Sidebar";
-import kibbutzLogo from "./img/logo-kibbuttz-transpert.png"
+import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ const Header = () => {
     console.log("close");
     setTimeout(() => {
       setOpen(false);
-    }, 300)
+    }, 300);
   };
 
   return (
@@ -32,10 +32,10 @@ const Header = () => {
         onClick={() => setOpen(false)}
       ></div>
 
-      <nav className="flex h-24 items-center justify-between p-5">
+      <nav className="flex h-24 items-center justify-between p-10">
         <NavLink to="/">
           {/* <NavBarLogo /> */}
-          <img src={kibbutzLogo} alt="" className="h-20"/>
+          <img src={kibbutzLogo} alt="" className="h-20" />
         </NavLink>
         <div className="hidden md:flex">
           <NavBarContact />
