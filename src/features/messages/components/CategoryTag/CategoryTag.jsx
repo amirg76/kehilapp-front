@@ -24,7 +24,7 @@ const CategoryTag = ({ category }) => {
         {!isInSkeleton ?
           <>
             <CategoryIcon categoryTitle={title} color="white" />
-            <h6 className="font-semibold mr-2">{title}</h6>
+            <h6 className="font-semibold text-[13px] mr-1">{title}</h6>
           </>
           :
           <h6 className="my-2"></h6>
