@@ -8,7 +8,11 @@ const SidebarItem = ({ title, color, icon, link, onCloseNavbar }) => {
   let location = useLocation();
 
   return (
-    <li onClick={onCloseNavbar}>
+    <li
+      onClick={() => {
+        onCloseNavbar && onCloseNavbar();
+      }}
+    >
       <Link
         to={`${link}`}
         // if link is clicked apply color, otherwise apply gray bg on hover
@@ -18,10 +22,7 @@ const SidebarItem = ({ title, color, icon, link, onCloseNavbar }) => {
             : "hover:font-bold hover:bg-gray-200"
         }`}
       >
-        <CategoryIcon
-          categoryTitle={icon}
-          color="#545454"
-        />
+        <CategoryIcon categoryTitle={icon} color="#545454" />
         <span className="mr-6">{title}</span>
       </Link>
     </li>
