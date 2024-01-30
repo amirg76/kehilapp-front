@@ -22,7 +22,6 @@ const MessagePreview = ({ message }) => {
     else setIsLongTextShown(true);
   };
 
-  console.log(containerHeight);
   return (
     <div className={`w-[270px] max-sm:w-full border-solid border border-black border-opacity-[0.1] rounded-[30px]
          bg-white shadow-0 shadow-md shadow-2 shadow-opacity-10 mx-3 my-10`}
