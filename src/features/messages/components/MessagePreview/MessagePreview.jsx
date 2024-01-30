@@ -8,7 +8,7 @@ const MessagePreview = ({ message }) => {
 
   const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
-  const [containerHeight, setContainerHeight] = useState(contentRef?.current?.offsetHeight - 50);
+  const [containerHeight, setContainerHeight] = useState(0);
   const formattedDate = useFormattedDate(message.createdAt);
   
   useEffect(() => {
@@ -22,6 +22,7 @@ const MessagePreview = ({ message }) => {
     else setIsLongTextShown(true);
   };
 
+  console.log(containerHeight);
   return (
     <div className={`w-[270px] max-sm:w-full border-solid border border-black border-opacity-[0.1] rounded-[30px]
          bg-white shadow-0 shadow-md shadow-2 shadow-opacity-10 mx-3 my-10`}
