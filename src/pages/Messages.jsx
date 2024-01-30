@@ -1,81 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
 //components
 import Sidebar from "@features/sidebar/components/Sidebar";
-import MessageList from "@features/messages/components/MessageList";
-import HeroSection from "../features/heroSection/components/HeroSection";
-import LoadingPage from "@components/ui/LoadingPage/LoadingPage";
-//redux
+import MessageList from "../features/messages/components/MessageList";
+import Hero from "../features/heroSection/components/Hero";
+
+//redux use functions
 import { useDispatch, useSelector } from "react-redux";
+//redux actions
 import { messageActions } from "@store/slices/messageSlice";
-import { userActions } from "@store/slices/userSlice";
-import { categoryActions } from "@store/slices/categorySlice";
-
-// api
-import { httpService } from "../services/httpService";
-import { CATEGORY_URL, MESSAGES_URL, USERS_URL } from "../api/apiConstants";
-import useMessagesDisplay from "../hooks/useMessagesDisplay";
-import SkeletonLoading from "../components/ui/skeletonLoading/SkeletonLoading";
-
+// api url
+import {
+  LATEST_MESSAGES_URL,
+  MESSAGES_BY_CATEGORY_URL,
+} from "@api/apiConstants.js";
 const Messages = () => {
+  let { categoryId } = useParams();
 
-  const { categoryId = "" } = useParams();
+
   const dispatch = useDispatch();
-
-  const { data: fetchedMessages, isLoading, error } = useQuery({
-    queryKey: ["messages", categoryId],
-    queryFn: () => {
-      return httpService.get(`${MESSAGES_URL}?categoryId=${categoryId}`);
-    },
-  });
-
-  const { data: fetchedCategories, isLoading: isLoadingCategories, error: errorCategories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => {
-      return httpService.get(CATEGORY_URL);
-    },
-  });
-
-  const { data: fetchedUsers, isLoading: isLoadingUsers, error: errorUsers } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => {
-      return httpService.get(USERS_URL);
-    },
-  });
+  const messages = useSelector((state) => state.message.messages);
 
   useEffect(() => {
-    if (fetchedMessages) {
-      dispatch(messageActions.loadMessages(fetchedMessages));
-    }
-    if (fetchedCategories) {
-      dispatch(categoryActions.loadCategories(fetchedCategories));
-    }
-    if (fetchedUsers) {
-      dispatch(userActions.loadUsers(fetchedUsers));
-    }
-  }, [fetchedMessages, fetchedUsers, fetchedCategories, dispatch]);
+    //! demo fetch, to be used only as demo, replace with react query.
+    const getData = async () => {
+      let url;
+      if (!categoryId) {
+        url = LATEST_MESSAGES_URL;
+      } else {
+        url = `${MESSAGES_BY_CATEGORY_URL}/${categoryId}`;
+      }
+      const response = await fetch(url);
+      if (response.ok) {
+        let json = await response.json();
+        dispatch(messageActions.loadMessages(json.data))
 
-  const messages = useSelector((state) => state.message.messages);
-  const users = useSelector((state) => state.user.users);
-  const categories = useSelector((state) => state.category.categories);
-
-  const messagesToDisplay = useMessagesDisplay(messages, categories, users);
+      }
+    };
+    getData();
+  }, [categoryId]);
 
   return (
     <div className="flex flex-1 w-full bg-[#efefef]">
       {/* sidebar & content split side by side */}
       <Sidebar />
       <div className="w-full h-full">
-        <HeroSection />
-        {/* {isLoading && <LoadingPage />} */}
-        {/* //TODO: add an error modal? */}
-        {error && <p>Error: {error.message}</p>}
-        {messagesToDisplay?.length ? (
-          <MessageList messages={messagesToDisplay} isLoading={isLoading} />
-        ) : (
-          <div>לא נמצאו הודעות</div>
-        )}
+        <Hero />
+        <MessageList messages={messages} />
       </div>
     </div>
   );

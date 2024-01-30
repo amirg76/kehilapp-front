@@ -5,9 +5,21 @@ import { Navigate } from "react-router-dom";
 import { ROOT, MESSAGES, LOGIN } from "@routes/routeConstants.js";
 // pages
 import Messages from "@pages/Messages.jsx";
-import Login from "@pages/Login.jsx";
+import Login from "@pages/Login";
 
 const routeConfig = [
+  // {
+  //   // Root Page - Redirect to the login page
+  //   path: ROOT,
+  //   element: <Navigate to={LOGIN} />,
+  //   exact: true,
+  // },
+  // {
+  //   // Login Page
+  //   path: LOGIN,
+  //   element: <Login />,
+  //   exact: true,
+  // },
   {
     // Main Page - Redirect to the messages page if user
     path: ROOT,
@@ -15,15 +27,14 @@ const routeConfig = [
     exact: true,
   },
   {
-    // Login Page
-    path: LOGIN,
-    element: <Login />,
-    exact: true,
-  },
-  {
     // messages page, redirects to the main category
     path: MESSAGES,
     element: <Messages />,
+    // element: isAuthenticate ? (
+    //   <Header>{<Messages />}</Header>
+    // ) : (
+    //   <Navigate to={LOGIN} />
+    // ),
     exact: true,
   },
   {

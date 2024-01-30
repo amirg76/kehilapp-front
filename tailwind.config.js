@@ -53,11 +53,7 @@ export default {
       borderRadius: {
         rightHeroImg: "5% 50% 66% 54% / 10% 61% 49% 90%  ",
       },
-    },
-    //! remove this if not used
-    // backgroundImage: {
-    //   hero: "url('./src/features/heroSection/img/image2.png')"
-    // }
+    }
   },
   safelist: [
     //categories active sidebar gradient

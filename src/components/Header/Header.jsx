@@ -6,7 +6,6 @@ import NavBarLogo from "./NavBarLogo";
 import NavBarContact from "./NavBarContact";
 import NavBarButton from "./NavBarButton";
 import Sidebar from "@features/sidebar/components/Sidebar";
-import kibbutzLogo from "./img/logo-kibbuttz-transpert.png"
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -34,8 +33,7 @@ const Header = () => {
 
       <nav className="flex h-24 items-center justify-between p-5">
         <NavLink to="/">
-          {/* <NavBarLogo /> */}
-          <img src={kibbutzLogo} alt="" className="h-20"/>
+          <NavBarLogo />
         </NavLink>
         <div className="hidden md:flex">
           <NavBarContact />
