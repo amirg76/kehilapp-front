@@ -3,7 +3,6 @@ import CategoryIcon from "@components/ui/CategoryIcon/CategoryIcon";
 
 const CategoryTag = ({ category }) => {
 
-  console.log(category);
   const { color, title, isInSkeleton = false } = category;
 
   const fillColors = {

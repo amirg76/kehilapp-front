@@ -2,15 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import Avatar from "@components/ui/Avatar/Avatar";
 import CategoryTag from "../CategoryTag/CategoryTag";
 import TextPreview from "../TextPreview/TextPreview";
-import { useFormattedDate } from "../../../../hooks/useFormattedDate";
+import useFormattedDate from "../../../../hooks/useFormattedDate";
 
 const MessagePreview = ({ message }) => {
 
-  const formattedDate = useFormattedDate(message.createdAt);
   const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
   const [containerHeight, setContainerHeight] = useState(contentRef?.current?.offsetHeight - 50);
-
+  const formattedDate = useFormattedDate(message.createdAt);
+  
   useEffect(() => {
     if (contentRef.current) {
       setContainerHeight(contentRef.current.offsetHeight - 50);
