@@ -16,18 +16,19 @@ import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
 const Sidebar = ({ classes, onCloseNavbar }) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    data: fetchedCategories,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: fetchedCategories, isLoading, error } = useQuery({
     queryKey: ["categories"],
     queryFn: () => {
       return httpService.get(CATEGORY_URL);
     },
   });
+
+  const toggleModal = (boolean) => {
+    setIsModalOpen(boolean)
+  }
 
   //TODO: imlemet redux for categories
   // useEffect(() => {
@@ -76,13 +77,11 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
         >
           הוסף הודעה
         </button>
-        {isModalOpen && fetchedCategories && (
           <MessageForm
             isModalOpen={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
+            toggleModal={toggleModal}
             categories={fetchedCategories}
           />
-        )}
         <hr className="mt-5" />
       </nav>
     </aside>
