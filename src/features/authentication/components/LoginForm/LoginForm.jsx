@@ -1,17 +1,44 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+// redux
+import { authActions } from "@store/slices/authSlice";
+import { useSelector, useDispatch } from "react-redux";
+
 import logoKisufim from "../img/logo-kibbuttz-transpert.png";
 import LoginFormInput from "../LoginFormInput/LoginFormInput";
 
-const LoginForm = ({ onLogin }) => {
+const handleLogin = (email, password) => {
+  if (email === "user@example.com" && password === "user@example.com") {
+    // Navigate to main page
+    navigate("/messages");
+  } else {
+    console.log("wrong credentials");
+  }
+};
+const LoginForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
   const handleSubmit = (event) => {
-    setPassword("");
-    setEmail("");
     event.preventDefault();
+    //* Simulate authentication logic (replace with your actual authentication logic)
+    if (email === "user@example.com" && password === "user@example.com") {
+      setPassword("");
+      setEmail("");
+      // Set user information in local storage
+      const user = { id: 1, name: "ישראל ישראלי" };
+      localStorage.setItem("token", "exampleToken");
+      localStorage.setItem("user", JSON.stringify(user));
 
-    onLogin(email, password);
+      // Dispatch the login action with user information
+      dispatch(authActions.login(user));
+      // Navigate to main page
+      navigate("/messages");
+    } else {
+      console.log("wrong credentials");
+    }
   };
 
   return (
