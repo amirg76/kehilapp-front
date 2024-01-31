@@ -17,7 +17,7 @@ import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 
 const Sidebar = ({ classes, onCloseNavbar }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const {
     data: fetchedCategories,
     isLoading,
@@ -66,16 +66,18 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
         </ul>
 
         {/* New Message Button */}
-        <button
-          className="p-2 rounded-md text-lg mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
-          onClick={() => {
-            // TODO: open a new message model on click
+        {isAuthenticated && (
+          <button
+            className="p-2 rounded-md text-lg mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
+            onClick={() => {
+              // TODO: open a new message model on click
 
-            setIsModalOpen(true);
-          }}
-        >
-          הוסף הודעה
-        </button>
+              setIsModalOpen(true);
+            }}
+          >
+            הוסף הודעה
+          </button>
+        )}
         {isModalOpen && fetchedCategories && (
           <MessageForm
             isModalOpen={isModalOpen}
