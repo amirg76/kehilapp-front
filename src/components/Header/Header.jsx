@@ -46,6 +46,7 @@ const Header = () => {
                    h-screen border-l-[1px]-[#ebebeb] z-30 transition-transform duration-600 pt-3
                    ${open ? "translate-x-0" : "translate-x-[-100%] md:flex"}`}
           onCloseNavbar={onCloseNavbar}
+          open={open}
         />
         <FontAwesomeIcon
           className="md:hidden"
