@@ -32,7 +32,7 @@ const Header = () => {
         onClick={() => setOpen(false)}
       ></div>
 
-      <nav className="flex h-24 items-center justify-between p-10">
+      <nav className="flex h-24 items-center justify-between p-10 ">
         <NavLink to="/">
           {/* <NavBarLogo /> */}
           <img src={kibbutzLogo} alt="" className="h-20" />
