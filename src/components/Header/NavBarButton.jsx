@@ -23,12 +23,12 @@ const NavBarButton = () => {
   };
 
   return (
-    <div className="flex flex-shrink-0 items-center ">
+    <div className="flex flex-shrink-0 items-center mx-auto">
       <ul>
         {isAuthenticated ? (
           <li>
             <div className="flex flex-shrink-0 items-center ">
-              <div className="flex flex-shrink-0 items-center p-2 ">
+              <div className="flex flex-shrink-0 items-center p-4 ">
                 שלום {currentUser.name}!
               </div>
               <button
