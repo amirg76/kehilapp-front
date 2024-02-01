@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+// import { useMutation } from "react-query"
+
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import TextareaCmp from "@components/form/TextareaCmp/TextareaCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
@@ -11,8 +13,10 @@ import { useDispatch } from "react-redux";
 import { messageActions } from "@store/slices/messageSlice";
 // api url
 import { MESSAGES_URL } from "@api/apiConstants.js";
+// import { httpService, queryClient } from "../../../../services/httpService";
 
-const MessageFormSection = ({ categories, closeModal }) => {
+const MessageFormSection = ({ categories, closeModal, isLoading, toggleLoading }) => {
+
   const [message, setMessage] = useState({
     categoryId: "",
     title: "",
@@ -22,7 +26,6 @@ const MessageFormSection = ({ categories, closeModal }) => {
 
   const [error, setError] = useState({ title: null, categoryId: null });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -44,7 +47,7 @@ const MessageFormSection = ({ categories, closeModal }) => {
   const handleSubmit = async (e) => {
     //loading
     setIsButtonDisabled(true);
-    setIsLoading(true);
+    toggleLoading(true);
 
     e.preventDefault();
     //form data body
@@ -54,18 +57,31 @@ const MessageFormSection = ({ categories, closeModal }) => {
     formData.append("text", message.text);
     formData.append("file", message.file);
 
-    const response = await fetch(MESSAGES_URL, {
-      method: "POST",
-      body: formData,
-    });
-    if (response.ok) {
-      let json = await response.json();
-      //add new post to state
-      dispatch(messageActions.saveMessage(json));
-    }
+    // setMessage(formData)
+    // mutate(formData)
 
-    closeModal();
+      const response = await fetch(MESSAGES_URL, {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        let json = await response.json();
+        //add new post to state
+        dispatch(messageActions.saveMessage(json));
+      }
+      toggleLoading(false);
+      closeModal();
   };
+
+  //TODO: react query integration
+  // const { mutate, isPending, isError, error: errorMsg } = useMutation({
+  //   mutationFn: (formData) => httpService.post(MESSAGES_URL, formData),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['messages'] });
+  //     dispatch(messageActions.saveMessage(message));
+  //     closeModal();
+  //   }
+  // });
 
   const validateForm = (ev) => {
     const { name, value } = ev.target;
