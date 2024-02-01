@@ -16,7 +16,7 @@ import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 import NavBarButton from "@components/Header/NavBarButton";
 
-const Sidebar = ({ classes, onCloseNavbar }) => {
+const Sidebar = ({ classes, onCloseNavbar, open }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -42,7 +42,7 @@ const Sidebar = ({ classes, onCloseNavbar }) => {
 
   return (
     <aside className={`${classes || "hidden md:block"}`}>
-      <nav className="h-fit flex flex-col border-e shadow-sm w-72 sticky top-24">
+      <nav className="h-screen flex flex-col border-e shadow-sm w-72 sticky top-24 ">
         {open && <NavBarButton />}
         <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
         {/* nav links */}
