@@ -3,22 +3,17 @@ import MessageFormHeader from "../MessageFormHeader";
 import MessageFormSection from "../MessageFormSection";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 
-const MessageForm = ({ isModalOpen, setIsModalOpen, categories }) => {
+const MessageForm = ({ isModalOpen, toggleModal, categories }) => {
   const closeModal = () => {
-    setIsModalOpen(false);
+    console.log('close');
+    toggleModal(false);
   };
   return (
     <>
-      <ModalDialog
-        isOpen={isModalOpen}
-        onClose={closeModal}
-      >
-        <div className="bg-[#EFEFEF] my-8 p-8 rounded-3xl shadow-md mx-5 xs:mx-14 lg:mx-0 lg:max-w-screen-md ">
+      <ModalDialog isOpen={isModalOpen} onClose={closeModal}>
+        <div className="bg-[#EFEFEF] w-screen sm:w-auto p-8 rounded-3xl shadow-md ">
           <MessageFormHeader closeModal={closeModal} />
-          <MessageFormSection
-            categories={categories}
-            closeModal={closeModal}
-          />
+          <MessageFormSection categories={categories} closeModal={closeModal} />
         </div>
       </ModalDialog>
     </>

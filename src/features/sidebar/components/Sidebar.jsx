@@ -16,19 +16,22 @@ import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 import NavBarButton from "@components/Header/NavBarButton";
 
-const Sidebar = ({ classes, onCloseNavbar, open }) => {
+const Sidebar = ({ classes, onCloseNavbar }) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { data: fetchedCategories, isLoading, error } = useQuery({
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const {
-    data: fetchedCategories,
-    isLoading,
-    error,
-  } = useQuery({
     queryKey: ["categories"],
     queryFn: () => {
       return httpService.get(CATEGORY_URL);
     },
   });
+
+  const toggleModal = (boolean) => {
+    setIsModalOpen(boolean)
+  }
 
   //TODO: imlemet redux for categories
   // useEffect(() => {
@@ -73,20 +76,16 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
             className="p-2 rounded-md text-lg mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
             onClick={() => {
               // TODO: open a new message model on click
-
-              setIsModalOpen(true);
-            }}
-          >
-            הוסף הודעה
-          </button>
-        )}
-        {isModalOpen && fetchedCategories && (
+            setIsModalOpen(true);
+          }}
+        >
+          הוסף הודעה
+        </button>
           <MessageForm
             isModalOpen={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
+            toggleModal={toggleModal}
             categories={fetchedCategories}
           />
-        )}
         <hr className="mt-5" />
       </nav>
     </aside>
