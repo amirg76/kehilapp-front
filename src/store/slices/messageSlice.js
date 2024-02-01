@@ -12,8 +12,7 @@ const messageSlice = createSlice({
       state.messages = action.payload;
     },
     saveMessage(state, action) {
-      const { newMessage } = action.payload;
-      state.messages.push(newMessage);
+      state.messages.unshift(action.payload);
     },
     updateMessage(state, action) {
       const { messageToSave } = action.payload;
