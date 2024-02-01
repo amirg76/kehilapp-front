@@ -15,11 +15,11 @@ import { MESSAGES_URL } from "@api/apiConstants.js";
 const MessageFormSection = ({ categories, closeModal }) => {
   const [message, setMessage] = useState({
     categoryId: "",
-    senderId: "099",
     title: "",
     text: "",
     file: "",
   });
+
   const [error, setError] = useState({ title: null, categoryId: null });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -153,8 +153,6 @@ const MessageFormSection = ({ categories, closeModal }) => {
               style="self-end relative left-[15px] bottom-[30px]"
             />
           </TextareaCmp>
-
-          {/* <FileLinkSvg /> */}
 
           <InputCmp
             type="file"
