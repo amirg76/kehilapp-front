@@ -12,7 +12,7 @@ const HeroSection = () => {
         backgroundImage: `url(${KibbutzCustomImage})`,
       }}
     >
-      <h1 className="text-6xl font-semibold mb-2 text-white pt-8">
+      <h1 className="text-6xl font-semibold mb-2 text-white pt-8 text-center px-6">
         הודעות הקיבוץ
       </h1>
       <SearchMessages />

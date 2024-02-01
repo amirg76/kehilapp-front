@@ -19,25 +19,36 @@ import useMessagesDisplay from "../hooks/useMessagesDisplay";
 import SkeletonLoading from "../components/ui/skeletonLoading/SkeletonLoading";
 
 const Messages = () => {
-
   const { categoryId = "" } = useParams();
   const dispatch = useDispatch();
 
-  const { data: fetchedMessages, isLoading, error } = useQuery({
+  const {
+    data: fetchedMessages,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["messages", categoryId],
     queryFn: () => {
       return httpService.get(`${MESSAGES_URL}?categoryId=${categoryId}`);
     },
   });
 
-  const { data: fetchedCategories, isLoading: isLoadingCategories, error: errorCategories } = useQuery({
+  const {
+    data: fetchedCategories,
+    isLoading: isLoadingCategories,
+    error: errorCategories,
+  } = useQuery({
     queryKey: ["categories"],
     queryFn: () => {
       return httpService.get(CATEGORY_URL);
     },
   });
 
-  const { data: fetchedUsers, isLoading: isLoadingUsers, error: errorUsers } = useQuery({
+  const {
+    data: fetchedUsers,
+    isLoading: isLoadingUsers,
+    error: errorUsers,
+  } = useQuery({
     queryKey: ["users"],
     queryFn: () => {
       return httpService.get(USERS_URL);
@@ -63,7 +74,7 @@ const Messages = () => {
   const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   return (
-    <div className="flex flex-1 w-full bg-[#efefef]">
+    <div className="flex flex-1 w-full bg-[#efefef] ">
       {/* sidebar & content split side by side */}
       <Sidebar />
       <div className="w-full h-full">
