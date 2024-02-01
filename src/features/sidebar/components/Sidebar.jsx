@@ -39,8 +39,8 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
   // }, [fetchedCategories, dispatch]);
 
   return (
-    <aside className={`${classes || "hidden md:block"} `}>
-      <nav className="h-screen flex flex-col border-e shadow-sm w-72 sticky top-24   ">
+    <aside className={`${classes || "hidden md:block"}`}>
+      <nav className="h-fit flex flex-col border-e shadow-sm w-72 sticky top-24">
         {open && <NavBarButton />}
         <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
         {/* nav links */}
