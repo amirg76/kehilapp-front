@@ -2,7 +2,7 @@ import React, { useState } from "react";
 //components
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 
-const ImagePreview = ({ imgSrc }) => {
+const ImagePreview = ({ imgSrc, altDescription }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -10,7 +10,7 @@ const ImagePreview = ({ imgSrc }) => {
       <img
         className="rounded-[20px] h-[195px] object-cover"
         src={imgSrc}
-        alt="image"
+        alt={altDescription}
         onClick={() => {
           setIsModalOpen(true);
         }}
@@ -21,7 +21,7 @@ const ImagePreview = ({ imgSrc }) => {
           setIsModalOpen(false);
         }}
       >
-        <img src={imgSrc} alt="" className="mx-auto w-[80dvw]" />
+        <img src={imgSrc} alt={altDescription} className="mx-auto w-[80dvw]" />
       </ModalDialog>
     </>
   );
