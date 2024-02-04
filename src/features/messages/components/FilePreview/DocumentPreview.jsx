@@ -16,7 +16,7 @@ const DocumentPreview = ({ previewImgSrc, fileUrl, fileName }) => {
 
   return (
     <img
-      className="rounded-[20px] h-[195px] object-cover"
+      className="rounded-[20px] h-[195px] object-cover cursor-pointer"
       src={previewImgSrc}
       alt="cover for a downloadable file"
       onClick={handleShowFile}

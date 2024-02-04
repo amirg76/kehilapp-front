@@ -8,7 +8,7 @@ const ImagePreview = ({ imgSrc, altDescription }) => {
   return (
     <>
       <img
-        className="rounded-[20px] h-[195px] object-cover"
+        className="rounded-[20px] h-[195px] object-cover cursor-pointer"
         src={imgSrc}
         alt={altDescription}
         onClick={() => {
