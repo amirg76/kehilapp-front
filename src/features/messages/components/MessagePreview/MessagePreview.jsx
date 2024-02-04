@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
+//components
 import Avatar from "@components/ui/Avatar/Avatar";
 import CategoryTag from "../CategoryTag/CategoryTag";
 import TextPreview from "../TextPreview/TextPreview";
+import FilePreview from "../FilePreview/FilePreview";
+//utils
 import useFormattedDate from "../../../../hooks/useFormattedDate";
 
 const MessagePreview = ({ message }) => {
@@ -35,12 +38,12 @@ const MessagePreview = ({ message }) => {
         className="flex flex-col p-[15px] relative bottom-[50px]"
         ref={contentRef}
       >
-        <img
-          className="rounded-[20px] h-[195px] object-cover"
-          // src="https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg" alt="demo-img" />
-          src="https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg"
-          alt="demo-img"
+        <FilePreview
+          attachmentType={message.attachmentType}
+          attachmentUrl={message.attachmentUrl}
+          attachmentName={message.attachmentName}
         />
+
         <div className="flex flex-col flex-1 mt-[10px]">
           <h1 className="text-[20px] font-semibold mb-[2px]">
             {message.title}
