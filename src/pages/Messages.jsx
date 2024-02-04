@@ -6,6 +6,8 @@ import Sidebar from "@features/sidebar/components/Sidebar";
 import MessageList from "@features/messages/components/MessageList";
 import HeroSection from "../features/heroSection/components/HeroSection";
 import LoadingPage from "@components/ui/LoadingPage/LoadingPage";
+import SearchMessages from "@features/searchMessages/components/SearchMessages/SearchMessages";
+
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { messageActions } from "@store/slices/messageSlice";
@@ -79,6 +81,7 @@ const Messages = () => {
       <Sidebar />
       <div className="w-full h-full">
         <HeroSection />
+        <SearchMessages/>
         {/* {isLoading && <LoadingPage />} */}
         {/* //TODO: add an error modal? */}
         {error && <p>Error: {error.message}</p>}
