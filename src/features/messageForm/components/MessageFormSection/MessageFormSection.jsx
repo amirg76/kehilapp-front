@@ -15,8 +15,12 @@ import { messageActions } from "@store/slices/messageSlice";
 import { MESSAGES_URL } from "@api/apiConstants.js";
 // import { httpService, queryClient } from "../../../../services/httpService";
 
-const MessageFormSection = ({ categories, closeModal, isLoading, toggleLoading }) => {
-
+const MessageFormSection = ({
+  categories,
+  closeModal,
+  isLoading,
+  toggleLoading,
+}) => {
   const [message, setMessage] = useState({
     categoryId: "",
     title: "",
@@ -60,17 +64,17 @@ const MessageFormSection = ({ categories, closeModal, isLoading, toggleLoading }
     // setMessage(formData)
     // mutate(formData)
 
-      const response = await fetch(MESSAGES_URL, {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        let json = await response.json();
-        //add new post to state
-        dispatch(messageActions.saveMessage(json));
-      }
-      toggleLoading(false);
-      closeModal();
+    const response = await fetch(MESSAGES_URL, {
+      method: "POST",
+      body: formData,
+    });
+    if (response.ok) {
+      let json = await response.json();
+      //add new post to state
+      dispatch(messageActions.saveMessage(json));
+    }
+    toggleLoading(false);
+    closeModal();
   };
 
   //TODO: react query integration
@@ -176,6 +180,7 @@ const MessageFormSection = ({ categories, closeModal, isLoading, toggleLoading }
             label="הוסף קובץ"
             inputStyle="ms-2 border-0"
             onChange={handleFileInput}
+            accept="image/png,image/jpeg,application/pdf"
           />
 
           <h5 className="mb-5">* שדות המסומנים בכוכבית הם שדות חובה</h5>
