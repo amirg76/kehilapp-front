@@ -45,7 +45,11 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
 
   return (
     <aside className={`${classes || "hidden md:block"}`}>
-      <nav className="h-fit flex flex-col border-e shadow-sm w-72 sticky top-24 ">
+      <nav
+        className={`${
+          !open && "top-24"
+        } h-fit flex flex-col border-e shadow-sm w-72 sticky`}
+      >
         {open && <NavBarButton />}
         <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
         {/* nav links */}
