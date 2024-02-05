@@ -17,11 +17,14 @@ import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 import NavBarButton from "@components/Header/NavBarButton";
 
 const Sidebar = ({ classes, onCloseNavbar, open }) => {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const { data: fetchedCategories, isLoading, error } = useQuery({
+  const {
+    data: fetchedCategories,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["categories"],
     queryFn: () => {
       return httpService.get(CATEGORY_URL);
@@ -29,8 +32,8 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
   });
 
   const toggleModal = (boolean) => {
-    setIsModalOpen(boolean)
-  }
+    setIsModalOpen(boolean);
+  };
 
   //TODO: imlemet redux for categories
   // useEffect(() => {
@@ -42,7 +45,7 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
 
   return (
     <aside className={`${classes || "hidden md:block"}`}>
-      <nav className="h-screen flex flex-col border-e shadow-sm w-72 sticky top-24 ">
+      <nav className="h-fit flex flex-col border-e shadow-sm w-72 sticky top-24 ">
         {open && <NavBarButton />}
         <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
         {/* nav links */}
@@ -79,7 +82,8 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
             }}
           >
             הוסף הודעה
-          </button>)}
+          </button>
+        )}
         <MessageForm
           isModalOpen={isModalOpen}
           toggleModal={toggleModal}
