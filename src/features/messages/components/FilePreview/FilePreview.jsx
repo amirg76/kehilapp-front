@@ -8,7 +8,11 @@ const FilePreview = ({ attachmentType, attachmentUrl, attachmentName }) => {
   if (!attachmentType) {
     return (
       <ImagePreview
-        imgSrc={"https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg"}
+        imgSrc={
+          attachmentUrl
+            ? attachmentUrl
+            : "https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg"
+        }
         altDescription="category cover image"
       />
     );
