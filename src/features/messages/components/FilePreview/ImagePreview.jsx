@@ -21,7 +21,7 @@ const ImagePreview = ({ imgSrc, altDescription }) => {
           setIsModalOpen(false);
         }}
       >
-        <img src={imgSrc} alt={altDescription} className="mx-auto w-[80dvw]" />
+        <img src={imgSrc} alt={altDescription} className="mx-auto w-screen max-w-[100vw] sm:w-[80dvw]" />
       </ModalDialog>
     </>
   );
