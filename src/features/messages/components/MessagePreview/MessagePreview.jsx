@@ -34,13 +34,18 @@ const MessagePreview = ({ message }) => {
         zIndex: "1",
       }}
     >
+      {!message.attachmentUrl && console.log(message.category.coverImgUrl)}
       <div
         className="flex flex-col p-[15px] relative bottom-[50px]"
         ref={contentRef}
       >
         <FilePreview
           attachmentType={message.attachmentType}
-          attachmentUrl={message.attachmentUrl}
+          attachmentUrl={
+            message.attachmentUrl
+              ? message.attachmentUrl
+              : message.category.coverImgUrl
+          }
           attachmentName={message.attachmentName}
         />
 
