@@ -24,7 +24,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 right-0 z-20 bg-white border-[#0000001a] border-solid shadow-navShadow">
+    <header className="sticky top-0 right-0 z-10 bg-white border-[#0000001a] border-solid shadow-navShadow">
       <div
         className={
           open ? "main-screen opacity-100 pointer-events-auto" : "main-screen"
