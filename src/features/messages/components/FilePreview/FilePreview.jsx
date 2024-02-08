@@ -2,6 +2,7 @@ import React from "react";
 //components
 import ImagePreview from "./ImagePreview";
 import DocumentPreview from "./DocumentPreview";
+import PdfIcon from "@components/ui/PdfIcon/PdfIcon";
 
 const FilePreview = ({ attachmentType, attachmentUrl, attachmentName }) => {
   if (!attachmentType) {
@@ -21,10 +22,12 @@ const FilePreview = ({ attachmentType, attachmentUrl, attachmentName }) => {
   } else if (attachmentType === "application/pdf") {
     return (
       <DocumentPreview
-        previewImgSrc={"https://www.svgrepo.com/show/373961/pdf2.svg"}
         fileUrl={attachmentUrl}
         fileName={attachmentName}
-      />
+        style="bg-[#facbc8]"
+      >
+        <PdfIcon />
+      </DocumentPreview>
     );
   } else {
     return <></>;
