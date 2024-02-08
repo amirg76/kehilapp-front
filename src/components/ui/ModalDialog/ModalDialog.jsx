@@ -12,7 +12,7 @@ const ModalDialog = ({ isOpen, onClose, children }) => {
     >
       {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div
-        className="fixed inset-0 bg-black/30 "
+        className="fixed inset-0 bg-black/70 "
         aria-hidden="true"
       />
 
