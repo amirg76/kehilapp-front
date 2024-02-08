@@ -1,5 +1,7 @@
 import Axios from 'axios'
+import { QueryClient } from "react-query";
 
+export const queryClient = new QueryClient();
 
 var axios = Axios.create({
     withCredentials: true

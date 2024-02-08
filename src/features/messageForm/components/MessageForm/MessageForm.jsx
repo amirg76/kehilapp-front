@@ -3,22 +3,25 @@ import MessageFormHeader from "../MessageFormHeader";
 import MessageFormSection from "../MessageFormSection";
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 
-const MessageForm = ({ isModalOpen, setIsModalOpen, categories }) => {
+const MessageForm = ({ isModalOpen, toggleModal, categories }) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toggleLoading = (boolean) => {
+    setIsLoading(boolean)
+  }
+
   const closeModal = () => {
-    setIsModalOpen(false);
+    toggleModal(false);
   };
+
+
   return (
     <>
-      <ModalDialog
-        isOpen={isModalOpen}
-        onClose={closeModal}
-      >
-        <div className="bg-[#EFEFEF] my-8 p-8 rounded-3xl shadow-md mx-5 xs:mx-14 lg:mx-0 lg:max-w-screen-md ">
-          <MessageFormHeader closeModal={closeModal} />
-          <MessageFormSection
-            categories={categories}
-            closeModal={closeModal}
-          />
+      <ModalDialog isOpen={isModalOpen} onClose={closeModal}>
+        <div className="bg-[#EFEFEF] w-screen sm:w-[426px] h-[728px] p-8 rounded-3xl shadow-md ">
+          {!isLoading && <MessageFormHeader closeModal={closeModal} />}
+          <MessageFormSection categories={categories} closeModal={closeModal} isLoading={isLoading} toggleLoading={toggleLoading}/>
         </div>
       </ModalDialog>
     </>
