@@ -7,19 +7,25 @@ import NavBarContact from "./NavBarContact";
 import NavBarButton from "./NavBarButton";
 import Sidebar from "@features/sidebar/components/Sidebar";
 import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
-
+//redux use functions
+import { useDispatch, useSelector } from "react-redux";
+import { uiActions } from "@store/slices/uiSlice";
 const Header = () => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
+  const isModalOpen = useSelector((state) => state.ui.isModalOpen);
+  const dispatch = useDispatch();
 
   const onOpenNavbar = () => {
     console.log("open");
-    setOpen(true);
+    dispatch(uiActions.toggleModal());
+    // setOpen(true);
   };
 
   const onCloseNavbar = () => {
     console.log("close");
     setTimeout(() => {
-      setOpen(false);
+      dispatch(uiActions.toggleModal());
+      // setOpen(false);
     }, 300);
   };
 
@@ -27,9 +33,12 @@ const Header = () => {
     <header className="sticky top-0 right-0 z-10 bg-white border-[#0000001a] border-solid shadow-navShadow">
       <div
         className={
-          open ? "main-screen opacity-100 pointer-events-auto" : "main-screen"
+          isModalOpen
+            ? "main-screen opacity-100 pointer-events-auto"
+            : "main-screen"
         }
-        onClick={() => setOpen(false)}
+        // onClick={() => setOpen(false)}
+        onClick={() => onCloseNavbar()}
       ></div>
 
       <nav className="flex h-24 items-center justify-between p-10 ">
@@ -44,9 +53,13 @@ const Header = () => {
         <Sidebar
           classes={`max-md:flex flex-column fixed left-0 top-0 bg-white opacity-90
                    h-screen border-l-[1px]-[#ebebeb] z-30 transition-transform duration-600 pt-3
-                   ${open ? "translate-x-0" : "translate-x-[-100%] md:flex"}`}
+                   ${
+                     isModalOpen
+                       ? "translate-x-0"
+                       : "translate-x-[-100%] md:flex"
+                   }`}
           onCloseNavbar={onCloseNavbar}
-          open={open}
+          open={isModalOpen}
         />
         <FontAwesomeIcon
           className="md:hidden"
