@@ -48,7 +48,7 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
       <nav
         className={`${
           !open && "top-24"
-        } h-fit flex flex-col border-e shadow-sm w-72 sticky`}
+        } h-fit flex flex-col border-e shadow-sm w-72 sticky `}
       >
         {open && <NavBarButton />}
         <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>

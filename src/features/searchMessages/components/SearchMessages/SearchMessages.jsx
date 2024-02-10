@@ -37,7 +37,7 @@ const SearchMessages = () => {
   }, [fetchedMessages, dispatch]);
 
   return (
-    <div className="flex items-center w-[90%] sm:w-[320px] border border-gray-300 rounded-xl bg-white sticky top-[80px] sm:top-[75px] mt-[-22px] mb-5 mx-auto z-10 shadow-md">
+    <div className="flex items-center w-[90%] sm:w-[320px] border border-gray-300 rounded-xl bg-white sticky top-[80px] sm:top-[75px] mt-[-22px] mb-5 mx-auto md:z-10 shadow-md">
       <FaSearch className="mr-4 text-gray-400" />
       <input
         type="text"
