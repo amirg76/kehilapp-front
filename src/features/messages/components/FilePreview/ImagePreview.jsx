@@ -2,8 +2,11 @@ import React, { useState } from "react";
 //components
 import ModalDialog from "@components/ui/ModalDialog/ModalDialog";
 
-const ImagePreview = ({ imgSrc, altDescription }) => {
+const ImagePreview = ({ imgSrc, altDescription, attachmentUrl }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const openImgPopUp = () => {
+    return !attachmentUrl && setIsModalOpen(true);
+  };
 
   return (
     <>
@@ -12,7 +15,7 @@ const ImagePreview = ({ imgSrc, altDescription }) => {
         src={imgSrc}
         alt={altDescription}
         onClick={() => {
-          setIsModalOpen(true);
+          openImgPopUp();
         }}
       />
       <ModalDialog
@@ -21,7 +24,11 @@ const ImagePreview = ({ imgSrc, altDescription }) => {
           setIsModalOpen(false);
         }}
       >
-        <img src={imgSrc} alt={altDescription} className="mx-auto w-screen max-w-[100vw] sm:w-[80dvw]" />
+        <img
+          src={imgSrc}
+          alt={altDescription}
+          className="mx-auto w-screen max-w-[100vw] sm:w-[80dvw]"
+        />
       </ModalDialog>
     </>
   );

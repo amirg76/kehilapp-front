@@ -14,6 +14,7 @@ const FilePreview = ({ attachmentType, attachmentUrl, attachmentName }) => {
             : "https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg"
         }
         altDescription="category cover image"
+        attachmentUrl={attachmentUrl}
       />
     );
   } else if (attachmentType.split("/")[0] === "image") {
