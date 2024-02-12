@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // redux
+import { uiActions } from "@store/slices/uiSlice";
 import { authActions } from "@store/slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -17,7 +18,8 @@ const NavBarButton = () => {
 
     // Dispatch the logout action
     dispatch(authActions.logout());
-
+    // close mobile sidebar
+    dispatch(uiActions.toggleModal());
     // Navigate to home page
     navigate("/");
   };
