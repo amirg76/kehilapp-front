@@ -32,8 +32,8 @@ const LoginForm = () => {
       const user = { id: 1, name: "ישראל ישראלי" };
       localStorage.setItem("token", "exampleToken");
       localStorage.setItem("user", JSON.stringify(user));
-      // close mobile sidebar
-      dispatch(uiActions.toggleModal());
+      // // close mobile sidebar
+      // dispatch(uiActions.toggleModal());
       // Dispatch the login action with user information
       dispatch(authActions.login(user));
       // Navigate to main page

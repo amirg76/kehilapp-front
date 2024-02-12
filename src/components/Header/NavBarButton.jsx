@@ -18,8 +18,8 @@ const NavBarButton = () => {
 
     // Dispatch the logout action
     dispatch(authActions.logout());
-    // close mobile sidebar
-    dispatch(uiActions.toggleModal());
+    // // close mobile sidebar
+    // dispatch(uiActions.toggleModal());
     // Navigate to home page
     navigate("/");
   };
