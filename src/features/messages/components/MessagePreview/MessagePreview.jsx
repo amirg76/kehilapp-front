@@ -64,8 +64,8 @@ const MessagePreview = ({ message }) => {
             <Avatar classes="ml-[17px]" />
             <h6 className="w-fit">
               <span className="font-semibold text-[18px]">
-                {message.sender.firstName || "אור"}{" "}
-                {message.sender.lastName || "כהן"}
+                {message.sender.firstName || "אורה"}{" "}
+                {message.sender.lastName || "ארביטמן"}
               </span>
             </h6>
           </section>

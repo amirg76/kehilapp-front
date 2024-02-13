@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // redux
+import { uiActions } from "@store/slices/uiSlice";
 import { authActions } from "@store/slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -31,7 +32,8 @@ const LoginForm = () => {
       const user = { id: 1, name: "ישראל ישראלי" };
       localStorage.setItem("token", "exampleToken");
       localStorage.setItem("user", JSON.stringify(user));
-
+      // // close mobile sidebar
+      // dispatch(uiActions.toggleModal());
       // Dispatch the login action with user information
       dispatch(authActions.login(user));
       // Navigate to main page

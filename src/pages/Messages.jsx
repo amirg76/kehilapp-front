@@ -72,7 +72,7 @@ const Messages = () => {
   const messages = useSelector((state) => state.message.messages);
   const users = useSelector((state) => state.user.users);
   const categories = useSelector((state) => state.category.categories);
-
+  const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   return (
@@ -81,7 +81,7 @@ const Messages = () => {
       <Sidebar />
       <div className="w-full h-full">
         <HeroSection />
-        <SearchMessages/>
+        {!isModalOpen && <SearchMessages />}
         {/* {isLoading && <LoadingPage />} */}
         {/* //TODO: add an error modal? */}
         {error && <p>Error: {error.message}</p>}
