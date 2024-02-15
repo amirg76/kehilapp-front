@@ -34,7 +34,10 @@ const MessageFormSection = ({
   const dispatch = useDispatch();
 
   const handleChange = (ev) => {
-    const { name, value } = ev.target;
+    console.log(ev);
+    const { name, value } = ev.target === undefined ? ev : ev.target;
+    console.log("name:" + name, "value:" + value);
+
     setMessage({ ...message, [name]: value });
     validateForm(ev);
   };
@@ -88,7 +91,7 @@ const MessageFormSection = ({
   // });
 
   const validateForm = (ev) => {
-    const { name, value } = ev.target;
+    const { name, value } = ev.target === undefined ? ev : ev.target;
 
     switch (name) {
       case "title":
@@ -133,7 +136,7 @@ const MessageFormSection = ({
             style="sm:w-[350px]"
           />
 
-          <ErrorMessage msg={error.categoryId} style="h-[20px] mb-3" />
+          <ErrorMessage msg={error.categoryId} style="h-[20px] mb-1" />
 
           <InputCmp
             name="title"
@@ -154,7 +157,7 @@ const MessageFormSection = ({
 
           <ErrorMessage
             msg={error.title}
-            style="h-[20px] mb-3 relative bottom-[20px]"
+            style="h-[20px] mb-1 relative bottom-[20px]"
           />
 
           <TextareaCmp
@@ -163,14 +166,15 @@ const MessageFormSection = ({
             value={message?.text}
             onChange={handleChange}
             rows="10"
-            maxLength="350"
-            style="w-full px-3 py-2"
+            maxLength="1500"
+            style="w-full h-64 mb-3 "
             containerStyle="flex flex-col"
           >
             <CharsCount
               currCount={message?.text?.length}
-              total="350"
-              style="self-end relative left-[15px] bottom-[30px]"
+              total="1500"
+              // style="self-end relative left-[15px] bottom-[30px]"
+              style="self-end relative left-[15px] "
             />
           </TextareaCmp>
 
@@ -183,11 +187,11 @@ const MessageFormSection = ({
             accept="image/png,image/jpeg,application/pdf"
           />
 
-          <h5 className="mb-5">* שדות המסומנים בכוכבית הם שדות חובה</h5>
+          <h5 className="mb-1">* שדות המסומנים בכוכבית הם שדות חובה</h5>
 
           <ButtonCmp
             label="שלח"
-            style="w-full sm:w-[150px] justify-self-end p-2"
+            style="w-full sm:w-[150px] justify-self-end p-2 "
             isDisabled={isButtonDisabled}
           />
         </form>
