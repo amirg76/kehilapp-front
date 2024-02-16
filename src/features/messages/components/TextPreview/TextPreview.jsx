@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
+import parse from "html-react-parser";
 const TextPreview = ({
   txt,
   isLongTxtShown,
@@ -26,7 +26,7 @@ const TextPreview = ({
         className={isLongTxtShown ? expandedClasses : baseClasses}
         ref={containerRef}
       >
-        {ReactHtmlParser(txt)}
+        {parse(txt)}
       </p>
       {isOverflowed && (
         <span
