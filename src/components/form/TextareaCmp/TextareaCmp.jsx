@@ -53,11 +53,11 @@ const TextareaCmp = ({
   ...otherProps
 }) => {
   const { containerStyle } = otherProps;
-  const [body, setBody] = useState("");
+  const [content, setContent] = useState("");
 
   const handleChange = (e) => {
     console.log("name:" + name, "value:" + e);
-    setBody(e);
+    setContent(e);
     onChange({ name, value: e });
   };
 
@@ -72,7 +72,7 @@ const TextareaCmp = ({
       <ReactQuill
         theme="snow"
         name={name}
-        value={body}
+        value={content}
         placeholder={placeholder}
         onChange={handleChange}
         style={{ direction: "rtl", textAlign: "right" }}
@@ -81,6 +81,9 @@ const TextareaCmp = ({
         modules={modules}
         formats={formats}
       />
+
+      {/* <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu>
+      <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu> */}
       {/* <textarea
         name={name}
         value={value}
