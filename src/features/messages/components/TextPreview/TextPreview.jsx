@@ -1,31 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from "react";
+///-/////
+const TextPreview = ({
+  txt,
+  isLongTxtShown,
+  toggleLongText,
+  baseClasses,
+  expandedClasses,
+}) => {
+  const containerRef = useRef(null);
+  const [isOverflowed, setIsOverflowed] = useState(false);
 
-const TextPreview = ({ txt, isLongTxtShown, toggleLongText, baseClasses, expandedClasses }) => {
+  useEffect(() => {
+    const container = containerRef.current;
 
-    const containerRef = useRef(null);
-    const [isOverflowed, setIsOverflowed] = useState(false);
+    if (container.scrollHeight > container.clientHeight) {
+      setIsOverflowed(true);
+    } else {
+      setIsOverflowed(false);
+    }
+  }, [txt]);
 
-    useEffect(() => {
-        const container = containerRef.current;
-
-        if (container.scrollHeight > container.clientHeight) {
-            setIsOverflowed(true);
-        } else {
-            setIsOverflowed(false);
-        }
-    }, [txt]);
-
-    return (
-        <section className="font-light mb-[15px]">
-            <p className={isLongTxtShown ? expandedClasses : baseClasses} ref={containerRef}>{txt}  </p>
-            {isOverflowed && <span
-                className="text-[#4870AD] cursor-pointer"
-                onClick={() => toggleLongText(!isLongTxtShown)}
-            >
-                {isLongTxtShown ? 'קרא פחות' : 'קרא עוד'}
-            </span>}
-        </section>
-    );
+  return (
+    <section className="font-light mb-[15px]">
+      <p
+        className={isLongTxtShown ? expandedClasses : baseClasses}
+        ref={containerRef}
+      >
+        {txt}{" "}
+      </p>
+      {isOverflowed && (
+        <span
+          className="text-[#4870AD] cursor-pointer"
+          onClick={() => toggleLongText(!isLongTxtShown)}
+        >
+          {isLongTxtShown ? "קרא פחות" : "קרא עוד"}
+        </span>
+      )}
+    </section>
+  );
 };
 
 export default TextPreview;
