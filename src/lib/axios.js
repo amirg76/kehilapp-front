@@ -1,5 +1,5 @@
 // api url
-// import { BASE_URL } from "@api/apiConstants.js";
+import { BASE_URL } from "@api/apiConstants.js";
 const init = ({ baseURL = BASE_URL, axiosOptions = { headers: {} } } = {}) => {
   api = axios.create({
     baseURL,
