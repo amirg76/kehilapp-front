@@ -11,6 +11,11 @@ const NavBarButton = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const handleToggleModel = () => {
+    // // close mobile sidebar
+    dispatch(uiActions.toggleModal());
+  };
+
   const handleLogout = () => {
     // Clear token and user information from local storage
     localStorage.removeItem("token");
@@ -19,6 +24,7 @@ const NavBarButton = () => {
     // Dispatch the logout action
     dispatch(authActions.logout());
     // // close mobile sidebar
+    handleToggleModel();
     // dispatch(uiActions.toggleModal());
     // Navigate to home page
     navigate("/");
@@ -44,7 +50,10 @@ const NavBarButton = () => {
         ) : (
           <li>
             <Link to="/login">
-              <button className="rounded-lg border-2 border-solid border-4870ad py-3 px-8 text-000000 border-backgroundButton text-center font-assistant font-semibold text-sm leading-5'">
+              <button
+                className="rounded-lg border-2 border-solid border-4870ad py-3 px-8 text-000000 border-backgroundButton text-center font-assistant font-semibold text-sm leading-5'"
+                onClick={handleToggleModel}
+              >
                 התחבר
               </button>
             </Link>
