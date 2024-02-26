@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import NavBarLogo from "./NavBarLogo";
-import NavBarContact from "./NavBarContact";
 import NavBarButton from "./NavBarButton";
 import Sidebar from "@features/sidebar/components/Sidebar";
 import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
@@ -47,7 +46,7 @@ const Header = () => {
           <img src={kibbutzLogo} alt="" className="h-20" />
         </NavLink>
         <div className="hidden md:flex">
-          <NavBarContact />
+        
           <NavBarButton />
         </div>
         <Sidebar
