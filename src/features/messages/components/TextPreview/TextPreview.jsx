@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import parse from "html-react-parser";
-
+/////--///
 const TextPreview = ({
   txt,
   isLongTxtShown,
@@ -11,7 +10,6 @@ const TextPreview = ({
 }) => {
   const containerRef = useRef(null);
   const [isOverflowed, setIsOverflowed] = useState(false);
-
   // Function to process HTML content and apply styles to anchor tags
   const processHtmlContent = () => {
     const replacedHtml = txt

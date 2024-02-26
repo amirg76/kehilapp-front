@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { useMutation } from "react-query"
-
+//cmps
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import TextareaCmp from "@components/form/TextareaCmp/TextareaCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
@@ -13,12 +12,13 @@ import { useDispatch } from "react-redux";
 import { messageActions } from "@store/slices/messageSlice";
 // api url
 import { MESSAGES_URL } from "@api/apiConstants.js";
-// import { httpService, queryClient } from "../../../../services/httpService";
+import { httpService, queryClient } from "../../../../services/httpService";
+import { useMutation } from "react-query"
 
 const MessageFormSection = ({
   categories,
   closeModal,
-  isLoading,
+  // isLoading,
   toggleLoading,
 }) => {
   const [message, setMessage] = useState({
@@ -64,31 +64,20 @@ const MessageFormSection = ({
     formData.append("text", message.text);
     formData.append("file", message.file);
 
-    // setMessage(formData)
-    // mutate(formData)
-
-    const response = await fetch(MESSAGES_URL, {
-      method: "POST",
-      body: formData,
-    });
-    if (response.ok) {
-      let json = await response.json();
-      //add new post to state
-      dispatch(messageActions.saveMessage(json));
-    }
-    toggleLoading(false);
-    closeModal();
+    setMessage(formData)
+    mutate(formData)
   };
 
-  //TODO: react query integration
-  // const { mutate, isPending, isError, error: errorMsg } = useMutation({
-  //   mutationFn: (formData) => httpService.post(MESSAGES_URL, formData),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['messages'] });
-  //     dispatch(messageActions.saveMessage(message));
-  //     closeModal();
-  //   }
-  // });
+  const { mutate, isLoading: isPending, isError, error: errorMsg } = useMutation({
+    mutationFn: (formData) => httpService.post(MESSAGES_URL, formData),
+    onSuccess: (data) => {
+      console.log('success');
+      queryClient.invalidateQueries({ queryKey: ['messages'] });
+      dispatch(messageActions.saveMessage(data));
+      toggleLoading(false);
+      closeModal();
+    }
+  });
 
   const validateForm = (ev) => {
     const { name, value } = ev.target === undefined ? ev : ev.target;
@@ -121,7 +110,7 @@ const MessageFormSection = ({
   // TODO: Change Loading page UI
   return (
     <>
-      {isLoading ? (
+      {isPending ? (
         <LoadingPage />
       ) : (
         <form onSubmit={handleSubmit} className="grid justify-items-stretch">
