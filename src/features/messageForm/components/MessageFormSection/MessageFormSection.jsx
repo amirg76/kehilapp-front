@@ -13,7 +13,7 @@ import { messageActions } from "@store/slices/messageSlice";
 // api url
 import { MESSAGES_URL } from "@api/apiConstants.js";
 import { httpService, queryClient } from "../../../../services/httpService";
-import { useMutation } from "react-query"
+import { useMutation } from "react-query";
 
 const MessageFormSection = ({
   categories,
@@ -64,19 +64,24 @@ const MessageFormSection = ({
     formData.append("text", message.text);
     formData.append("file", message.file);
 
-    setMessage(formData)
-    mutate(formData)
+    setMessage(formData);
+    mutate(formData);
   };
 
-  const { mutate, isLoading: isPending, isError, error: errorMsg } = useMutation({
+  const {
+    mutate,
+    isLoading: isPending,
+    isError,
+    error: errorMsg,
+  } = useMutation({
     mutationFn: (formData) => httpService.post(MESSAGES_URL, formData),
     onSuccess: (data) => {
-      console.log('success');
-      queryClient.invalidateQueries({ queryKey: ['messages'] });
+      console.log("success");
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
       dispatch(messageActions.saveMessage(data));
       toggleLoading(false);
       closeModal();
-    }
+    },
   });
 
   const validateForm = (ev) => {
@@ -155,7 +160,7 @@ const MessageFormSection = ({
             value={message?.text}
             onChange={handleChange}
             rows="10"
-            maxLength="1500"
+            // maxLength="1500"
             style="w-full h-64 mb-3 "
             containerStyle="flex flex-col"
           >
