@@ -28,6 +28,10 @@
   -webkit-line-clamp: unset;
 }
 
+.msgs-container-height{
+ min-height: calc(100vh - 96px);
+}
+
 .top-clip {
   clip-path: polygon(
     96.982% 58.418%,

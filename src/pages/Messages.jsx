@@ -76,7 +76,7 @@ const Messages = () => {
   const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   return (
-    <div className="flex flex-1 w-full bg-[#efefef] ">
+    <div className="flex flex-1 w-full bg-[#efefef] msgs-container-height">
       {/* sidebar & content split side by side */}
       <Sidebar />
       <div className="w-full h-full">
