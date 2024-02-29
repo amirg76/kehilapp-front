@@ -55,7 +55,6 @@ const TextPreview = ({
       >
         {processHtmlContent()}
       </div>
-      {/* {console.log(txt)} */}
       {isOverflowed && (
         <span
           className="text-[#4870AD] cursor-pointer"
@@ -70,22 +69,4 @@ const TextPreview = ({
 
 export default TextPreview;
 
-// const TextPreview = ({ txt, isLongTxtShown, toggleLongText, classes }) => {
 
-//     if (txt.length < 90) return <section className={classes}>{txt}</section>
-//     return (
-//         <section className={classes}>
-//             {isLongTxtShown ?
-//                 <React.Fragment>
-//                     {txt}
-//                     <span className='text-[#4870AD]' onClick={() => toggleLongText(false)}> קרא פחות</span>
-//                 </React.Fragment> :
-//                 <React.Fragment>
-//                     {txt.substr(0, 110)}
-//                     <span className='text-[#4870AD]' onClick={() => toggleLongText(true)}> קרא עוד...</span>
-//                 </React.Fragment>}
-//         </section>
-//     )
-// }
-
-// export default TextPreview
