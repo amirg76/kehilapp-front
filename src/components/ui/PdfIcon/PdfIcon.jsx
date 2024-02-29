@@ -2,8 +2,8 @@ import React from 'react'
 
 const PdfIcon = () => {
     return (
-        <svg height="100px" width="100px" className="mb-6" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 0 309.267 309.267" xml:space="preserve">
+        <svg height="100px" width="100px" className="mb-6" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 309.267 309.267" xmlSpace="preserve">
             <g>
                 <path style={{ fill: "#E2574C" }} d="M38.658,0h164.23l87.049,86.711v203.227c0,10.679-8.659,19.329-19.329,19.329H38.658
     c-10.67,0-19.329-8.65-19.329-19.329V19.329C19.329,8.65,27.989,0,38.658,0z"/>

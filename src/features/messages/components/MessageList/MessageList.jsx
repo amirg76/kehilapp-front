@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 //SkeletonLoading
 import SkeletonLoading from "@components/ui/skeletonLoading/SkeletonLoading";
 
-const MessageList = ({ messages, isLoading }) => {
+const MessageList = ({ messages, currentCategory, isLoading }) => {
   //TODO - what is the best practice to get the sender's name? from where should i send the request to the backend?
 
   const SkeletonLoadingArray = Array.from({ length: 12 });
@@ -13,12 +13,16 @@ const MessageList = ({ messages, isLoading }) => {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="flex flex-wrap justify-center">
-        {isLoading
-          ? SkeletonLoadingArray.map((_, i) => <SkeletonLoading key={i} />)
-          : messages &&
-            messages.map((message) => (
-              <MessagePreview key={message._id} message={message} />
-            ))}
+        {isLoading && SkeletonLoadingArray.map((_, i) => <SkeletonLoading key={i} />)}
+        {messages.length ?
+          messages.map((message) => (
+            <MessagePreview key={message._id} message={message} />
+          )) :
+          <div className="text-center">
+            <div className="text-2xl font-semibold">לא נמצאו הודעות </div>
+            {currentCategory && <div>בקטגוריה {currentCategory.title} </div>}
+          </div>
+        }
       </div>
     </div>
   );

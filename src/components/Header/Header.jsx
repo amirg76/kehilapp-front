@@ -17,14 +17,14 @@ const Header = () => {
 
   const onOpenNavbar = () => {
     console.log("open");
-    dispatch(uiActions.toggleModal());
+    dispatch(uiActions.openModal());
     // setOpen(true);
   };
 
   const onCloseNavbar = () => {
     console.log("close");
     setTimeout(() => {
-      dispatch(uiActions.toggleModal());
+      dispatch(uiActions.closeModal());
       // setOpen(false);
     }, 300);
   };
