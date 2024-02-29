@@ -23,6 +23,11 @@ import SkeletonLoading from "../components/ui/skeletonLoading/SkeletonLoading";
 const Messages = () => {
   const { categoryId = "" } = useParams();
   const dispatch = useDispatch();
+  const messages = useSelector((state) => state.message.messages);
+  const users = useSelector((state) => state.user.users);
+  const categories = useSelector((state) => state.category.categories);
+  const isModalOpen = useSelector((state) => state.ui.isModalOpen);
+  const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   const {
     data: fetchedMessages,
@@ -43,6 +48,17 @@ const Messages = () => {
     queryKey: ["categories"],
     queryFn: () => {
       return httpService.get(CATEGORY_URL);
+    },
+  });
+
+  const {
+    data: currentCategory,
+    isLoading: isLoadingCategory,
+    error: errorCategory,
+  } = useQuery({
+    queryKey: ["category", categoryId],
+    queryFn: () => {
+      return httpService.get(`${CATEGORY_URL}/${categoryId}`);
     },
   });
 
@@ -69,11 +85,6 @@ const Messages = () => {
     }
   }, [fetchedMessages, fetchedUsers, fetchedCategories, dispatch]);
 
-  const messages = useSelector((state) => state.message.messages);
-  const users = useSelector((state) => state.user.users);
-  const categories = useSelector((state) => state.category.categories);
-  const isModalOpen = useSelector((state) => state.ui.isModalOpen);
-  const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   return (
     <div className="flex flex-1 w-full bg-[#efefef] msgs-container-height">
@@ -85,11 +96,7 @@ const Messages = () => {
         {/* {isLoading && <LoadingPage />} */}
         {/* //TODO: add an error modal? */}
         {error && <p>Error: {error.message}</p>}
-        {messagesToDisplay?.length ? (
-          <MessageList messages={messagesToDisplay} isLoading={isLoading} />
-        ) : (
-          <div>לא נמצאו הודעות</div>
-        )}
+        <MessageList messages={messagesToDisplay} currentCategory={currentCategory} isLoading={isLoading} />
       </div>
     </div>
   );
