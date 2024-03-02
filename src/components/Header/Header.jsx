@@ -61,7 +61,7 @@ const Header = () => {
           onCloseNavbar={onCloseNavbar}
           open={isModalOpen}
         />
-        {console.log(isModalOpen)}
+
         <FontAwesomeIcon
           className="md:hidden"
           onClick={onOpenNavbar}
