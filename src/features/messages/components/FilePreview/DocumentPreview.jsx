@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 
 const DocumentPreview = ({ fileUrl, fileName, children, style }) => {
-  
+
   const handleShowFile = () => {
     const link = document.createElement("a");
     link.href = fileUrl;
@@ -18,7 +18,9 @@ const DocumentPreview = ({ fileUrl, fileName, children, style }) => {
   };
 
   return (
-    <div className={`rounded-[20px] h-[195px] object-cover cursor-pointer flex flex-col items-center justify-end ${style}`} onClick={handleShowFile}>
+    <div className={`rounded-[20px] h-[195px] object-cover cursor-pointer flex flex-col items-center justify-end
+    shadow-0 shadow-md shadow-2 shadow-opacity-10] border-solid border border-black border-opacity-[0.1]
+    ${style}`} onClick={handleShowFile}>
       {children}
       <div className="w-full px-3 bg-[#78777778] rounded-b-[20px] flex items-center">
         <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{ color: "rgb(31, 41, 55)" }} className="ml-2" />
