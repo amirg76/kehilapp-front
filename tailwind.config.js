@@ -46,7 +46,6 @@ export default {
         categoryYellow: "#CAA062",
         categoryDarkGreen: "#62CAA5",
         categoryPink: "#CA62B3",
-        categoryYellow1: "#E4E0A6",
       },
       boxShadow: {
         navShadow: "0px 4px 10px 0px rgba(0,0,0,0.11)",
@@ -70,7 +69,6 @@ export default {
     "bg-gradient-to-r  from-categoryYellow",
     "bg-gradient-to-r  from-categoryDarkGreen",
     "bg-gradient-to-r  from-categoryPink",
-    "bg-gradient-to-r  from-categoryYellow1",
   ],
   plugins: [],
 };
