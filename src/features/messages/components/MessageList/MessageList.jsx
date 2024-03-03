@@ -11,7 +11,7 @@ const MessageList = ({ messages, currentCategory, isLoading }) => {
   const SkeletonLoadingArray = Array.from({ length: 12 });
 
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="mx-auto max-w-[1410px]">
       <div className="flex flex-wrap justify-center">
         {isLoading && SkeletonLoadingArray.map((_, i) => <SkeletonLoading key={i} />)}
         {messages.length ?

@@ -30,7 +30,7 @@ const MessagePreview = ({ message }) => {
     //      bg-white shadow-0 shadow-md shadow-2 shadow-opacity-10 mx-6 my-10`}
     <div
       className={`w-[436px] max-sm:w-full border-solid border border-black border-opacity-[0.2] rounded-[30px]
-            bg-white mx-6 my-10`}
+            bg-white mx-4 my-10`}
       style={{
         height: `${containerHeight}px`,
         position: "relative",
