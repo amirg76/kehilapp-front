@@ -30,6 +30,7 @@ const MessageFormSection = ({
 
   const [error, setError] = useState({ title: null, categoryId: null });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const windowWidth = window.innerWidth;
 
   const dispatch = useDispatch();
 
@@ -162,13 +163,15 @@ const MessageFormSection = ({
             rows="10"
             // maxLength="1500"
             style="w-full h-64 mb-3 "
-            containerStyle="flex flex-col"
+            containerStyle={`flex flex-col ${
+              windowWidth < 600 ? "space-y-14" : "space-y-8"
+            }  bg-white `}
           >
             <CharsCount
               currCount={message?.text?.length}
               total="1500"
               // style="self-end relative left-[15px] bottom-[30px]"
-              style="self-end relative left-[15px] "
+              style="self-end relative left-[15px]  "
             />
           </TextareaCmp>
 
