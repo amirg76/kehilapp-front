@@ -11,21 +11,16 @@ import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
 import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "@store/slices/uiSlice";
 const Header = () => {
-  // const [open, setOpen] = useState(false);
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const dispatch = useDispatch();
 
   const onOpenNavbar = () => {
-    console.log("open");
     dispatch(uiActions.openModal());
-    // setOpen(true);
   };
 
   const onCloseNavbar = () => {
-    console.log("close");
     setTimeout(() => {
       dispatch(uiActions.closeModal());
-      // setOpen(false);
     }, 300);
   };
 
@@ -37,7 +32,6 @@ const Header = () => {
             ? "main-screen opacity-100 pointer-events-auto"
             : "main-screen"
         }
-        // onClick={() => setOpen(false)}
         onClick={() => onCloseNavbar()}
       ></div>
 
