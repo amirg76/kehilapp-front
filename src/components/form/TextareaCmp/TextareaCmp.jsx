@@ -5,37 +5,38 @@ import MagicUrl from "quill-magic-url";
 //-----------------//
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import EditorToolbar, { modules, formats } from "./EditorToolbar";
 
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }, { font: [] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    ["link", "image"],
-    ["clean"],
-    // [{ direction: "rtl" }], // this is rtl support
-  ],
-  magicUrl: true,
-};
+// const modules = {
+//   toolbar: [
+//     [{ header: [1, 2, false] }, { font: [] }],
+//     ["bold", "italic", "underline", "strike", "blockquote"],
+//     [
+//       { list: "ordered" },
+//       { list: "bullet" },
+//       { indent: "-1" },
+//       { indent: "+1" },
+//     ],
+//     ["link", "image"],
+//     ["clean"],
+//     // [{ direction: "rtl" }], // this is rtl support
+//   ],
+//   magicUrl: true,
+// };
 
-const formats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-  "image",
-];
+// const formats = [
+//   "header",
+//   "bold",
+//   "italic",
+//   "underline",
+//   "strike",
+//   "blockquote",
+//   "list",
+//   "bullet",
+//   "indent",
+//   "link",
+//   "image",
+// ];
 
 Quill.register("modules/magicUrl", MagicUrl);
 
@@ -68,14 +69,13 @@ const TextareaCmp = ({
           {label}
         </label>
       )}
-
+      <EditorToolbar />
       <ReactQuill
         theme="snow"
         name={name}
         value={content}
         placeholder={placeholder}
         onChange={handleChange}
-        style={{ direction: "rtl", textAlign: "right" }}
         className={` border-gray-300 rounded-md resize-none focus:outline-none focus:border-primary-700  ${style} `}
         maxLength={maxLength}
         modules={modules}
