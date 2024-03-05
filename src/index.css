@@ -18,6 +18,10 @@
   }
 }
 
+.ql-editor {
+  direction: rtl;
+  text-align: right;
+}
 .text-preview {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -28,8 +32,8 @@
   -webkit-line-clamp: unset;
 }
 
-.msgs-container-height{
- min-height: calc(100vh - 96px);
+.msgs-container-height {
+  min-height: calc(100vh - 96px);
 }
 
 .top-clip {
