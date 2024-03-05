@@ -17,7 +17,7 @@ const MessageForm = ({ isModalOpen, toggleModal, categories }) => {
   return (
     <>
       <ModalDialog isOpen={isModalOpen} onClose={closeModal}>
-        <div className="bg-[#EFEFEF] w-screen sm:w-[600px]  p-8 sm:rounded-3xl shadow-md ">
+        <div className="bg-[#EFEFEF] w-screen sm:w-[700px]  p-8 sm:rounded-3xl shadow-md ">
           {!isLoading && <MessageFormHeader closeModal={closeModal} />}
           <MessageFormSection
             categories={categories}

@@ -163,9 +163,10 @@ const MessageFormSection = ({
             rows="10"
             // maxLength="1500"
             style="w-full h-64 mb-3 "
-            containerStyle={`flex flex-col ${
-              windowWidth < 600 ? "space-y-14" : "space-y-8"
-            }  bg-white `}
+            containerStyle={"flex flex-col  bg-white"}
+            // containerStyle={`flex flex-col ${
+            //   windowWidth < 600 ? "space-y-14" : "space-y-8"
+            // }  bg-white `}
           >
             <CharsCount
               currCount={message?.text?.length}
