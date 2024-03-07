@@ -128,7 +128,7 @@ const MessageFormSection = ({
             onBlur={validateForm}
             value={message.categoryId}
             containerStyle="relative mb-1 sm:w-fit"
-            style="sm:w-[350px]"
+            style="sm:w-[350px]  "
           />
 
           <ErrorMessage msg={error.categoryId} style="h-[20px] mb-1" />
@@ -140,7 +140,7 @@ const MessageFormSection = ({
             onChange={handleChange}
             onBlur={validateForm}
             maxLength="25"
-            inputStyle="w-full sm:w-[350px] mb-1"
+            inputStyle="w-full sm:w-[350px] mb-1  "
             containerStyle="flex flex-col sm:w-fit"
           >
             <CharsCount
@@ -152,7 +152,7 @@ const MessageFormSection = ({
 
           <ErrorMessage
             msg={error.title}
-            style="h-[20px] mb-1 relative bottom-[20px]"
+            style="sm:h-[20px] mb-1 relative bottom-[20px]"
           />
 
           <TextareaCmp
@@ -162,8 +162,8 @@ const MessageFormSection = ({
             onChange={handleChange}
             rows="10"
             // maxLength="1500"
-            style="w-full h-64 mb-3 "
-            containerStyle={"flex flex-col  bg-white"}
+            style="w-full sm:h-64 sm:mb-3 h-[20vh] "
+            containerStyle={"flex flex-col bg-white"}
             // containerStyle={`flex flex-col ${
             //   windowWidth < 600 ? "space-y-14" : "space-y-8"
             // }  bg-white `}
