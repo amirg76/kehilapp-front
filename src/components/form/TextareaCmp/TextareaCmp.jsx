@@ -63,7 +63,7 @@ const TextareaCmp = ({
   };
 
   return (
-    <div className={`mb-10 ${containerStyle}`}>
+    <div className={`mb-10 xxs:mb-2 ${containerStyle}`}>
       {label && (
         <label htmlFor={name} className={labelStyle}>
           {label}

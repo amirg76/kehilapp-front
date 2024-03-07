@@ -7,7 +7,8 @@ export default {
       zen: ["Zen Kaku Gothic Antique"],
     },
     screens: {
-      xs: "500px",
+      xxs: "375px",
+      xs: "400px",
       sm: "640px",
       // => @media (min-width: 640px) { ... }
 
