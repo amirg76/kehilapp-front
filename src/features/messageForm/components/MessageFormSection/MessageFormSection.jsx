@@ -6,7 +6,7 @@ import TextareaCmp from "@components/form/TextareaCmp/TextareaCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import SelectCmp from "@components/form/SelectCmp/SelectCmp";
 import CharsCount from "@components/ui/CharsCount/CharsCount";
-import ErrorMessage from "@components/ui/ErrrorMessage/ErrorMessage";
+import ErrorMessage from "@components/ui/ErrorMessage/ErrorMessage";
 import LoadingPage from "@components/ui/LoadingPage/LoadingPage";
 //redux
 import { messageActions } from "@store/slices/messageSlice";
