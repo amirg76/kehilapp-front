@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 //cmps
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import TextareaCmp from "@components/form/TextareaCmp/TextareaCmp";
@@ -8,8 +9,9 @@ import CharsCount from "@components/ui/CharsCount/CharsCount";
 import ErrorMessage from "@components/ui/ErrrorMessage/ErrorMessage";
 import LoadingPage from "@components/ui/LoadingPage/LoadingPage";
 //redux
-import { useDispatch } from "react-redux";
 import { messageActions } from "@store/slices/messageSlice";
+import { useDispatch } from "react-redux";
+import { uiActions } from "@store/slices/uiSlice";
 // api url
 import { MESSAGES_URL } from "@api/apiConstants.js";
 import { httpService, queryClient } from "../../../../services/httpService";
@@ -17,7 +19,7 @@ import { useMutation } from "react-query";
 
 const MessageFormSection = ({
   categories,
-  closeModal,
+  closeMessageModal,
   // isLoading,
   toggleLoading,
 }) => {
@@ -30,18 +32,21 @@ const MessageFormSection = ({
 
   const [error, setError] = useState({ title: null, categoryId: null });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
   const windowWidth = window.innerWidth;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleChange = (ev) => {
     console.log(ev);
     const { name, value } = ev.target === undefined ? ev : ev.target;
-    console.log("name:" + name, "value:" + value);
+    // console.log("name:" + name, "value:" + value);
 
     setMessage({ ...message, [name]: value });
     validateForm(ev);
   };
+
   const handleFileInput = (e) => {
     setMessage({ ...message, file: e.target.files[0] });
   };
@@ -76,14 +81,21 @@ const MessageFormSection = ({
     error: errorMsg,
   } = useMutation({
     mutationFn: (formData) => httpService.post(MESSAGES_URL, formData),
-    onSuccess: (data) => {
-      console.log("success");
-      queryClient.invalidateQueries({ queryKey: ["messages"] });
-      dispatch(messageActions.saveMessage(data));
-      toggleLoading(false);
-      closeModal();
-    },
+    onSuccess: (data) => onMessageSent(data)
   });
+
+  const onMessageSent = (data) => {
+    queryClient.invalidateQueries({ queryKey: ["messages"] });
+    dispatch(messageActions.saveMessage(data));
+    toggleLoading(false);
+    closeMessageModal();
+    onCloseNavbar();
+    navigate(`/messages/${message.categoryId}`)
+  }
+
+  const onCloseNavbar = () => {
+    dispatch(uiActions.closeModal());
+  };
 
   const validateForm = (ev) => {
     const { name, value } = ev.target === undefined ? ev : ev.target;
@@ -164,9 +176,9 @@ const MessageFormSection = ({
             // maxLength="1500"
             style="w-full sm:h-64 sm:mb-3 h-[20vh] "
             containerStyle={"flex flex-col bg-white"}
-            // containerStyle={`flex flex-col ${
-            //   windowWidth < 600 ? "space-y-14" : "space-y-8"
-            // }  bg-white `}
+          // containerStyle={`flex flex-col ${
+          //   windowWidth < 600 ? "space-y-14" : "space-y-8"
+          // }  bg-white `}
           >
             <CharsCount
               currCount={message?.text?.length}

@@ -10,18 +10,18 @@ const MessageForm = ({ isModalOpen, toggleModal, categories }) => {
     setIsLoading(boolean);
   };
 
-  const closeModal = () => {
+  const closeMessageModal = () => {
     toggleModal(false);
   };
   //sm:w-[426px]
   return (
     <>
-      <ModalDialog isOpen={isModalOpen} onClose={closeModal}>
+      <ModalDialog isOpen={isModalOpen} onClose={closeMessageModal}>
         <div className="bg-[#EFEFEF] w-screen sm:w-[700px] h-[100vh] sm:h-[90vh] xxs:h-fit p-8 sm:rounded-3xl shadow-md ">
-          {!isLoading && <MessageFormHeader closeModal={closeModal} />}
+          {!isLoading && <MessageFormHeader closeMessageModal={closeMessageModal} />}
           <MessageFormSection
             categories={categories}
-            closeModal={closeModal}
+            closeMessageModal={closeMessageModal}
             isLoading={isLoading}
             toggleLoading={toggleLoading}
           />
