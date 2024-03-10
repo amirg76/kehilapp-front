@@ -10,6 +10,7 @@ import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
 //redux use functions
 import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "@store/slices/uiSlice";
+
 const Header = () => {
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const dispatch = useDispatch();
