@@ -1,14 +1,15 @@
 import React from "react";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 
-const MessageFormHeader = ({ closeModal }) => {
+const MessageFormHeader = ({ closeMessageModal }) => {
+  
   return (
     <div className="flex justify-between items-center">
       <h2 className="text-2xl text-gray-500 font-semibold">כתיבת הודעה</h2>
       {/* Close Button */}
       <ButtonCmp
         className="text-gray-400 hover:text-gray-800 cursor-pointer mb-10 sm:mt-4 "
-        onClick={closeModal}
+        onClick={closeMessageModal}
         label={
           <svg
             xmlns="http://www.w3.org/2000/svg"
