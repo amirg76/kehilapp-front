@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // redux
-import { uiActions } from "@store/slices/uiSlice";
 import { authActions } from "@store/slices/authSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import logoKisufim from "../img/logo-kibbuttz-transpert.png";
 
@@ -97,15 +96,17 @@ const LoginForm = () => {
           className="w-full max-w-md px-8 py-10 bg-white rounded-2xl shadow-lg"
           onSubmit={handleSubmit}
         >
-          <h1 className="mb-3">ברוך שובך</h1>
-          <h2 className="text-xl font-bold mb-10">כניסה לחשבונך</h2>
+          <h1 className="mb-3">ברוך שובך!</h1>
+          <h2 className="text-xl font-bold mb-6">כניסה לחשבונך</h2>
 
           <InputCmp label="אימייל" name="email" value={userCredentials.email}
-            onChange={handleChange} onBlur={validateForm} containerStyle="flex flex-col" />
-          <ErrorMessage msg={error.email} style="h-[20px] mb-3" />
+            onChange={handleChange} onBlur={validateForm} inputStyle="py-3"
+            containerStyle="flex flex-col" labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2" />
+          <ErrorMessage msg={error.email} style="h-[20px]  mr-3" />
           <InputCmp label="סיסמא" type="password" name="password" value={userCredentials.password}
-            onBlur={validateForm} onChange={handleChange} containerStyle="flex flex-col" />
-          <ErrorMessage msg={error.password} style="h-[20px] mb-5" />
+            onChange={handleChange} onBlur={validateForm} inputStyle="py-3"
+            containerStyle="flex flex-col" labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2" />
+          <ErrorMessage msg={error.password} style="h-[20px] mb-6 mr-3" />
           <ButtonCmp label="כניסה לחשבון" isDisabled={isButtonDisabled} onClick={handleSubmit} style="w-full py-3" />
 
         </form>
