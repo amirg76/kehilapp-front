@@ -19,10 +19,54 @@ const LoginForm = () => {
     email: '',
     password: ''
   })
+  const [error, setError] = useState({
+    email: null,
+    password: null
+  })
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleChange = ({ target }) => {
-    const { name, value } = target
+  useEffect(() => {
+    setIsButtonDisabled(
+      Object.values(error).some((value) => value?.length > 0 || value === null)
+    );
+  }, [error]);
+
+  const handleChange = (ev) => {
+    const { name, value } = ev.target
     setUserCredentials({ ...userCredentials, [name]: value })
+    validateForm(ev);
+  };
+
+  const validateForm = (ev) => {
+    const { name, value } = ev.target
+    // console.log('validate', name, value);
+    switch (name) {
+      case "email":
+        if (!value || !value.length) {
+          setError((prevErrors) => ({ ...prevErrors, email: "שדה חובה" }));
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
+          setError((prevErrors) => ({ ...prevErrors, email: "כתובת המייל אינה תקינה" }))
+        } else {
+          setError((prevErrors) => ({ ...prevErrors, email: "" }));
+        }
+        break;
+      case "password":
+        if (!value || !value.length) {
+          setError((prevErrors) => ({ ...prevErrors, password: "שדה חובה" }));
+        } else if (!/^.{8,20}$/.test(value)) {
+          setError((prevErrors) => ({ ...prevErrors, password: "הסיסמא צריכה להיות באורך של 8 תווים לפחות" }));
+        }
+        //OPTIONAL
+        // else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,20}$/.test(value)) {
+        //   setError((prevErrors) => ({ ...prevErrors, password: "הסיסמא צריכה להכיל לפחות מספר אחד, אות גדולה אחת ואות קטנה אחת" }));
+        // } 
+        else {
+          setError((prevErrors) => ({ ...prevErrors, password: "" }));
+        }
+      default:
+        break;
+    }
   };
 
   const handleSubmit = (event) => {
@@ -47,11 +91,7 @@ const LoginForm = () => {
     <>
       {/* Login Form on the Right */}
       <div className="flex flex-col items-center md:w-1/2">
-        <img
-          className="object-cover w-[15em] h-[8em] my-10"
-          src={logoKisufim}
-          alt="Your Company"
-        />
+        <img className="object-cover w-[15em] h-[8em] my-10" src={logoKisufim} alt="Your Company" />
         {/* Login Form */}
         <form
           className="w-full max-w-md px-8 py-10 bg-white rounded-2xl shadow-lg"
@@ -60,11 +100,13 @@ const LoginForm = () => {
           <h1 className="mb-3">ברוך שובך</h1>
           <h2 className="text-xl font-bold mb-10">כניסה לחשבונך</h2>
 
-          <InputCmp label="אימייל" name="email" value={userCredentials.email} onChange={handleChange} containerStyle="flex flex-col mb-4"/>
-          <ErrorMessage msg="" style=""/>
-          <InputCmp label="סיסמא" type="password" name="password" value={userCredentials.password} onChange={handleChange} containerStyle="flex flex-col mb-4"/>
-          <ErrorMessage msg="" style=""/>
-          <ButtonCmp label="כניסה לחשבון" onClick={handleSubmit} style="w-full py-3"/>
+          <InputCmp label="אימייל" name="email" value={userCredentials.email}
+            onChange={handleChange} onBlur={validateForm} containerStyle="flex flex-col" />
+          <ErrorMessage msg={error.email} style="h-[20px] mb-3" />
+          <InputCmp label="סיסמא" type="password" name="password" value={userCredentials.password}
+            onBlur={validateForm} onChange={handleChange} containerStyle="flex flex-col" />
+          <ErrorMessage msg={error.password} style="h-[20px] mb-5" />
+          <ButtonCmp label="כניסה לחשבון" isDisabled={isButtonDisabled} onClick={handleSubmit} style="w-full py-3" />
 
         </form>
       </div>
