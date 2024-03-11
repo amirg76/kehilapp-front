@@ -10,6 +10,10 @@ import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import ErrorMessage from "@components/ui/ErrorMessage";
 
+import { LOGIN_URL } from "../../../../api/apiConstants";
+import { httpService, queryClient } from "../../../../services/httpService";
+import { useMutation } from "react-query";
+
 const LoginForm = () => {
 
   const dispatch = useDispatch();
@@ -23,7 +27,7 @@ const LoginForm = () => {
     password: null
   })
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState('')
 
   useEffect(() => {
     setIsButtonDisabled(
@@ -68,23 +72,26 @@ const LoginForm = () => {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    //* Simulate authentication logic (replace with your actual authentication logic)
-    const { email, password } = userCredentials
-    if (email === "user@example.com" && password === "user@example.com") {
-      // Set user information in local storage
-      const user = { id: 1, name: "ישראל ישראלי" };
-      localStorage.setItem("token", "exampleToken");
-      localStorage.setItem("user", JSON.stringify(user));
-      // Dispatch the login action with user information
-      dispatch(authActions.login(user));
-      // Navigate to main page
-      navigate("/messages");
-    } else {
-      console.log("wrong credentials");
-    }
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+    mutate()
   };
+
+  const { mutate, isLoading: isPending, isError, error: errorMsg } = useMutation({
+    mutationFn: () => httpService.post(LOGIN_URL, userCredentials),
+    onSuccess: (user) => onUserLoggedIn(user),
+    onError: (err) => setLoginError(err)
+  });
+
+  const onUserLoggedIn = (user) => {
+    // Set user information in local storage
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    // Dispatch the login action with user information
+    dispatch(authActions.login(user));
+    // Navigate to main page
+    navigate("/messages");
+  }
+
 
   return (
     <>
@@ -107,8 +114,8 @@ const LoginForm = () => {
             onChange={handleChange} onBlur={validateForm} inputStyle="py-3"
             containerStyle="flex flex-col" labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2" />
           <ErrorMessage msg={error.password} style="h-[20px] mb-6 mr-3" />
+          <ErrorMessage msg={loginError} style="h-[20px] mr-3" />
           <ButtonCmp label="כניסה לחשבון" isDisabled={isButtonDisabled} onClick={handleSubmit} style="w-full py-3" />
-
         </form>
       </div>
     </>
