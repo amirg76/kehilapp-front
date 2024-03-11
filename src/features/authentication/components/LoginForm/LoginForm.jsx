@@ -89,8 +89,8 @@ const LoginForm = () => {
   return (
     <>
       {/* Login Form on the Right */}
-      <div className="flex flex-col items-center md:w-1/2">
-        <img className="object-cover w-[15em] h-[8em] my-10" src={logoKisufim} alt="Your Company" />
+      <div className="flex flex-col justify-center items-center h-[100vh] md:w-1/2">
+        <img className="w-[11em] mb-2" src={logoKisufim} alt="Your Company" />
         {/* Login Form */}
         <form
           className="w-full max-w-md px-8 py-10 bg-white rounded-2xl shadow-lg"
