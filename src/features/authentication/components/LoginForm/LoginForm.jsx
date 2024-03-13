@@ -13,6 +13,8 @@ import ErrorMessage from "@components/ui/ErrorMessage";
 import { LOGIN_URL } from "../../../../api/apiConstants";
 import { httpService, queryClient } from "../../../../services/httpService";
 import { useMutation } from "react-query";
+import LoadingPage from "../../../../components/ui/LoadingPage/LoadingPage";
+import Spinner from "../../../../components/ui/Spinner/Spinner";
 
 const LoginForm = () => {
 
@@ -27,7 +29,7 @@ const LoginForm = () => {
     password: null
   })
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [loginError, setLoginError] = useState('')
+  const [loginErrorMessage, setLoginErrorMessage] = useState('')
 
   useEffect(() => {
     setIsButtonDisabled(
@@ -77,19 +79,25 @@ const LoginForm = () => {
     mutate()
   };
 
-  const { mutate, isLoading: isPending, isError, error: errorMsg } = useMutation({
+  const { mutate, isLoading, isError, error: loginError } = useMutation({
     mutationFn: () => httpService.post(LOGIN_URL, userCredentials),
     onSuccess: (user) => onUserLoggedIn(user),
-    onError: (err) => setLoginError(err)
+    onError: (err) => updateErrorMessage(err)
   });
 
   const onUserLoggedIn = (user) => {
-    // Set user information in local storage
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    console.log(user);
+    // Set user information in session storage
+    sessionStorage.setItem("loggedInUser", JSON.stringify(user));
     // Dispatch the login action with user information
     dispatch(authActions.login(user));
     // Navigate to main page
     navigate("/messages");
+  }
+
+  const updateErrorMessage = (err) => {
+    if (err.response.status === 401) setLoginErrorMessage("שם משתמש או סיסמא שגויים")
+    else setLoginErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר")
   }
 
 
@@ -114,8 +122,8 @@ const LoginForm = () => {
             onChange={handleChange} onBlur={validateForm} inputStyle="py-3"
             containerStyle="flex flex-col" labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2" />
           <ErrorMessage msg={error.password} style="h-[20px] mb-6 mr-3" />
-          <ErrorMessage msg={loginError} style="h-[20px] mr-3" />
-          <ButtonCmp label="כניסה לחשבון" isDisabled={isButtonDisabled} onClick={handleSubmit} style="w-full py-3" />
+          <ErrorMessage msg={isLoading ? "" : loginErrorMessage} style="h-[25px] mr-3 text-center" />
+          <ButtonCmp label={isLoading ? <Spinner style="w-6 h-6" /> : "כניסה לחשבון"} isDisabled={isButtonDisabled} onClick={handleSubmit} style="w-full py-3 h-[52px]" />
         </form>
       </div>
     </>
