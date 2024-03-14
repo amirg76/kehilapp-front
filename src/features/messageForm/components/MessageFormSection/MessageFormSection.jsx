@@ -39,7 +39,7 @@ const MessageFormSection = ({
   const navigate = useNavigate()
 
   const handleChange = (ev) => {
-    console.log(ev);
+    // console.log(ev);
     const { name, value } = ev.target === undefined ? ev : ev.target;
     // console.log("name:" + name, "value:" + value);
 

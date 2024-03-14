@@ -4,14 +4,22 @@ import Avatar from "@components/ui/Avatar/Avatar";
 import CategoryTag from "../CategoryTag/CategoryTag";
 import TextPreview from "../TextPreview/TextPreview";
 import FilePreview from "../FilePreview/FilePreview";
+import ButtonCmp from "@components/form/ButtonCmp";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+
+import { useDispatch, useSelector } from "react-redux";
+
 //utils
 import useFormattedDate from "../../../../hooks/useFormattedDate";
 
-const MessagePreview = ({ message }) => {
+const MessagePreview = ({ message, onRemoveMessage }) => {
   const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
   const [containerHeight, setContainerHeight] = useState(0);
   const formattedDate = useFormattedDate(message.createdAt);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -73,10 +81,13 @@ const MessagePreview = ({ message }) => {
             </h6>
           </section>
           <div className="flex items-end justify-between">
-            <section className="flex w-fit">
+            <section className="flex items-center w-fit">
               <h6 className="ml-[15px]">{formattedDate.date}</h6>
-              <h6 className="font-light">{formattedDate.time}</h6>
+              <h6 className="font-light ml-[15px]">{formattedDate.time}</h6>
             </section>
+            {isAuthenticated && <FontAwesomeIcon icon={faTrash}
+              onClick={() => onRemoveMessage(message._id)}
+              className="cursor-pointer p-2 rounded-full bg-slate-200 hover:text-gray-600" />}
             <CategoryTag
               category={{
                 title: message.category.title,
