@@ -22,7 +22,7 @@ const messageSlice = createSlice({
     },
     removeMessage(state, action) {
       state.messages = state.messages.filter(
-        (message) => message._id !== action.payload.messageId
+        (message) => message._id !== action.payload
       );
     },
   },

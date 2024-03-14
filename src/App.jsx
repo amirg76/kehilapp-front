@@ -15,10 +15,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    // const token = localStorage.getItem("token");
+    const user = sessionStorage.getItem("loggedInUser");
 
-    if (token && user) {
+    if (user) {
       dispatch(authActions.login(JSON.parse(user)));
     }
   }, []);
