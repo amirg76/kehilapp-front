@@ -91,7 +91,7 @@ const Messages = () => {
         {!isModalOpen && <SearchMessages />}
         {/* {isLoading && <LoadingPage />} */}
         {/* //TODO: add an error modal? */}
-        {error && <p>Error: {error.message}</p>}
+        {/* {error && <p>Error: {error.message}</p>} */}
         <MessageList messages={messagesToDisplay} currentCategory={currentCategory} isLoading={isLoading} onRemoveMessage={onRemoveMessage} />
       </div>
     </div>
