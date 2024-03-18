@@ -9,7 +9,7 @@ const MessageForm = ({ isModalOpen, toggleModal, categories }) => {
   const toggleLoading = (boolean) => {
     setIsLoading(boolean);
   };
-  //
+
   const closeMessageModal = () => {
     toggleModal(false);
   };
