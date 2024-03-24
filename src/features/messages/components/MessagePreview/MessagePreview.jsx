@@ -75,8 +75,8 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
             <Avatar classes="ml-[17px]" />
             <h6 className="w-fit">
               <span className="font-semibold text-[18px]">
-                {message.sender.firstName || "אורה"}{" "}
-                {message.sender.lastName || "ארביטמן"}
+                {message.sender.firstName || "קיבוץ"}{" "}
+                {message.sender.lastName || "כיסופים"}
               </span>
             </h6>
           </section>
@@ -85,9 +85,13 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
               <h6 className="ml-[15px]">{formattedDate.date}</h6>
               <h6 className="font-light ml-[15px]">{formattedDate.time}</h6>
             </section>
-            {isAuthenticated && <FontAwesomeIcon icon={faTrash}
-              onClick={() => onRemoveMessage(message._id)}
-              className="cursor-pointer p-2 rounded-full bg-slate-200 hover:text-gray-600" />}
+            {isAuthenticated && (
+              <FontAwesomeIcon
+                icon={faTrash}
+                onClick={() => onRemoveMessage(message._id)}
+                className="cursor-pointer p-2 rounded-full bg-slate-200 hover:text-gray-600"
+              />
+            )}
             <CategoryTag
               category={{
                 title: message.category.title,
