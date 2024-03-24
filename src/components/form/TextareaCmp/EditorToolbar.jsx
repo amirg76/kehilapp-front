@@ -64,6 +64,7 @@ export const modules = {
     maxStack: 100,
     userOnly: true,
   },
+  magicUrl: true,
 };
 
 // Formats objects for setting up the Quill editor
