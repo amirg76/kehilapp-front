@@ -16,20 +16,22 @@ import { useMutation } from "react-query";
 import LoadingPage from "../../../../components/ui/LoadingPage/LoadingPage";
 import Spinner from "../../../../components/ui/Spinner/Spinner";
 
-const LoginForm = () => {
+// routeConstants
+import { MESSAGES } from "@routes/routeConstants";
 
+const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userCredentials, setUserCredentials] = useState({
-    email: '',
-    password: ''
-  })
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState({
     email: null,
-    password: null
-  })
+    password: null,
+  });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [loginErrorMessage, setLoginErrorMessage] = useState('')
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
 
   useEffect(() => {
     setIsButtonDisabled(
@@ -38,20 +40,23 @@ const LoginForm = () => {
   }, [error]);
 
   const handleChange = (ev) => {
-    const { name, value } = ev.target
-    setUserCredentials({ ...userCredentials, [name]: value })
+    const { name, value } = ev.target;
+    setUserCredentials({ ...userCredentials, [name]: value });
     validateForm(ev);
   };
 
   const validateForm = (ev) => {
-    const { name, value } = ev.target
+    const { name, value } = ev.target;
     // console.log('validate', name, value);
     switch (name) {
       case "email":
         if (!value || !value.length) {
           setError((prevErrors) => ({ ...prevErrors, email: "שדה חובה" }));
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-          setError((prevErrors) => ({ ...prevErrors, email: "כתובת המייל אינה תקינה" }))
+          setError((prevErrors) => ({
+            ...prevErrors,
+            email: "כתובת המייל אינה תקינה",
+          }));
         } else {
           setError((prevErrors) => ({ ...prevErrors, email: "" }));
         }
@@ -60,12 +65,15 @@ const LoginForm = () => {
         if (!value || !value.length) {
           setError((prevErrors) => ({ ...prevErrors, password: "שדה חובה" }));
         } else if (!/^.{8,20}$/.test(value)) {
-          setError((prevErrors) => ({ ...prevErrors, password: "הסיסמא צריכה להיות באורך של 8 תווים לפחות" }));
+          setError((prevErrors) => ({
+            ...prevErrors,
+            password: "הסיסמא צריכה להיות באורך של 8 תווים לפחות",
+          }));
         }
         //OPTIONAL
         // else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,20}$/.test(value)) {
         //   setError((prevErrors) => ({ ...prevErrors, password: "הסיסמא צריכה להכיל לפחות מספר אחד, אות גדולה אחת ואות קטנה אחת" }));
-        // } 
+        // }
         else {
           setError((prevErrors) => ({ ...prevErrors, password: "" }));
         }
@@ -76,13 +84,18 @@ const LoginForm = () => {
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
-    mutate()
+    mutate();
   };
 
-  const { mutate, isLoading, isError, error: loginError } = useMutation({
+  const {
+    mutate,
+    isLoading,
+    isError,
+    error: loginError,
+  } = useMutation({
     mutationFn: () => httpService.post(LOGIN_URL, userCredentials),
     onSuccess: (user) => onUserLoggedIn(user),
-    onError: (err) => updateErrorMessage(err)
+    onError: (err) => updateErrorMessage(err),
   });
 
   const onUserLoggedIn = (user) => {
@@ -92,14 +105,14 @@ const LoginForm = () => {
     // Dispatch the login action with user information
     dispatch(authActions.login(user));
     // Navigate to main page
-    navigate("/messages");
-  }
+    navigate(MESSAGES);
+  };
 
   const updateErrorMessage = (err) => {
-    if (err.response.status === 401) setLoginErrorMessage("שם משתמש או סיסמא שגויים")
-    else setLoginErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר")
-  }
-
+    if (err.response.status === 401)
+      setLoginErrorMessage("שם משתמש או סיסמא שגויים");
+    else setLoginErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר");
+  };
 
   return (
     <>
@@ -114,16 +127,39 @@ const LoginForm = () => {
           <h1 className="mb-3">ברוך שובך!</h1>
           <h2 className="text-xl font-bold mb-6">כניסה לחשבונך</h2>
 
-          <InputCmp label="אימייל" name="email" value={userCredentials.email}
-            onChange={handleChange} onBlur={validateForm} inputStyle="py-3"
-            containerStyle="flex flex-col" labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2" />
+          <InputCmp
+            label="אימייל"
+            name="email"
+            value={userCredentials.email}
+            onChange={handleChange}
+            onBlur={validateForm}
+            inputStyle="py-3"
+            containerStyle="flex flex-col"
+            labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2"
+          />
           <ErrorMessage msg={error.email} style="h-[20px]  mr-3" />
-          <InputCmp label="סיסמא" type="password" name="password" value={userCredentials.password}
-            onChange={handleChange} onBlur={validateForm} inputStyle="py-3"
-            containerStyle="flex flex-col" labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2" />
+          <InputCmp
+            label="סיסמא"
+            type="password"
+            name="password"
+            value={userCredentials.password}
+            onChange={handleChange}
+            onBlur={validateForm}
+            inputStyle="py-3"
+            containerStyle="flex flex-col"
+            labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2"
+          />
           <ErrorMessage msg={error.password} style="h-[20px] mb-6 mr-3" />
-          <ErrorMessage msg={isLoading ? "" : loginErrorMessage} style="h-[25px] mr-3 text-center" />
-          <ButtonCmp label={isLoading ? <Spinner style="w-6 h-6" /> : "כניסה לחשבון"} isDisabled={isButtonDisabled} onClick={handleSubmit} style="w-full py-3 h-[52px]" />
+          <ErrorMessage
+            msg={isLoading ? "" : loginErrorMessage}
+            style="h-[25px] mr-3 text-center"
+          />
+          <ButtonCmp
+            label={isLoading ? <Spinner style="w-6 h-6" /> : "כניסה לחשבון"}
+            isDisabled={isButtonDisabled}
+            onClick={handleSubmit}
+            style="w-full py-3 h-[52px]"
+          />
         </form>
       </div>
     </>
