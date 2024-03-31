@@ -5,6 +5,11 @@ import { uiActions } from "@store/slices/uiSlice";
 import { authActions } from "@store/slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 
+// routeConstants
+import { ROOT, LOGIN } from "@routes/routeConstants";
+// check organization url
+import { currentEndPointHelper } from "@utils/currentEndPointHelper";
+
 const NavBarButton = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const currentUser = useSelector((state) => state.auth.currentUser);
@@ -18,9 +23,9 @@ const NavBarButton = () => {
 
     // Dispatch the logout action
     dispatch(authActions.logout());
-    dispatch(uiActions.closeModal())
+    dispatch(uiActions.closeModal());
     // Navigate to home page
-    navigate("/");
+    navigate(ROOT);
   };
 
   return (
@@ -42,7 +47,7 @@ const NavBarButton = () => {
           </li>
         ) : (
           <li>
-            <Link to="/login">
+            <Link to={LOGIN}>
               <button
                 className="rounded-lg border-2 border-solid border-4870ad py-3 px-8 text-000000 border-backgroundButton text-center font-assistant font-semibold text-sm leading-5'"
                 onClick={() => dispatch(uiActions.closeModal())}
