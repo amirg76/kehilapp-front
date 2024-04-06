@@ -19,7 +19,6 @@ import { httpService, queryClient } from "../services/httpService";
 import { CATEGORY_URL, MESSAGES_URL, USERS_URL } from "../api/apiConstants";
 import useMessagesDisplay from "../hooks/useMessagesDisplay";
 import SkeletonLoading from "../components/ui/skeletonLoading/SkeletonLoading";
-import { currentEndPointHelper } from "@utils/currentEndPointHelper";
 
 const Messages = () => {
   const { categoryId = "" } = useParams();
@@ -29,7 +28,6 @@ const Messages = () => {
   const categories = useSelector((state) => state.category.categories);
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const messagesToDisplay = useMessagesDisplay(messages, categories, users);
-  const currentUrl = currentEndPointHelper;
 
   const {
     data: fetchedMessages,
@@ -123,7 +121,6 @@ const Messages = () => {
           onRemoveMessage={onRemoveMessage}
         />
       </div>
-      {console.log("Current URL:", currentUrl())}
     </div>
   );
 };

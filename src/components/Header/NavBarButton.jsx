@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 // routeConstants
 import { ROOT, LOGIN } from "@routes/routeConstants";
 // check organization url
-import { currentEndPointHelper } from "@utils/currentEndPointHelper";
 
 const NavBarButton = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

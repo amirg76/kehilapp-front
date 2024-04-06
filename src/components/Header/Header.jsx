@@ -10,6 +10,8 @@ import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
 //redux use functions
 import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "@store/slices/uiSlice";
+// routeConstants
+import { ROOT } from "@routes/routeConstants";
 
 const Header = () => {
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
@@ -37,7 +39,7 @@ const Header = () => {
       ></div>
 
       <nav className="flex h-24 items-center justify-between p-10 ">
-        <NavLink to="/">
+        <NavLink to={ROOT}>
           {/* <NavBarLogo /> */}
           <img src={kibbutzLogo} alt="" className="h-20" />
         </NavLink>
