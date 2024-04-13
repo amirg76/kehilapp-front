@@ -36,7 +36,7 @@ const MessageFormSection = ({
   const windowWidth = window.innerWidth;
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (ev) => {
     // console.log(ev);
@@ -81,7 +81,7 @@ const MessageFormSection = ({
     error: errorMsg,
   } = useMutation({
     mutationFn: (formData) => httpService.post(MESSAGES_URL, formData),
-    onSuccess: (data) => onMessageSent(data)
+    onSuccess: (data) => onMessageSent(data),
   });
 
   const onMessageSent = (data) => {
@@ -90,8 +90,8 @@ const MessageFormSection = ({
     toggleLoading(false);
     closeMessageModal();
     onCloseNavbar();
-    navigate(`/messages/${message.categoryId}`)
-  }
+    navigate(`/messages/${message.categoryId}`);
+  };
 
   const onCloseNavbar = () => {
     dispatch(uiActions.closeModal());
@@ -134,7 +134,7 @@ const MessageFormSection = ({
         <form onSubmit={handleSubmit} className="grid justify-items-stretch">
           <SelectCmp
             name="categoryId"
-            options={categories}
+            options={categories ? categories : []}
             onChange={handleChange}
             defaultOption="* קטגוריה"
             onBlur={validateForm}
@@ -176,9 +176,9 @@ const MessageFormSection = ({
             // maxLength="1500"
             style="w-full sm:h-64 sm:mb-3 h-[20vh] "
             containerStyle={"flex flex-col bg-white"}
-          // containerStyle={`flex flex-col ${
-          //   windowWidth < 600 ? "space-y-14" : "space-y-8"
-          // }  bg-white `}
+            // containerStyle={`flex flex-col ${
+            //   windowWidth < 600 ? "space-y-14" : "space-y-8"
+            // }  bg-white `}
           >
             <CharsCount
               currCount={message?.text?.length}
