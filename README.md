@@ -1,4 +1,4 @@
-# Shop&Fun&Kids online store
+# Kibbutz Kissufim Messages Web Site
 <img src="public/screenshots/desktop-screenshot.png" width="500">
 <img src="public/screenshots/login-screenshot.png" width="500">
 
