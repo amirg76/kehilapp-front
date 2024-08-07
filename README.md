@@ -67,7 +67,7 @@ We use AWS EC2-DEV AND PROD WITH CI/CD.
 
 
 ## App Link
-[Kibbutz Kissufim](https://www.weunity.net/kissufim))
+[Kibbutz Kissufim](https://www.weunity.net/kissufim)
 ---
 
 ## Contributors
