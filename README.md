@@ -1,27 +1,75 @@
-# React + TypeScript + Vite
+# Shop&Fun&Kids online store
+<img src="public/screenshots/desktop-screenshot.png" width="500">
+<img src="public/screenshots/login-screenshot.png" width="500">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+**Version 1.00**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Code and document for the Kibbutz kissufim Messages Web Site.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### How We Build The Project
 
-- Configure the top-level `parserOptions` property like this:
+#### Desgin
+We use TAILWIND library for the css design.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+#### Client
+We use REACT AND VITE to build the project on cilent side.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+We use ALOTE OF REACT COMPONENTS to handle the data and
+connect and render the data from the componments to the html.
+
+We use REACT ROUTER to handle page routing
+
+We use MULTER packege to for files upload.
+
+We use JEST packege for TESTING.
+
+We use RECAT-QUERY to simplify the complex task of data fetching and caching.
+
+We use REDUXJS-TOOLKIT library to simplifies managing the state in React applications using REDUX.
+
+#### Server
+
+We use NODE.JS and EXPRESS to build the API to get data.
+
+We use 4 methods with the API: GET,POST,DELETE AND PUT.
+
+We use MONGOOSE to store and get the data from MONGODB.
+
+We use JOI for data validator.
+
+We use AWS EC2-DEV AND PROD WITH CI/CD.
+
+### What Languege We Use
+
+- NODE.JS
+- EXPRESS
+- MONGOOSE AND MONGODB
+- REACT COMPONENTS
+- REACT ROUTER
+- API METHODS
+- REDUXJS-TOOLKIT
+- RECAT-QUERY
+- AWS EC2-DEV AND PROD WITH CI/CD
+---
+#### How To Login
+- admin-- user:user@example.com password:user@example.com
+
+
+## App Link
+[Kibbutz Kissufim](https://www.weunity.net/kissufim))
+---
+
+## Contributors
+
+- Amir Gilboa <amirg76@gmail.com>
+- Dafna Bashan <dafnaba1@gmail.com>
+- Samir Khoury <sameerkhoury67@gmail.com>
+
+
+---
+
+### License & copyright
+
+© Amir Gilboa , Fullstack Developer
