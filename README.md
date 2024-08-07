@@ -1,4 +1,13 @@
 # Kibbutz Kissufim Messages Web Site
+
+### Thanks...
+This project(that is still ongoing) was started in 7.10.23 to help kibbutz kissufim for collect and search 
+important messages that flooded after we get to the hotel on the dead sea.
+there where many pepole that volunteers with the development,design and aws server for deploy.
+Appleseeds to take place with 2 best senior dev and senoir product mananger that accompaniment the project.
+
+SO THANKS A LOT FOR ALL THE GOOD PEOפLE...
+
 <img src="public/screenshots/desktop-screenshot.png" width="500">
 <img src="public/screenshots/login-screenshot.png" width="500">
 
