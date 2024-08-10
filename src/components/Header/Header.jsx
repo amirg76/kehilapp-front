@@ -13,14 +13,31 @@ import { uiActions } from "@store/slices/uiSlice";
 // routeConstants
 import { ROOT } from "@routes/routeConstants";
 
+/**
+ * A functional component representing the application header.
+ * It includes a navigation bar with a logo, contact and button links,
+ * as well as a sidebar that can be toggled open or closed.
+ *
+ * @return {JSX.Element} The JSX element representing the application header.
+ */
 const Header = () => {
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const dispatch = useDispatch();
 
+  /**
+   * Opens the navbar by dispatching the openModal action.
+   *
+   * @return {void} No return value.
+   */
   const onOpenNavbar = () => {
     dispatch(uiActions.openModal());
   };
 
+  /**
+   * Closes the navbar after a short delay.
+   *
+   * @return {void} No return value.
+   */
   const onCloseNavbar = () => {
     setTimeout(() => {
       dispatch(uiActions.closeModal());

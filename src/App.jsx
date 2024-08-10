@@ -10,6 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 //components
 import Header from "@components/Header/Header";
 
+/**
+ * The main application component.
+ *
+ * This component handles the routing and rendering of the application.
+ * It checks for a logged in user and dispatches the login action if a user is found.
+ * It also conditionally renders the Header component based on the current pathname.
+ *
+ * @return {JSX.Element} The JSX element representing the application.
+ */
 const App = () => {
   const { pathname } = useLocation(); //* temp fix for hiding header on login screen
   const dispatch = useDispatch();
@@ -29,6 +38,7 @@ const App = () => {
       {/* //TODO: when logged out, disable Header component */}
       {/* {isAuthenticated && <Header />} */}
       {pathname !== LOGIN && <Header />}
+
       {/*
 
         <Route
