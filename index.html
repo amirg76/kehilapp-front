@@ -9,6 +9,7 @@
       name="description"
       content="אפליקציית הודעות שנועדה לשפר את הקישוריות בקהילות"
     />
+    <!-- This line is added to ensure that all http requests are automatically upgraded to https -->
     <meta
       http-equiv="Content-Security-Policy"
       content="upgrade-insecure-requests"
@@ -39,6 +40,10 @@
     <script type="module" src="/src/main.jsx"></script>
     <!-- AWS SETTING -->
     <script>
+      // These lines are added to make the AWS SDK work in the browser, which was designed to run in a Node.js environment.
+      // They are necessary to get around some of the Node.js-specific APIs that are used by the AWS SDK.
+      // See https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/browser-configuring-global.html
+      // for more information.
       window.global = window;
       window.process = {
         env: { DEBUG: undefined },

@@ -1,7 +1,15 @@
+/*These lines are part of Tailwind CSS's CSS framework.
+
+- `@tailwind base;` imports the base styles that provide some sensible defaults for things like box-sizing, line-height, and more.
+- `@tailwind components;` imports the styles for Tailwind's built-in component classes, such as buttons, forms, and navigation menus.
+- `@tailwind utilities;` imports the utility classes that let you customize your site's design on the fly. These classes are incredibly powerful and can be used to style anything in your site.*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* 
+  The "@layer components { }" is a new feature in Tailwind CSS v2.0, which allows you to define styles for your own components without having to use the "!important" keyword. 
+*/
 @layer components {
   .main-screen {
     position: fixed;

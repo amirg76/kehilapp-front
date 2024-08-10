@@ -9,7 +9,7 @@ import Login from "@pages/Login.jsx";
 
 const routeConfig = [
   {
-    // Main Page - Redirect to the messages page if user
+    // Main Page - Redirect to the messages page if user go to the main page
     path: ROOT,
     element: <Navigate to={MESSAGES} />,
     exact: true,
@@ -27,6 +27,7 @@ const routeConfig = [
     exact: true,
   },
   {
+    // messages page
     path: `${MESSAGES}/:categoryId`,
     element: <Messages />,
     exact: true,
