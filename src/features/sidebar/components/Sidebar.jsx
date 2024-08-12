@@ -14,7 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 //redux actions
 import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
-import NavBarButton from "@components/Header/NavBarButton";
+
+import NavBarAuthArea from "../../../components/Header/NavBarAuthArea";
 
 const Sidebar = ({ classes, onCloseNavbar, open }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,7 +51,7 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
           !open && "top-24"
         } h-fit flex flex-col border-e shadow-sm w-72 sticky `}
       >
-        {open && <NavBarButton />}
+        {open && <NavBarAuthArea />}
         <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
         {/* nav links */}
         <ul className="mb-5 ms-6 pl-2 text-lg">

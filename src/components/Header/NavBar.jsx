@@ -10,19 +10,24 @@ import useNavbarHandler from "@hooks/useNavbarHandler";
 import { ROOT } from "@routes/routeConstants";
 //redux use functions
 import { useSelector } from "react-redux";
-import { uiActions } from "@store/slices/uiSlice";
+import NavBarAuthArea from "./NavBarAuthArea";
+
+/**
+ * Renders the navigation bar component.
+ *
+ * @return {JSX.Element} The rendered navigation bar.
+ */
 const NavBar = () => {
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
 
   return (
     <nav className="flex h-24 items-center justify-between p-10 ">
       <NavLink to={ROOT}>
-        {/* <NavBarLogo /> */}
         <img src={kibbutzLogo} alt="" className="h-20" />
       </NavLink>
-      <div className="hidden md:flex">
+      <div className="hidden md:flex ">
         <NavBarContact />
-        <NavBarButton />
+        <NavBarAuthArea />
       </div>
       <Sidebar
         classes={`max-md:flex flex-column fixed left-0 top-0 bg-white opacity-90
