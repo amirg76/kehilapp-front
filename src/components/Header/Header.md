@@ -1,7 +1,9 @@
-This is a React functional component named Header that represents the application's header. It consists of a navigation bar with a logo, contact and button links, and a sidebar that can be toggled open or closed.
+This code defines a functional component called Header that represents the application header.
 
-The component uses Redux to manage its state, specifically the isModalOpen property, which determines whether the sidebar is open or closed. The component also defines two functions, onOpenNavbar and onCloseNavbar, which dispatch actions to open or close the sidebar, respectively.
+It includes a navigation bar with a logo, contact and button links, and a sidebar that can be toggled open or closed.
 
-The component renders a header element with a nav element inside, which contains the logo, contact and button links, and the sidebar. The sidebar is conditionally rendered based on the isModalOpen property, and its classes are dynamically generated based on this property.
+The component uses useSelector and useDispatch hooks from Redux to manage state and actions.
 
-The component also includes a hamburger icon (represented by the FontAwesomeIcon component) that is only visible on medium-sized screens and below, which toggles the sidebar open when clicked.
+It also has a function onCloseNavbar that closes the navbar after a short delay using setTimeout.
+
+The JSX returned includes a header element with conditional styling based on the isModalOpen state and a NavBar component.

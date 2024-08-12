@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+
 import NavBarLogo from "./NavBarLogo";
-import NavBarContact from "./NavBarContact";
-import NavBarButton from "./NavBarButton";
-import Sidebar from "@features/sidebar/components/Sidebar";
-import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
-//redux use functions
+// import NavBarContact from "./NavBarContact";
+// import NavBarButton from "./NavBarButton";
+// import Sidebar from "@features/sidebar/components/Sidebar";
+// import kibbutzLogo from "./img/logo-kibbuttz-transpert.png";
+// //redux use functions
 import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "@store/slices/uiSlice";
 // routeConstants
-import { ROOT } from "@routes/routeConstants";
+// import { ROOT } from "@routes/routeConstants";
+import NavBar from "./NavBar";
 
 /**
  * A functional component representing the application header.
@@ -23,21 +22,11 @@ import { ROOT } from "@routes/routeConstants";
 const Header = () => {
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const dispatch = useDispatch();
-
-  /**
-   * Opens the navbar by dispatching the openModal action.
-   *
-   * @return {void} No return value.
-   */
-  const onOpenNavbar = () => {
-    dispatch(uiActions.openModal());
-  };
-
-  /**
-   * Closes the navbar after a short delay.
-   *
-   * @return {void} No return value.
-   */
+  // /**
+  //  * Closes the navbar after a short delay.
+  //  *
+  //  * @return {void} No return value.
+  //  */
   const onCloseNavbar = () => {
     setTimeout(() => {
       dispatch(uiActions.closeModal());
@@ -54,34 +43,7 @@ const Header = () => {
         }
         onClick={() => onCloseNavbar()}
       ></div>
-
-      <nav className="flex h-24 items-center justify-between p-10 ">
-        <NavLink to={ROOT}>
-          {/* <NavBarLogo /> */}
-          <img src={kibbutzLogo} alt="" className="h-20" />
-        </NavLink>
-        <div className="hidden md:flex">
-          <NavBarContact />
-          <NavBarButton />
-        </div>
-        <Sidebar
-          classes={`max-md:flex flex-column fixed left-0 top-0 bg-white opacity-90
-                   h-screen border-l-[1px]-[#ebebeb] z-30 transition-transform duration-600 pt-3
-                   ${
-                     isModalOpen
-                       ? "translate-x-0"
-                       : "translate-x-[-100%] md:flex"
-                   }`}
-          onCloseNavbar={onCloseNavbar}
-          open={isModalOpen}
-        />
-
-        <FontAwesomeIcon
-          className="md:hidden"
-          onClick={onOpenNavbar}
-          icon={faBars}
-        />
-      </nav>
+      <NavBar />
     </header>
   );
 };
