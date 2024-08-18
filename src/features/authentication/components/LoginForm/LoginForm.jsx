@@ -10,14 +10,16 @@ import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import ErrorMessage from "@components/ui/ErrorMessage";
 
-import { LOGIN_URL } from "../../../../api/apiConstants";
-import { httpService, queryClient } from "../../../../services/httpService";
+import { LOGIN_URL } from "@api/apiConstants";
+import { httpService, queryClient } from "@services/httpService";
 import { useMutation } from "react-query";
-import LoadingPage from "../../../../components/ui/LoadingPage/LoadingPage";
-import Spinner from "../../../../components/ui/Spinner/Spinner";
+
+import Spinner from "@ui/Spinner/Spinner";
 
 // routeConstants
 import { MESSAGES } from "@routes/routeConstants";
+import validateEmail from "@hooks/validateEmail";
+import validatePassword from "@hooks/validatePassword";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -34,6 +36,13 @@ const LoginForm = () => {
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
 
   useEffect(() => {
+    /**
+     * Updates the button's disabled state based on the presence of errors.
+     *
+     * @description Checks if any error messages exist and updates the button's disabled state accordingly.
+     * @param {object} error - The object containing error messages.
+     * @return {void}
+     */
     setIsButtonDisabled(
       Object.values(error).some((value) => value?.length > 0 || value === null)
     );
@@ -44,42 +53,19 @@ const LoginForm = () => {
     setUserCredentials({ ...userCredentials, [name]: value });
     validateForm(ev);
   };
-
+  /**
+   * Validates a form field based on the provided event.
+   *
+   * @param {object} ev - The event object containing the target element's name and value.
+   * @return {void}
+   */
   const validateForm = (ev) => {
     const { name, value } = ev.target;
-    // console.log('validate', name, value);
-    switch (name) {
-      case "email":
-        if (!value || !value.length) {
-          setError((prevErrors) => ({ ...prevErrors, email: "שדה חובה" }));
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-          setError((prevErrors) => ({
-            ...prevErrors,
-            email: "כתובת המייל אינה תקינה",
-          }));
-        } else {
-          setError((prevErrors) => ({ ...prevErrors, email: "" }));
-        }
-        break;
-      case "password":
-        if (!value || !value.length) {
-          setError((prevErrors) => ({ ...prevErrors, password: "שדה חובה" }));
-        } else if (!/^.{8,20}$/.test(value)) {
-          setError((prevErrors) => ({
-            ...prevErrors,
-            password: "הסיסמא צריכה להיות באורך של 8 תווים לפחות",
-          }));
-        }
-        //OPTIONAL
-        // else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,20}$/.test(value)) {
-        //   setError((prevErrors) => ({ ...prevErrors, password: "הסיסמא צריכה להכיל לפחות מספר אחד, אות גדולה אחת ואות קטנה אחת" }));
-        // }
-        else {
-          setError((prevErrors) => ({ ...prevErrors, password: "" }));
-        }
-      default:
-        break;
-    }
+    const errorMessages = {
+      email: validateEmail(value),
+      password: validatePassword(value),
+    };
+    setError((prevErrors) => ({ ...prevErrors, [name]: errorMessages[name] }));
   };
 
   const handleSubmit = (ev) => {
