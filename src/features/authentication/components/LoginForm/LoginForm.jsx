@@ -120,7 +120,7 @@ const LoginForm = () => {
             onChange={handleChange}
             onBlur={validateForm}
             inputStyle="py-3"
-            containerStyle="flex flex-col"
+            containerstyle="flex flex-col"
             labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2"
           />
           <ErrorMessage msg={error.email} style="h-[20px]  mr-3" />
@@ -132,7 +132,7 @@ const LoginForm = () => {
             onChange={handleChange}
             onBlur={validateForm}
             inputStyle="py-3"
-            containerStyle="flex flex-col"
+            containerstyle="flex flex-col"
             labelStyle="relative w-fit bg-white top-[10px] right-[10px] px-2"
           />
           <ErrorMessage msg={error.password} style="h-[20px] mb-6 mr-3" />

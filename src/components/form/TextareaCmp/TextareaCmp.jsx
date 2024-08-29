@@ -53,7 +53,7 @@ const TextareaCmp = ({
   children,
   ...otherProps
 }) => {
-  const { containerStyle } = otherProps;
+  const { containerstyle } = otherProps;
   const [content, setContent] = useState("");
 
   const handleChange = (e) => {
@@ -63,7 +63,7 @@ const TextareaCmp = ({
   };
 
   return (
-    <div className={`mb-10 xxs:mb-2 ${containerStyle}`}>
+    <div className={`mb-10 xxs:mb-2 ${containerstyle}`}>
       {label && (
         <label htmlFor={name} className={labelStyle}>
           {label}

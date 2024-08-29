@@ -14,10 +14,10 @@ const InputCmp = ({
   children,
   ...otherProps
 }) => {
-  const { containerStyle, onContainerClick } = otherProps;
+  const { containerstyle, onContainerClick } = otherProps;
 
   return (
-    <div className={containerStyle} onClick={onContainerClick}>
+    <div className={containerstyle} onClick={onContainerClick}>
       {label && (
         <label htmlFor={name} className={labelStyle}>
           {label}
