@@ -5,5 +5,7 @@ import { currentEndPointHelper } from "@utils/currentEndPointHelper";
 export const ROOT = `/${currentEndPointHelper()}`;
 // export const LOGIN = "/login";
 export const LOGIN = `/${currentEndPointHelper()}/login`;
+// export const REGISTER = "/register";
+export const REGISTER = `/${currentEndPointHelper()}/register`;
 // export const MESSAGES = "/messages";
 export const MESSAGES = `/${currentEndPointHelper()}/messages`;

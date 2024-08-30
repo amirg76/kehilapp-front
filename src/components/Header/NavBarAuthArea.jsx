@@ -7,8 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 import useNavbarHandler from "@hooks/useNavbarHandler";
 import useAuthButton from "@hooks/useAuthButton";
+import useRegisterButton from "@hooks/useRegisterButton";
 // routeConstants
-import { ROOT, LOGIN } from "@routes/routeConstants";
+import { ROOT, LOGIN, REGISTER } from "@routes/routeConstants";
 import NavBarAuthDetails from "./NavBarAuthDetails";
 import NavBarButton from "./NavBarButton";
 // check organization url
@@ -42,19 +43,39 @@ const NavBarAuthArea = () => {
     navigate(LOGIN);
   };
 
+  const handleRegister = () => {
+    navbarHandler("close");
+
+    // Navigate to register page
+    navigate(REGISTER);
+  };
+
   const { onClickAuthButton, className, children } = useAuthButton(
     handleLogout,
     handleLogin,
     isAuthenticated
   );
+  const { onClickRegisterButton, registerClassName, registerChildren } =
+    useRegisterButton(handleRegister, isAuthenticated);
 
   return (
     <div className="flex flex-shrink-0 items-center mx-auto">
-      <ul>
+      <ul className="flex flex-shrink-0 items-center  ">
         {isAuthenticated ? (
           NavBarAuthDetails(currentUser, onClickAuthButton, className, children)
         ) : (
-          <li>{NavBarButton(onClickAuthButton, className, children)}</li>
+          <>
+            <li className="mx-4">
+              {NavBarButton(onClickAuthButton, className, children)}
+            </li>
+            <li>
+              {NavBarButton(
+                onClickRegisterButton,
+                registerClassName,
+                registerChildren
+              )}
+            </li>
+          </>
         )}
       </ul>
     </div>
