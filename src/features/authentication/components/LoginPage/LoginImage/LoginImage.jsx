@@ -1,5 +1,5 @@
 import React from "react";
-import leftImg from "../img/image1.png";
+import leftImg from "../../img/image1.png";
 const LoginImage = () => {
   {
     /* Image on the Left */

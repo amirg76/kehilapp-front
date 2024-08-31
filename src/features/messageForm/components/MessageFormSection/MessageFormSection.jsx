@@ -139,7 +139,7 @@ const MessageFormSection = ({
             defaultOption="* קטגוריה"
             onBlur={validateForm}
             value={message.categoryId}
-            containerStyle="relative mb-1 sm:w-fit"
+            containerstyle="relative mb-1 sm:w-fit"
             style="sm:w-[350px]  "
           />
 
@@ -153,7 +153,7 @@ const MessageFormSection = ({
             onBlur={validateForm}
             maxLength="25"
             inputStyle="w-full sm:w-[350px] mb-1  "
-            containerStyle="flex flex-col sm:w-fit"
+            containerstyle="flex flex-col sm:w-fit"
           >
             <CharsCount
               currCount={message?.title?.length}
@@ -175,8 +175,8 @@ const MessageFormSection = ({
             rows="10"
             // maxLength="1500"
             style="w-full sm:h-64 sm:mb-3 h-[20vh] "
-            containerStyle={"flex flex-col bg-white"}
-            // containerStyle={`flex flex-col ${
+            containerstyle={"flex flex-col bg-white"}
+            // containerstyle={`flex flex-col ${
             //   windowWidth < 600 ? "space-y-14" : "space-y-8"
             // }  bg-white `}
           >
