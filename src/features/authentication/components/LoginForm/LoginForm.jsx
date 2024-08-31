@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { authActions } from "@store/slices/authSlice";
 import { useDispatch } from "react-redux";
 
-import logoKisufim from "../../img/logo-kibbuttz-transpert.png";
+import logoKisufim from "../img/logo-kibbuttz-transpert.png";
 
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
@@ -22,7 +22,7 @@ import validateEmail from "@hooks/validateEmail";
 import validatePassword from "@hooks/validatePassword";
 import useButtonDisabled from "@hooks/useButtonDisabled";
 
-const RegisterForm = () => {
+const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userCredentials, setUserCredentials] = useState({
@@ -139,4 +139,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;
