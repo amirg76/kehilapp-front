@@ -1,14 +1,15 @@
 //smart component
 import React from "react";
-import LoginImage from "@features/authentication/components/LoginPage/LoginImage";
-import LoginForm from "@features/authentication/components/LoginPage/LoginForm";
 
+import LoginForm from "@features/authentication/components/LoginForm/LoginForm";
+import leftImg from "@features/authentication/components/img/image1.png";
+import LoginRegisterImage from "../features/authentication/components/LoginRegisterImage/LoginRegisterImage";
 const Login = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row h-screen bg-gradient-to-b from-[#EFEFEF] to-white">
         <LoginForm />
-        <LoginImage />
+        <LoginRegisterImage img={leftImg} />
       </div>
     </>
   );
