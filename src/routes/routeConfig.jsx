@@ -2,10 +2,11 @@ import React from "react";
 // routing
 import { Navigate } from "react-router-dom";
 // routes constants
-import { ROOT, MESSAGES, LOGIN } from "@routes/routeConstants.js";
+import { ROOT, MESSAGES, LOGIN, REGISTER } from "@routes/routeConstants.js";
 // pages
 import Messages from "@pages/Messages.jsx";
 import Login from "@pages/Login.jsx";
+import Register from "@pages/Register.jsx";
 
 const routeConfig = [
   {
@@ -18,6 +19,12 @@ const routeConfig = [
     // Login Page
     path: LOGIN,
     element: <Login />,
+    exact: true,
+  },
+  {
+    // Register Page
+    path: REGISTER,
+    element: <Register />,
     exact: true,
   },
   {
