@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { authActions } from "@store/slices/authSlice";
 import { useDispatch } from "react-redux";
 
-import logoKisufim from "../img/logo-kibbuttz-transpert.png";
+import logoKisufim from "../../img/logo-kibbuttz-transpert.png";
 
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
@@ -20,6 +20,7 @@ import Spinner from "@ui/Spinner/Spinner";
 import { MESSAGES } from "@routes/routeConstants";
 import validateEmail from "@hooks/validateEmail";
 import validatePassword from "@hooks/validatePassword";
+import useButtonDisabled from "@hooks/useButtonDisabled";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -36,16 +37,7 @@ const LoginForm = () => {
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
 
   useEffect(() => {
-    /**
-     * Updates the button's disabled state based on the presence of errors.
-     *
-     * @description Checks if any error messages exist and updates the button's disabled state accordingly.
-     * @param {object} error - The object containing error messages.
-     * @return {void}
-     */
-    setIsButtonDisabled(
-      Object.values(error).some((value) => value?.length > 0 || value === null)
-    );
+    useButtonDisabled(setIsButtonDisabled, error);
   }, [error]);
 
   const handleChange = (ev) => {
@@ -53,12 +45,7 @@ const LoginForm = () => {
     setUserCredentials({ ...userCredentials, [name]: value });
     validateForm(ev);
   };
-  /**
-   * Validates a form field based on the provided event.
-   *
-   * @param {object} ev - The event object containing the target element's name and value.
-   * @return {void}
-   */
+
   const validateForm = (ev) => {
     const { name, value } = ev.target;
     const errorMessages = {
