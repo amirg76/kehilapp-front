@@ -21,6 +21,7 @@ import { MESSAGES } from "@routes/routeConstants";
 import validateEmail from "@hooks/validateEmail";
 import validatePassword from "@hooks/validatePassword";
 import useButtonDisabled from "@hooks/useButtonDisabled";
+import { useOnUserAuth } from "../../hooks/useOnUserAuth";
 
 const RegisterForm = ({ type }) => {
   const dispatch = useDispatch();
@@ -71,7 +72,8 @@ const RegisterForm = ({ type }) => {
         type === "register" ? REGISTER_URL : LOGIN_URL,
         userCredentials
       ),
-    onSuccess: (user) => onUserLoggedIn(user),
+    onSuccess: (user) =>
+      useOnUserAuth(type === "register" ? "register" : "login", user),
     onError: (err) => updateErrorMessage(err),
   });
 
