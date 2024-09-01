@@ -8,4 +8,4 @@ export const AUTH_URL = `${BASE_URL}api/auth`;
 export const LATEST_MESSAGES_URL = `${MESSAGES_URL}/latest`;
 export const MESSAGES_BY_CATEGORY_URL = `${MESSAGES_URL}/category`;
 export const LOGIN_URL = `${AUTH_URL}/login`;
-export const REGISTER_URL = `${BASE_URL}api/register`;
+export const REGISTER_URL = `${AUTH_URL}/register`;
