@@ -8,7 +8,7 @@ const Register = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row h-screen bg-gradient-to-b from-[#EFEFEF] to-white">
-        <RegisterForm />
+        <RegisterForm type="register" />
         <LoginRegisterImage img={leftImg} />
       </div>
     </>

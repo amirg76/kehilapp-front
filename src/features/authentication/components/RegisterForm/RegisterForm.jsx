@@ -10,7 +10,7 @@ import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import ErrorMessage from "@components/ui/ErrorMessage";
 
-import { LOGIN_URL } from "@api/apiConstants";
+import { LOGIN_URL, REGISTER_URL } from "@api/apiConstants";
 import { httpService, queryClient } from "@services/httpService";
 import { useMutation } from "react-query";
 
@@ -22,7 +22,7 @@ import validateEmail from "@hooks/validateEmail";
 import validatePassword from "@hooks/validatePassword";
 import useButtonDisabled from "@hooks/useButtonDisabled";
 
-const RegisterForm = () => {
+const RegisterForm = ({ type }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userCredentials, setUserCredentials] = useState({
@@ -66,7 +66,11 @@ const RegisterForm = () => {
     isError,
     error: loginError,
   } = useMutation({
-    mutationFn: () => httpService.post(LOGIN_URL, userCredentials),
+    mutationFn: () =>
+      httpService.post(
+        type === "register" ? REGISTER_URL : LOGIN_URL,
+        userCredentials
+      ),
     onSuccess: (user) => onUserLoggedIn(user),
     onError: (err) => updateErrorMessage(err),
   });
@@ -97,8 +101,8 @@ const RegisterForm = () => {
           className="w-full max-w-md px-8 py-10 bg-white rounded-2xl shadow-lg"
           onSubmit={handleSubmit}
         >
-          <h1 className="mb-3">ברוך שובך!</h1>
-          <h2 className="text-xl font-bold mb-6">כניסה לחשבונך</h2>
+          <h1 className="mb-3">הרשמה לאתר</h1>
+          <h2 className="text-xl font-bold mb-6">פתיחת חשבון חדש</h2>
 
           <InputCmp
             label="אימייל"
@@ -128,7 +132,7 @@ const RegisterForm = () => {
             style="h-[25px] mr-3 text-center"
           />
           <ButtonCmp
-            label={isLoading ? <Spinner style="w-6 h-6" /> : "כניסה לחשבון"}
+            label={isLoading ? <Spinner style="w-6 h-6" /> : "תרשמו אותי"}
             isDisabled={isButtonDisabled}
             onClick={handleSubmit}
             style="w-full py-3 h-[52px]"
