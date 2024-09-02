@@ -12,6 +12,10 @@ const authSlice = createSlice({
       state.currentUser = null;
       state.isAuthenticated = false;
     },
+    register: (state, action) => {
+      state.currentUser = action.payload;
+      state.isAuthenticated = true;
+    },
   },
 });
 
