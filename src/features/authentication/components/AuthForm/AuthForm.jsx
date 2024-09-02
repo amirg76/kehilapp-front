@@ -1,29 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// redux
 import { authActions } from "@store/slices/authSlice";
 import { useDispatch } from "react-redux";
-
 import logoKisufim from "../img/logo-kibbuttz-transpert.png";
-
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import ErrorMessage from "@components/ui/ErrorMessage";
-
 import { LOGIN_URL, REGISTER_URL } from "@api/apiConstants";
 import { httpService, queryClient } from "@services/httpService";
 import { useMutation } from "react-query";
-
 import Spinner from "@ui/Spinner/Spinner";
-
-// routeConstants
 import { MESSAGES } from "@routes/routeConstants";
 import validateEmail from "@hooks/validateEmail";
 import validatePassword from "@hooks/validatePassword";
 import useButtonDisabled from "@hooks/useButtonDisabled";
 import { useOnUserAuth } from "../../hooks/useOnUserAuth";
 
-const RegisterForm = () => {
+const AuthForm = ({ type }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userCredentials, setUserCredentials] = useState({
@@ -35,7 +28,7 @@ const RegisterForm = () => {
     password: null,
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     useButtonDisabled(setIsButtonDisabled, error);
@@ -61,43 +54,51 @@ const RegisterForm = () => {
     mutate();
   };
 
-  const handleSuccess = (user) => {
-    sessionStorage.setItem("loggedInUser", JSON.stringify(user));
-    // Dispatch the register action with user information
-    dispatch(authActions.register(user));
+  const handleSuccess = useCallback(
+    (user) => {
+      sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+      dispatch(authActions[type](user));
+      navigate(MESSAGES);
+    },
+    [dispatch, navigate, type]
+  );
 
-    // Navigate to main page
-    navigate(MESSAGES);
-  };
   const updateErrorMessage = (err) => {
     if (err.response.status === 401)
-      setLoginErrorMessage("שם משתמש או סיסמא שגויים");
-    else setLoginErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר");
+      setErrorMessage("שם משתמש או סיסמא שגויים");
+    else setErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר");
   };
 
   const {
     mutate,
     isLoading,
     isError,
-    error: loginError,
+    error: authError,
   } = useMutation({
-    mutationFn: () => httpService.post(REGISTER_URL, userCredentials),
+    mutationFn: () =>
+      httpService.post(
+        type === "register" ? REGISTER_URL : LOGIN_URL,
+        userCredentials
+      ),
     onSuccess: (user) => handleSuccess(user),
     onError: (err) => updateErrorMessage(err),
   });
 
+  const formTitle = type === "register" ? "הרשמה לאתר" : "כניסה לאתר";
+  const formSubtitle =
+    type === "register" ? "פתיחת חשבון חדש" : "התחבר לחשבון שלך";
+  const buttonLabel = type === "register" ? "תרשמו אותי" : "כניסה";
+
   return (
     <>
-      {/* Login Form on the Right */}
       <div className="flex flex-col justify-center items-center h-[100vh] md:w-1/2">
         <img className="w-[11em] mb-2" src={logoKisufim} alt="Your Company" />
-        {/* Login Form */}
         <form
           className="w-full max-w-md px-8 py-10 bg-white rounded-2xl shadow-lg"
           onSubmit={handleSubmit}
         >
-          <h1 className="mb-3">הרשמה לאתר</h1>
-          <h2 className="text-xl font-bold mb-6">פתיחת חשבון חדש</h2>
+          <h1 className="mb-3">{formTitle}</h1>
+          <h2 className="text-xl font-bold mb-6">{formSubtitle}</h2>
 
           <InputCmp
             label="אימייל"
@@ -123,11 +124,11 @@ const RegisterForm = () => {
           />
           <ErrorMessage msg={error.password} style="h-[20px] mb-6 mr-3" />
           <ErrorMessage
-            msg={isLoading ? "" : loginErrorMessage}
+            msg={isLoading ? "" : errorMessage}
             style="h-[25px] mr-3 text-center"
           />
           <ButtonCmp
-            label={isLoading ? <Spinner style="w-6 h-6" /> : "תרשמו אותי"}
+            label={isLoading ? <Spinner style="w-6 h-6" /> : buttonLabel}
             isDisabled={isButtonDisabled}
             onClick={handleSubmit}
             style="w-full py-3 h-[52px]"
@@ -138,4 +139,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default AuthForm;

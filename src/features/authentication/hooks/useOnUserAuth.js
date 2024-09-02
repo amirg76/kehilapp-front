@@ -2,15 +2,29 @@ import { MESSAGES } from "@routes/routeConstants";
 import { useDispatch } from "react-redux";
 // redux
 import { authActions } from "@store/slices/authSlice";
-export const useOnUserAuth = ({ user, type }) => {
+import { useCallback } from "react";
+export const useOnUserAuth = ({ type, user }) => {
   const dispatch = useDispatch();
-  console.log(user);
-  // Set user information in session storage
-  sessionStorage.setItem("loggedInUser", JSON.stringify(user));
-  // Dispatch the register action with user information
-  dispatch(
-    type === "register" ? authActions.register(user) : authActions.login(user)
+  const handleAuth = useCallback(
+    (type, user) => {
+      if (type === "register") {
+        // Set user information in session storage
+        sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+        dispatch(authActions.register(user));
+      } else {
+        dispatch(authActions.login(user));
+      }
+      navigate(MESSAGES);
+    },
+    [type, user]
   );
-  // Navigate to main page
-  navigate(MESSAGES);
+  //   console.log(user);
+  //   // Set user information in session storage
+  //   sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+  //   // Dispatch the register action with user information
+  //   dispatch(
+  //     type === "register" ? authActions.register(user) : authActions.login(user)
+  //   );
+  //   // Navigate to main page
+  //   navigate(MESSAGES);
 };
