@@ -56,15 +56,22 @@ const AuthForm = ({ type }) => {
 
   const handleSuccess = useCallback(
     (user) => {
+      if (user?.message === "User already exists") {
+        updateErrorMessage(user?.message);
+        return;
+      }
       sessionStorage.setItem("loggedInUser", JSON.stringify(user));
       dispatch(authActions[type](user));
+
       navigate(MESSAGES);
     },
     [dispatch, navigate, type]
   );
 
   const updateErrorMessage = (err) => {
-    if (err.response.status === 401)
+    if (err === "User already exists")
+      setErrorMessage("משתמש זה כבר קיים במערכת");
+    else if (err.response.status === 401)
       setErrorMessage("שם משתמש או סיסמא שגויים");
     else setErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר");
   };
