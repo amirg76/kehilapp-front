@@ -9,7 +9,7 @@ const Login = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row h-screen bg-gradient-to-b from-[#EFEFEF] to-white">
-        <AuthForm />
+        <AuthForm type="login" />
         <LoginRegisterImage img={leftImg} />
       </div>
     </>
