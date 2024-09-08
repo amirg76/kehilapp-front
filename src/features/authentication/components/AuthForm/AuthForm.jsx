@@ -55,25 +55,25 @@ const AuthForm = ({ type }) => {
   };
 
   const handleSuccess = useCallback(
-    (user) => {
-      if (user?.message === "User already exists") {
-        updateErrorMessage(user?.message);
-        return;
-      }
-      sessionStorage.setItem("loggedInUser", JSON.stringify(user));
-      dispatch(authActions[type](user));
+    (data) => {
+      if (data?.error?.status === 404 || data?.error?.status === 401) {
+        updateErrorMessage(data?.error?.status);
+      } else {
+        sessionStorage.setItem("loggedInUser", JSON.stringify(data));
+        dispatch(authActions[type](data));
 
-      navigate(MESSAGES);
+        navigate(MESSAGES);
+      }
     },
     [dispatch, navigate, type]
   );
 
-  const updateErrorMessage = (err) => {
-    if (err === "User already exists")
-      setErrorMessage("משתמש זה כבר קיים במערכת");
-    else if (err.response.status === 401)
-      setErrorMessage("שם משתמש או סיסמא שגויים");
-    else setErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר");
+  const updateErrorMessage = (errStatus) => {
+    if (errStatus) {
+      if (errStatus === 404) setErrorMessage("משתמש לא קיים במערכת");
+      // setErrorMessage("משתמש זה כבר קיים במערכת");
+      else if (errStatus === 401) setErrorMessage("סיסמא לא נכונה, נסה שוב");
+    } else setErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר");
   };
 
   const {
@@ -87,7 +87,7 @@ const AuthForm = ({ type }) => {
         type === "register" ? REGISTER_URL : LOGIN_URL,
         userCredentials
       ),
-    onSuccess: (user) => handleSuccess(user),
+    onSuccess: (data) => handleSuccess(data),
     onError: (err) => updateErrorMessage(err),
   });
 

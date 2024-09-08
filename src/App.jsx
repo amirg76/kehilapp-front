@@ -14,6 +14,7 @@ const App = () => {
   const { pathname } = useLocation(); //* temp fix for hiding header on login screen
   const dispatch = useDispatch();
   //
+
   useEffect(() => {
     // const token = localStorage.getItem("token");
     const user = sessionStorage.getItem("loggedInUser");
