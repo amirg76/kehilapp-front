@@ -28,6 +28,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
       "@components": path.resolve(__dirname, "src/components"),
       "@features": path.resolve(__dirname, "src/features"),
+      "@lib": path.resolve(__dirname, "src/lib"),
       "@pages": path.resolve(__dirname, "src/pages"),
       "@context": path.resolve(__dirname, "src/context"),
       "@hooks": path.resolve(__dirname, "src/hooks"),
