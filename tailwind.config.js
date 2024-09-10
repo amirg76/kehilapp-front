@@ -48,6 +48,18 @@ export default {
         categoryDarkGreen: "#62CAA5",
         categoryPink: "#CA62B3",
         categoryYellow1: "#E4E0A6",
+        adminDashboard: {
+          mainColor: "#2a3447",
+          mainTextColor: "#e0e0e0",
+          200: "#c0c0c0",
+          300: "#a0a0a0",
+          400: "#808080",
+          500: "#666666",
+          600: "#4d4d4d",
+          700: "#333333",
+          800: "#1a1a1a",
+          900: "#000000",
+        },
       },
       boxShadow: {
         navShadow: "0px 4px 10px 0px rgba(0,0,0,0.11)",

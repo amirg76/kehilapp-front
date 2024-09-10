@@ -7,8 +7,9 @@ import { ROOT, MESSAGES, LOGIN, REGISTER } from "@routes/routeConstants.js";
 import Messages from "@pages/Messages.jsx";
 import Login from "@pages/Login.jsx";
 import Register from "@pages/Register.jsx";
+import AdminDashBoard from "../pages/AdminDashBoard";
 
-const routeConfig = [
+export const routeConfig = [
   {
     // Main Page - Redirect to the messages page if user go to the main page
     path: ROOT,
@@ -47,4 +48,21 @@ const routeConfig = [
   //   },
 ];
 
-export default routeConfig;
+export const adminRoutes = [
+  {
+    path: "kissufim/admin/dashboard",
+    element: <AdminDashBoard />,
+    exact: true,
+  },
+  // {
+  //   path: "/admin/users",
+  //   element: <Users />,
+  //   exact: true,
+  // },
+  // {
+  //   path: "/admin/settings",
+  //   element: <Settings />,
+  //   exact: true,
+  // },
+  // Add more routes here...
+];
