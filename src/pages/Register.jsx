@@ -1,7 +1,7 @@
 //smart component
 import React from "react";
 import LoginRegisterImage from "@features/authentication/components/LoginRegisterImage/LoginRegisterImage";
-import RegisterForm from "@features/authentication/components/RegisterForm/RegisterForm";
+
 import leftImg from "@features/authentication/components/img/image1.png";
 import AuthForm from "../features/authentication/components/AuthForm/AuthForm";
 

@@ -15,7 +15,8 @@ import validateEmail from "@hooks/validateEmail";
 import validatePassword from "@hooks/validatePassword";
 import useButtonDisabled from "@hooks/useButtonDisabled";
 import { useOnUserAuth } from "../../hooks/useOnUserAuth";
-
+import { handleSuccess } from "../../helpers/authSuccess";
+import { updateErrorMessage } from "../../helpers/AuthErrors";
 const AuthForm = ({ type }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,27 +55,12 @@ const AuthForm = ({ type }) => {
     mutate();
   };
 
-  const handleSuccess = useCallback(
+  const handleSuccessCallback = useCallback(
     (data) => {
-      if (data?.error?.status === 404 || data?.error?.status === 401) {
-        updateErrorMessage(data?.error?.status);
-      } else {
-        sessionStorage.setItem("loggedInUser", JSON.stringify(data));
-        dispatch(authActions[type](data));
-
-        navigate(MESSAGES);
-      }
+      handleSuccess(data, setErrorMessage, dispatch, navigate, type);
     },
-    [dispatch, navigate, type]
+    [dispatch, navigate, type, setErrorMessage]
   );
-
-  const updateErrorMessage = (errStatus) => {
-    if (errStatus) {
-      if (errStatus === 404) setErrorMessage("משתמש לא קיים במערכת");
-      // setErrorMessage("משתמש זה כבר קיים במערכת");
-      else if (errStatus === 401) setErrorMessage("סיסמא לא נכונה, נסה שוב");
-    } else setErrorMessage("לא ניתן להתחבר, נסה שוב מאוחר יותר");
-  };
 
   const {
     mutate,
@@ -87,8 +73,12 @@ const AuthForm = ({ type }) => {
         type === "register" ? REGISTER_URL : LOGIN_URL,
         userCredentials
       ),
-    onSuccess: (data) => handleSuccess(data),
-    onError: (err) => updateErrorMessage(err),
+    onSuccess: (data) => handleSuccessCallback(data),
+    onError: (err) => {
+      console.log(err);
+
+      updateErrorMessage(err, setErrorMessage);
+    },
   });
 
   const formTitle = type === "register" ? "הרשמה לאתר" : "כניסה לאתר";
