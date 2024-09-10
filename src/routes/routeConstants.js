@@ -9,3 +9,5 @@ export const LOGIN = `/${currentEndPointHelper()}/login`;
 export const REGISTER = `/${currentEndPointHelper()}/register`;
 // export const MESSAGES = "/messages";
 export const MESSAGES = `/${currentEndPointHelper()}/messages`;
+// export const DASHBOARD = "/admin/dashboard";
+export const DASHBOARD = `/${currentEndPointHelper()}/admin/dashboard`;

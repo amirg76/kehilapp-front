@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 //routing
 import { Routes, Route, useLocation } from "react-router-dom";
-import routeConfig from "@routes/routeConfig";
+
 // routes constants
-import { LOGIN, REGISTER } from "@routes/routeConstants.js";
+import { LOGIN, REGISTER, DASHBOARD } from "@routes/routeConstants.js";
 // redux
 import { authActions } from "@store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 //components
 import Header from "@components/Header/Header";
+import { routeConfig, adminRoutes } from "./routes/routeConfig";
 
 const App = () => {
   const { pathname } = useLocation(); //* temp fix for hiding header on login screen
@@ -29,7 +30,7 @@ const App = () => {
 
       {/* //TODO: when logged out, disable Header component */}
       {/* {isAuthenticated && <Header />} */}
-      {![LOGIN, REGISTER].includes(pathname) && <Header />}
+      {![LOGIN, REGISTER, DASHBOARD].includes(pathname) && <Header />}
 
       {/*
 
@@ -42,6 +43,14 @@ const App = () => {
 
       <Routes>
         {routeConfig.map((route, index) => (
+          <Route
+            key={index}
+            path={route.path}
+            element={route.element}
+            exact={route.exact}
+          />
+        ))}
+        {adminRoutes.map((route, index) => (
           <Route
             key={index}
             path={route.path}
