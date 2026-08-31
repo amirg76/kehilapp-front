@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   messages: [],
+  // The active search term, mirrored here so result cards can highlight matches.
+  searchTerm: "",
 };
 
 const messageSlice = createSlice({
@@ -10,6 +12,9 @@ const messageSlice = createSlice({
   reducers: {
     loadMessages(state, action) {
       state.messages = action.payload;
+    },
+    setSearchTerm(state, action) {
+      state.searchTerm = action.payload || "";
     },
     saveMessage(state, action) {
       state.messages.unshift(action.payload);

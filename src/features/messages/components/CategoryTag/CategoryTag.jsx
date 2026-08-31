@@ -26,7 +26,7 @@ const CategoryTag = ({ category }) => {
             <h6 className="font-semibold text-[13px] mr-1">{title}</h6>
           </>
         ) : (
-          <h6 className="my-2"></h6>
+          <div className="my-2"></div>
         )}
       </div>
       <svg

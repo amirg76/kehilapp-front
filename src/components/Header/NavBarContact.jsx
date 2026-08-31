@@ -2,7 +2,10 @@ import React from "react";
 
 const NavBarContact = () => {
   return (
-    <div className="container flex items-center">
+    // No `container` here: Tailwind's `container` is width:100%, and on an empty
+    // placeholder it ate the header's free space and forced the auth buttons to
+    // wrap onto two rows (clipped by the h-24 header).
+    <div className="flex items-center">
      {/* TODO add delete or keep this section? */}
       {/* <div className="flex ml-[20px]"> */}
         {/* <h5 className="font-bold text-sm">דוא"ל :</h5> */}

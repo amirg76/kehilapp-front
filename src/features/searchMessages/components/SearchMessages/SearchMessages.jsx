@@ -37,6 +37,11 @@ const SearchMessages = () => {
     }
   }, [fetchedMessages, dispatch]);
 
+  // Mirror the term into redux so result cards can highlight the match.
+  useEffect(() => {
+    dispatch(messageActions.setSearchTerm(searchTerm));
+  }, [searchTerm, dispatch]);
+
   return (
     <div
       className={`${

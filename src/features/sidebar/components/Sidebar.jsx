@@ -44,14 +44,24 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
   // }, [fetchedCategories, dispatch]);
 
   return (
-    <aside className={`${classes || "hidden md:block"}`}>
+    <aside
+      className={`${
+        classes || "hidden md:block"
+      } bg-white dark:bg-slate-800 border-e dark:border-white/10 shadow-sm`}
+    >
       <nav
         className={`${
           !open && "top-24"
-        } h-fit flex flex-col border-e shadow-sm w-72 sticky `}
+        } flex flex-col w-72 sticky`}
       >
-        {open && <NavBarButton />}
-        <h3 className="text-xl font-semibold ms-6 mb-2 mt-8">קטגוריה</h3>
+        {/* Auth entry points inside the hamburger drawer. Same component as the
+            desktop header, so signup/login stay in sync across breakpoints. */}
+        {open && (
+          <div className="px-4 pt-4 pb-5 border-b border-black/10 dark:border-white/10">
+            <NavBarButton />
+          </div>
+        )}
+        <h3 className="text-xl font-semibold ms-6 mb-2 mt-8 dark:text-slate-100">קטגוריה</h3>
         {/* nav links */}
         <ul className="mb-5 ms-6 pl-2 text-lg">
           <SidebarItem

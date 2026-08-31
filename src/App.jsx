@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
 // routes constants
-import { LOGIN } from "@routes/routeConstants.js";
+import { LOGIN, REGISTER, VERIFY_EMAIL } from "@routes/routeConstants.js";
 // redux
 import { authActions } from "@store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,13 +22,16 @@ const App = () => {
       dispatch(authActions.login(JSON.parse(user)));
     }
   }, []);
+  // The auth screens (login/register/verify) render full-bleed without the app
+  // chrome, matching the existing login layout.
+  const hideHeaderOn = [LOGIN, REGISTER, VERIFY_EMAIL];
   return (
-    <div className="w-screen flex flex-col ">
+    <div className="w-screen flex flex-col bg-white dark:bg-slate-900 min-h-screen">
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
 
       {/* //TODO: when logged out, disable Header component */}
       {/* {isAuthenticated && <Header />} */}
-      {pathname !== LOGIN && <Header />}
+      {!hideHeaderOn.includes(pathname) && <Header />}
       {/*
 
         <Route
@@ -38,16 +41,18 @@ const App = () => {
           />
         */}
 
-      <Routes>
-        {routeConfig.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={route.element}
-            exact={route.exact}
-          />
-        ))}
-      </Routes>
+      <main className="flex flex-col flex-1">
+        <Routes>
+          {routeConfig.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={route.element}
+              exact={route.exact}
+            />
+          ))}
+        </Routes>
+      </main>
     </div>
   );
 };
