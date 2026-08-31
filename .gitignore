@@ -11,3 +11,12 @@ node_modules
 README
 
 .vite/
+
+# ...but the example MUST be committed: it documents the required vars, and a
+# missing one is what produced the white screen. The negation has to sit on its
+# own line - glued onto `.vite/` it never applied, so `.env.*` was quietly
+# ignoring `.env.example` too.
+!.env.example
+
+# Vite build output (this project outputs to build/, not dist/).
+build

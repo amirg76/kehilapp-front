@@ -8,3 +8,6 @@ export const AUTH_URL = `${BASE_URL}api/auth`;
 export const LATEST_MESSAGES_URL = `${MESSAGES_URL}/latest`;
 export const MESSAGES_BY_CATEGORY_URL = `${MESSAGES_URL}/category`;
 export const LOGIN_URL = `${AUTH_URL}/login`;
+export const REGISTER_URL = `${AUTH_URL}/register`;
+export const VERIFY_EMAIL_URL = `${AUTH_URL}/verify-email`;
+export const RESEND_VERIFICATION_URL = `${AUTH_URL}/resend-verification`;

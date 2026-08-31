@@ -1,15 +1,23 @@
 import { useMemo } from "react";
+import { getCategoryImage } from "@utils/categoryImage";
 
 const useMessagesDisplay = (messages, categories, users) => {
   const displayInfo = useMemo(() => {
-    if (!messages.length || !categories.length || !users.length) {
+    // Messages render even with no user data: sender name is optional enrichment,
+    // and the public (logged-out) view never loads the auth-only user directory.
+    if (!messages.length || !categories.length) {
       return [];
     }
 
     return messages.map((message) => {
-      const category = categories.find(
+      const rawCategory = categories.find(
         (category) => category._id === message.categoryId
       );
+      // Attach a resolved local cover image so a message with no attachment
+      // falls back to its category's picture instead of a broken external URL.
+      const category = rawCategory
+        ? { ...rawCategory, coverImgUrl: getCategoryImage(rawCategory.title) }
+        : rawCategory;
       const user = users.find((user) => user._id === message.senderId);
       return {
         _id: message._id,

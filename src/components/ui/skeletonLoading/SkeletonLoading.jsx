@@ -16,9 +16,9 @@ const SkeletonLoading = () => {
         <div className="rounded-[20px] h-[195px] object-cover bg-slate-400 "></div>
 
         <div className="flex flex-col flex-1 mt-[10px]">
-          <h1 className=" h-8 bg-slate-400 "></h1>
+          <div className=" h-8 bg-slate-400 "></div>
 
-          <h1 className="my-2 h-32 bg-slate-400 "></h1>
+          <div className="my-2 h-32 bg-slate-400 "></div>
 
           <section className="flex items-center">
             <div className=" rounded-full bg-slate-400 h-10 w-10"></div>
@@ -26,9 +26,9 @@ const SkeletonLoading = () => {
           </section>
           <div className="flex items-end justify-between">
             <section className="flex w-fit">
-              <h1 className=" h-8 w-16 bg-slate-400 "></h1>
+              <div className=" h-8 w-16 bg-slate-400 "></div>
 
-              <h1 className="mx-2 h-8 w-16 bg-slate-400 "></h1>
+              <div className="mx-2 h-8 w-16 bg-slate-400 "></div>
             </section>
             <CategoryTag
               category={{

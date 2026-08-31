@@ -27,6 +27,7 @@ const Messages = () => {
   const users = useSelector((state) => state.user.users);
   const categories = useSelector((state) => state.category.categories);
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   const {
@@ -71,6 +72,9 @@ const Messages = () => {
     queryFn: () => {
       return httpService.get(USERS_URL);
     },
+    // The user directory is auth-only; a public visitor shouldn't trigger it
+    // (it would 401). Sender-name enrichment simply no-ops when logged out.
+    enabled: isAuthenticated,
   });
 
   const {
@@ -105,11 +109,11 @@ const Messages = () => {
   };
 
   return (
-    <div className="flex flex-1 w-full bg-[#efefef] msgs-container-height">
+    <div className="flex flex-1 w-full bg-[#efefef] dark:bg-slate-900 msgs-container-height">
       {/* sidebar & content split side by side */}
       <Sidebar />
       <div className="w-full h-full">
-        <HeroSection />
+        <HeroSection currentCategory={currentCategory} />
         {!isModalOpen && <SearchMessages />}
         {/* {isLoading && <LoadingPage />} */}
         {/* //TODO: add an error modal? */}

@@ -5,15 +5,15 @@ import DocumentPreview from "./DocumentPreview";
 import PdfIcon from "@components/ui/PdfIcon/PdfIcon";
 
 const FilePreview = ({ attachmentType, attachmentUrl, attachmentName }) => {
+  // No file on the message: show the category cover image when we have one,
+  // otherwise render nothing (the old code pointed at a dead external URL,
+  // which rendered a broken-image box on every attachment-less message).
   if (!attachmentType) {
+    if (!attachmentUrl) return <></>;
     return (
       <ImagePreview
-        imgSrc={
-          attachmentUrl
-            ? attachmentUrl
-            : "https://i.ibb.co/0mfdBtk/42243380990100408272no.jpg"
-        }
-        altDescription="category cover image"
+        imgSrc={attachmentUrl}
+        altDescription="תמונת קטגוריה"
         attachmentUrl={attachmentUrl}
       />
     );

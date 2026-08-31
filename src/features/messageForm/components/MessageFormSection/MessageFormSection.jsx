@@ -120,6 +120,7 @@ const MessageFormSection = ({
         } else {
           setError((prevErrors) => ({ ...prevErrors, categoryId: "" }));
         }
+      break; // was fall-through — default is a no-op, so behavior is unchanged
       default:
         break;
     }

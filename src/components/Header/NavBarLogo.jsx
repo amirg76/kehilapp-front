@@ -7,7 +7,7 @@ const NavBarLogo = () => {
         <img
           className="h-10 w-auto"
           src="/img/company-logo.png"
-          alt="Your Company"
+          alt="כיסופים"
         />
       </div>
     </div>
