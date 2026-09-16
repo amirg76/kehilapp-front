@@ -1,5 +1,5 @@
 /*
- * Minimal offline-shell service worker for WeUnity.
+ * Minimal offline-shell service worker for Kehilapp.
  *
  * Design goals:
  *  - Make the app installable + give it an offline fallback shell.
@@ -8,7 +8,7 @@
  *    network. Only same-origin built assets (/assets/, /img/) are cached.
  *  - Ignore the API (different origin, http://localhost:5001) entirely.
  */
-const CACHE = "weunity-shell-v1";
+const CACHE = "kehilapp-shell-v1";
 const SHELL = ["/", "/manifest.webmanifest", "/img/company-logo.png"];
 
 self.addEventListener("install", (event) => {

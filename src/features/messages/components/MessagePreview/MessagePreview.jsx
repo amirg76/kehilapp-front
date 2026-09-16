@@ -61,7 +61,7 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
 
   const onShare = async () => {
     const url = buildShareUrl();
-    const shareData = { title: message.title || "WeUnity", url };
+    const shareData = { title: message.title || "Kehilapp", url };
     // Prefer the native share sheet on mobile; fall back to clipboard copy.
     if (navigator.share) {
       try {
