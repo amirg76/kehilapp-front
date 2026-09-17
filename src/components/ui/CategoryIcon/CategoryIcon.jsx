@@ -38,7 +38,7 @@ const CategoryIcon = ({ categoryTitle, color }) => {
             d="M4.83398 6.00047V10.9505C4.83398 11.6798 5.41345 12.3793 6.4449 12.895C7.47635 13.4107 8.87529 13.7005 10.334 13.7005C11.7927 13.7005 13.1916 13.4107 14.2231 12.895C15.2545 12.3793 15.834 11.6798 15.834 10.9505V6.00047"
             stroke={color}
             strokeWidth="1.5"
-            stroklinecap="round"
+            strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
