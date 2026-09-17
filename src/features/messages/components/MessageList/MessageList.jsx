@@ -10,6 +10,8 @@ import { getCategoryImage } from "@utils/categoryImage";
 import usePins from "@hooks/usePins";
 // routes
 import { LOGIN, REGISTER } from "@routes/routeConstants";
+// redux selectors
+import { selectCanSeeMembersContent } from "@store/slices/authSlice";
 
 const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) => {
   //TODO - what is the best practice to get the sender's name? from where should i send the request to the backend?
@@ -17,6 +19,10 @@ const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) 
   const SkeletonLoadingArray = Array.from({ length: 12 });
   const currentCategoryTitle = currentCategory?.title || "כל ההודעות";
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // Verified-but-not-yet-approved members see public content only, same as an
+  // anonymous visitor — mirrors the server's canSeeMembersContent.
+  const canSeeMembersContent = useSelector(selectCanSeeMembersContent);
+  const isPendingApproval = isAuthenticated && !canSeeMembersContent;
   const { pinnedIds } = usePins();
 
   // Pinned ("important") messages float to the top; order is otherwise stable.
@@ -86,6 +92,25 @@ const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) 
               התחברות
             </Link>
           </div>
+        </div>
+      )}
+      {/* Signed in, verified, but not yet let in by an admin — nothing to do but
+          wait, so no login/register actions here (unlike the anonymous banner).
+          Amber "waiting" treatment kept distinct from the anon banner's primary
+          color, and readable in both themes. */}
+      {isPendingApproval && (
+        <div
+          data-testid="pending-approval-banner"
+          role="status"
+          className="mx-6 mt-6 flex items-center gap-3 rounded-2xl border border-amber-300 dark:border-amber-500/40
+                     bg-amber-50 dark:bg-amber-900/20 px-5 py-4"
+        >
+          <span className="text-2xl" aria-hidden="true">
+            ⏳
+          </span>
+          <p className="text-amber-900 dark:text-amber-100 font-medium">
+            החשבון ממתין לאישור מנהל הקהילה — בינתיים מוצג תוכן ציבורי בלבד
+          </p>
         </div>
       )}
       {/* current-category header */}

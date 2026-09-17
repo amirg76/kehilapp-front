@@ -11,3 +11,4 @@ export const LOGIN_URL = `${AUTH_URL}/login`;
 export const REGISTER_URL = `${AUTH_URL}/register`;
 export const VERIFY_EMAIL_URL = `${AUTH_URL}/verify-email`;
 export const RESEND_VERIFICATION_URL = `${AUTH_URL}/resend-verification`;
+export const ME_URL = `${AUTH_URL}/me`;

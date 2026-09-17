@@ -154,7 +154,8 @@ const RegisterForm = () => {
           <p className="text-slate-600 dark:text-slate-300 mb-6">
             שלחנו קישור אימות לכתובת{" "}
             <span className="font-semibold">{credentials.email}</span>. לחץ עליו
-            כדי להפעיל את החשבון.
+            כדי לאמת את החשבון. לאחר האימות מנהל הקהילה יצטרך לאשר את החשבון —
+            כך שאם לא תראו מיד את כל התוכן, זה צפוי.
           </p>
 
           {demoVerifyLink && (

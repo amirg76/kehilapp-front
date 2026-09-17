@@ -9,6 +9,9 @@ import { authActions } from "@store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 //components
 import Header from "@components/Header/Header";
+// api
+import { ME_URL } from "@api/apiConstants";
+import { httpService } from "@/services/httpService";
 
 const App = () => {
   const { pathname } = useLocation(); //* temp fix for hiding header on login screen
@@ -18,9 +21,45 @@ const App = () => {
     // const token = localStorage.getItem("token");
     const user = sessionStorage.getItem("loggedInUser");
 
-    if (user) {
-      dispatch(authActions.login(JSON.parse(user)));
-    }
+    if (!user) return;
+
+    dispatch(authActions.login(JSON.parse(user)));
+
+    // The session cookie is httpOnly, so a page reload restores a session the
+    // SPA cannot itself verify or refresh: sessionStorage may hold a role or an
+    // `approved` flag that is now stale (an admin approval takes effect on the
+    // token already held, with no re-login — see backend authController.me).
+    // GET /me reads the account fresh from the auth cookie on every call, so
+    // this both catches up an approval and fixes the "header shows
+    // הרשמה/התחבר while a session is actually live" glitch on refresh.
+    let cancelled = false;
+    httpService
+      .get(ME_URL)
+      .then((res) => {
+        if (cancelled) return;
+        dispatch(authActions.updateUser(res.user));
+        const stored = JSON.parse(sessionStorage.getItem("loggedInUser") || "null");
+        if (stored) {
+          sessionStorage.setItem(
+            "loggedInUser",
+            JSON.stringify({ ...stored, user: { ...stored.user, ...res.user } })
+          );
+        }
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        // The cookie the SPA thought it had is no longer accepted by the server
+        // (expired/revoked) — a session that looks signed-in locally but isn't
+        // must not be left showing as authenticated.
+        if (err?.response?.status === 401) {
+          sessionStorage.removeItem("loggedInUser");
+          dispatch(authActions.logout());
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
   // The auth screens (login/register/verify) render full-bleed without the app
   // chrome, matching the existing login layout.
