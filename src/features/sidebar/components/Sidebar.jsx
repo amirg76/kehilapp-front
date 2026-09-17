@@ -16,7 +16,10 @@ import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 import NavBarButton from "@components/Header/NavBarButton";
 
-const Sidebar = ({ classes, onCloseNavbar, open, variant = "page" }) => {
+// ...rest exists so the caller can mark this whole subtree inert/aria-hidden.
+// Without forwarding, those attributes would be destructured away and
+// silently do nothing -- which is worse than not passing them at all.
+const Sidebar = ({ classes, onCloseNavbar, open, variant = "page", ...rest }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -48,6 +51,7 @@ const Sidebar = ({ classes, onCloseNavbar, open, variant = "page" }) => {
       className={`${
         classes || "hidden md:block"
       } bg-white dark:bg-slate-800 border-e dark:border-white/10 shadow-sm`}
+      {...rest}
     >
       <nav
         className={`${

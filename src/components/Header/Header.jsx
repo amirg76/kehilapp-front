@@ -63,6 +63,15 @@ const Header = () => {
           onCloseNavbar={onCloseNavbar}
           open={isModalOpen}
           variant="drawer"
+          // The drawer hides itself with a transform, so while closed it is
+          // off-canvas but still in the DOM, still focusable and still in the
+          // accessibility tree -- at every width, desktop included. Measured on
+          // the signed-in board at 1280: nine tab stops on controls nobody can
+          // see, and "הוסף הודעה" announced twice, because the page renders its
+          // own Sidebar as well. inert removes it from focus and from the
+          // accessibility tree; aria-hidden is the fallback for browsers that
+          // do not support inert yet.
+          {...(!isModalOpen && { inert: "", "aria-hidden": "true" })}
         />
         <div className="flex items-center gap-3 md:hidden">
           <ThemeToggle />

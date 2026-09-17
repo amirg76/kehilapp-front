@@ -41,11 +41,32 @@ test('sign in, post a message, and see it @flow', async ({ page }) => {
 
   // From here everything lives inside the compose modal (a headlessui
   // Dialog, role="dialog"). Scoping to it avoids matching the still-mounted
-  // Sidebar compose buttons (their label contains "הוסף", which also matches
-  // the send-button regex) and the background search box (also a textbox).
+  // Sidebar compose buttons and the background search box (also a textbox).
   const dialog = page.getByRole('dialog');
-  await dialog.getByRole('textbox').last().fill(body);
-  await dialog.getByRole('button', { name: /send|publish|שלח|פרסם|הוסף/i }).first().click();
+
+  // The form requires a category and a title (2-25 chars) before the submit
+  // button becomes enabled -- the previous version of this test never filled
+  // either, so the submit click below always no-opped on a disabled button.
+  await dialog.getByRole('combobox').selectOption({ index: 1 });
+  await dialog.getByRole('textbox').fill(`E2E ${Date.now()}`);
+
+  // The message body is a Quill rich-text editor (react-quill): its
+  // `.ql-editor` region is `contenteditable`, not a real <textarea>, and
+  // Quill does not give it an ARIA role, so `getByRole('textbox')` never
+  // matches it -- it only ever matched the title field above (the sole real
+  // textbox in the form). That's a second, independent test defect: even
+  // with the compose button reachable, the old locator could never have
+  // filled the real message body. Playwright's `.fill()` does support
+  // `contenteditable` elements directly.
+  await dialog.locator('.ql-editor').fill(body);
+
+  // The "שלח" (send) button shares a data-testid pattern with the compose
+  // button above for the same reason: a broad name regex like
+  // /send|publish|שלח|פרסם|הוסף/ also matches this form's "הוסף קובץ" (add
+  // file) control, which sits earlier in the DOM -- `.first()` clicked the
+  // file picker, not send, and the click "succeeded" (the file button isn't
+  // disabled) while silently never submitting the message.
+  await page.getByTestId('message-submit-button').click();
 
   // The message appears in the feed.
   await expect(page.getByText(body)).toBeVisible();

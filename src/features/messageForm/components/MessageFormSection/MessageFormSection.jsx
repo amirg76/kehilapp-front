@@ -201,6 +201,7 @@ const MessageFormSection = ({
           <h5 className="mb-1">* שדות המסומנים בכוכבית הם שדות חובה</h5>
 
           <ButtonCmp
+            data-testid="message-submit-button"
             label="שלח"
             style="w-full sm:w-[150px] justify-self-end p-2 "
             isDisabled={isButtonDisabled}
