@@ -32,12 +32,13 @@ const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD;
 const uniqueEmail = () => `approval-test-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
 const TEST_PASSWORD = 'ApprovalFlow123';
 
-// Count of visible message cards: MessagePreview renders exactly one <h1> per
-// card (its title), and it is the only per-message heading on the page — see
-// MessageList/MessagePreview. HeroSection also renders static chrome that is
-// present in both counts, so a before/after delta still isolates the tier
-// that opened up.
-const messageCardCount = (page) => page.locator('h1').count();
+// Count of visible message cards, anchored on a stable per-card hook rather
+// than every <h1> on the page (MessagePreview's <h1> is its title, but this
+// project already has more than one h1 as a documented smell — counting all
+// of them silently starts counting the wrong thing the moment that changes
+// elsewhere). data-testid="message-card" is added on MessagePreview's root
+// for exactly this.
+const messageCardCount = (page) => page.getByTestId('message-card').count();
 
 test('unapproved member sees public-only + pending banner; admin approval unlocks members tier @approval', async ({
   page,
@@ -90,10 +91,15 @@ test('unapproved member sees public-only + pending banner; admin approval unlock
   await page.getByRole('button', { name: /log ?in|התחבר|כניסה/i }).click();
 
   // 3. Pending state: the new banner is visible, no members-only card is
-  // present, and the public-only card count is what's showing.
+  // present, and the public-only card count is what's showing. The banner
+  // renders above MessageList's loading branch, so waiting on it alone proves
+  // nothing about whether the messages themselves have arrived — anchor on an
+  // actual card the same way step 5 anchors on members-only content, so the
+  // count below can't run before the data does.
   const pendingBanner = page.getByTestId('pending-approval-banner');
   await expect(pendingBanner).toBeVisible();
   await expect(page.getByText('🔒 לחברים בלבד')).toHaveCount(0);
+  await expect(page.getByTestId('message-card').first()).toBeVisible();
   const publicCount = await messageCardCount(page);
   expect(publicCount).toBeGreaterThan(0);
 
@@ -115,22 +121,40 @@ test('unapproved member sees public-only + pending banner; admin approval unlock
   const newUser = users.find((u) => u.email === email);
   expect(newUser, `registered account ${email} not found in /api/users`).toBeTruthy();
 
-  const approveResult = await request.patch(`${API}/api/users/${newUser._id}/approve`, {
-    headers: { 'X-CSRF-Token': csrfToken },
-  });
-  expect(approveResult.ok(), `approve failed: ${approveResult.status()} ${await approveResult.text()}`).toBeTruthy();
-  const approveBody = await approveResult.json();
-  expect(approveBody.approved).toBe(true);
+  // From here on the test owns a real, approved account in the shared
+  // database whose password is a literal in this file. Clean it up (revoke
+  // its approval — userRoutes.js exposes approve/revoke/role on users, no
+  // delete) no matter how the rest of the test goes, using the admin session
+  // already established above.
+  try {
+    const approveResult = await request.patch(`${API}/api/users/${newUser._id}/approve`, {
+      headers: { 'X-CSRF-Token': csrfToken },
+    });
+    expect(approveResult.ok(), `approve failed: ${approveResult.status()} ${await approveResult.text()}`).toBeTruthy();
+    const approveBody = await approveResult.json();
+    expect(approveBody.approved).toBe(true);
 
-  // 5. Reload the still-logged-in member's page — no re-login. App.jsx's /me
-  // call on mount picks up the fresh `approved` flag and merges it in.
-  await page.reload();
+    // 5. Reload the still-logged-in member's page — no re-login. App.jsx's /me
+    // call on mount picks up the fresh `approved` flag and merges it in.
+    await page.reload();
 
-  // Wait for actual content, not network idle (react-query keeps polling /
-  // background-refetching, which makes networkidle an unreliable signal in
-  // this project).
-  await expect(page.getByText('🔒 לחברים בלבד').first()).toBeVisible();
-  await expect(pendingBanner).toHaveCount(0);
-  const approvedCount = await messageCardCount(page);
-  expect(approvedCount).toBeGreaterThan(publicCount);
+    // Wait for actual content, not network idle (react-query keeps polling /
+    // background-refetching, which makes networkidle an unreliable signal in
+    // this project).
+    await expect(page.getByText('🔒 לחברים בלבד').first()).toBeVisible();
+    await expect(pendingBanner).toHaveCount(0);
+    const approvedCount = await messageCardCount(page);
+    expect(approvedCount).toBeGreaterThan(publicCount);
+  } finally {
+    const revokeResult = await request.patch(`${API}/api/users/${newUser._id}/revoke`, {
+      headers: { 'X-CSRF-Token': csrfToken },
+    });
+    if (!revokeResult.ok()) {
+      // Don't let cleanup failure mask the real assertion failure (if any),
+      // but don't stay silent either — this account is now left behind.
+      console.error(
+        `cleanup: revoking ${email} (${newUser._id}) failed: ${revokeResult.status()} ${await revokeResult.text()}`
+      );
+    }
+  }
 });

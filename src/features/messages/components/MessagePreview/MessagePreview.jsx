@@ -82,6 +82,7 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
   return (
     <div
       id={`msg-${message._id}`}
+      data-testid="message-card"
       className={`w-[436px] max-sm:w-full border-solid border rounded-[30px] mx-4 my-10
             ${
               pinned
