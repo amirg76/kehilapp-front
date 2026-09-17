@@ -62,6 +62,7 @@ const Header = () => {
                    }`}
           onCloseNavbar={onCloseNavbar}
           open={isModalOpen}
+          variant="drawer"
         />
         <div className="flex items-center gap-3 md:hidden">
           <ThemeToggle />

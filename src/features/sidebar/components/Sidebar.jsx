@@ -16,7 +16,7 @@ import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 import NavBarButton from "@components/Header/NavBarButton";
 
-const Sidebar = ({ classes, onCloseNavbar, open }) => {
+const Sidebar = ({ classes, onCloseNavbar, open, variant = "page" }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -89,6 +89,7 @@ const Sidebar = ({ classes, onCloseNavbar, open }) => {
         {/* New Message Button */}
         {isAuthenticated && (
           <button
+            data-testid={`sidebar-compose-${variant}`}
             className="p-2 rounded-md text-lg mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
             onClick={() => {
               // TODO: open a new message model on click
