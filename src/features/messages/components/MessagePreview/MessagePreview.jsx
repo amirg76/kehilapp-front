@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 //components
 import Avatar from "@components/ui/Avatar/Avatar";
 import CategoryTag from "../CategoryTag/CategoryTag";
+import UrgencyBadge from "../UrgencyBadge/UrgencyBadge";
 import TextPreview from "../TextPreview/TextPreview";
 import FilePreview from "../FilePreview/FilePreview";
 
@@ -120,6 +121,12 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
         />
 
         <div className="flex flex-col flex-1 mt-[10px]">
+          {/* Urgency sits above the access badge and the title: it is the first
+              thing that should change how the reader treats the card, while
+              "לחברים בלבד" answers a different question (who may see it).
+              Each badge keeps its own row so two badges wrap instead of
+              overflowing the card on a narrow phone. */}
+          <UrgencyBadge urgency={message.urgency} />
           {isMembersOnly && (
             <span
               className="inline-flex items-center gap-1 w-fit mb-2 px-3 py-1 rounded-full text-sm font-semibold

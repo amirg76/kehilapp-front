@@ -8,6 +8,7 @@ import SkeletonLoading from "@components/ui/skeletonLoading/SkeletonLoading";
 //utils
 import { getCategoryImage } from "@utils/categoryImage";
 import usePins from "@hooks/usePins";
+import { getUrgencyRank } from "@utils/urgency";
 // routes
 import { LOGIN, REGISTER } from "@routes/routeConstants";
 // redux selectors
@@ -25,13 +26,28 @@ const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) 
   const isPendingApproval = isAuthenticated && !canSeeMembersContent;
   const { pinnedIds } = usePins();
 
-  // Pinned ("important") messages float to the top; order is otherwise stable.
+  // Ordering precedence: pin, then urgency, then whatever order the API returned
+  // (the board's date order).
+  //
+  // Pin deliberately outranks urgency. A pin is this viewer's own explicit act on
+  // their own browser; urgency is set once by the publisher for everybody. If
+  // urgency won, an urgent message could push a card the viewer had just pinned
+  // back down the list, and the pin would look broken even though it is still
+  // stored — the one behaviour this had to avoid. So a pinned message never drops
+  // below an unpinned one, and urgency orders the cards *within* each group:
+  // pinned-urgent first, then the rest of the pins, then unpinned urgent/important,
+  // then the routine board.
+  //
+  // The date order is inherited rather than re-sorted: Array.prototype.sort is
+  // stable (ES2019+), so equal keys keep the order the server sent, and we do not
+  // second-guess the API's ordering.
   const orderedMessages = useMemo(() => {
     const pinnedSet = new Set(pinnedIds);
     return [...messages].sort((a, b) => {
       const ap = pinnedSet.has(a._id) ? 1 : 0;
       const bp = pinnedSet.has(b._id) ? 1 : 0;
-      return bp - ap;
+      if (bp !== ap) return bp - ap;
+      return getUrgencyRank(b.urgency) - getUrgencyRank(a.urgency);
     });
   }, [messages, pinnedIds]);
 

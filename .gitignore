@@ -31,3 +31,16 @@ playwright-report/
 .playwright-mcp/
 *-probe.png
 admin-login.png
+
+# secrets and keys - none of these exist in this repo today, and the point is
+# that none of them can ever stage by accident either. This block is copied from
+# the backend's .gitignore, which has carried it all along: this repo was the one
+# missing it, so the three repos that ship together were not equally covered.
+# Cheap to add; the failure it prevents is not recoverable once pushed.
+secrets/
+prod.env
+*.pem
+*.key
+*.p12
+*credentials*.json
+id_rsa
