@@ -85,8 +85,20 @@ console.log("--- the real seeded demo password shape ---");
 const seeded = randomBytes(18).toString("base64url");
 check("seeded demo password is 24 chars", seeded.length, 24);
 expectAccept("seeded demo password (randomBytes(18).base64url)", seeded);
-// The exact string the browser check used, so this file records it too.
-expectAccept("the measured demo password", "REDACTED-ROTATED-CREDENTIAL");
+// There WAS a line here pinning the exact password a browser run had used, "so
+// this file records it too". It was removed, and the reason is worth keeping:
+// GitGuardian flagged it on the pull request as a hardcoded credential, and it
+// was right to. The value was harmless — a random password for an in-memory
+// database that dies with the process and is regenerated on every seed — but a
+// credential-shaped string does not get to plead its own context in a public
+// repository, and this file already proves the same property one line above by
+// generating the shape rather than quoting an instance of it.
+//
+// Worth recording HOW it got through: the secret scan run before that push
+// searched for patterns — `sk-ant-`, `AKIA`, `password=`, connection strings. A
+// bare base64url string passed as a function argument matches none of them.
+// Pattern scanning cannot see this class at all; entropy scanning can. Do not
+// treat a clean pattern scan as evidence that a file carries no secret.
 
 console.log("");
 console.log("--- upper bound ---");
