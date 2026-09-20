@@ -9,6 +9,7 @@ import logoKisufim from "../img/logo-kibbuttz-transpert.png";
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import ErrorMessage from "@components/ui/ErrorMessage";
+import { validatePassword } from "@/utils/passwordPolicy";
 
 import { LOGIN_URL, RESEND_VERIFICATION_URL } from "../../../../api/apiConstants";
 import { httpService, queryClient } from "../../../../services/httpService";
@@ -66,22 +67,14 @@ const LoginForm = () => {
         }
         break;
       case "password":
-        if (!value || !value.length) {
-          setError((prevErrors) => ({ ...prevErrors, password: "שדה חובה" }));
-        } else if (!/^.{8,20}$/.test(value)) {
-          setError((prevErrors) => ({
-            ...prevErrors,
-            password: "הסיסמא צריכה להיות באורך של 8 תווים לפחות",
-          }));
-        }
-        //OPTIONAL
-        // else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*\s).{8,20}$/.test(value)) {
-        //   setError((prevErrors) => ({ ...prevErrors, password: "הסיסמא צריכה להכיל לפחות מספר אחד, אות גדולה אחת ואות קטנה אחת" }));
-        // }
-        else {
-          setError((prevErrors) => ({ ...prevErrors, password: "" }));
-        }
-      break; // was fall-through — default is a no-op, so behavior is unchanged
+        // Length policy lives in one place and mirrors the server's
+        // Joi.string().min(8).max(128). A local copy here is what let the client
+        // drift to an 8-20 window and lock every 24-character demo password out.
+        setError((prevErrors) => ({
+          ...prevErrors,
+          password: validatePassword(value),
+        }));
+        break; // was fall-through — default is a no-op, so behavior is unchanged
       default:
         break;
     }

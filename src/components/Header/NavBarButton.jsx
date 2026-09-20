@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 // redux
 import { uiActions } from "@store/slices/uiSlice";
-import { authActions } from "@store/slices/authSlice";
+import { authActions, selectCurrentUser } from "@store/slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 // routeConstants
@@ -38,7 +38,11 @@ const SECONDARY_ACTION =
 
 const NavBarButton = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const currentUser = useSelector((state) => state.auth.currentUser);
+  // The slice stores the WHOLE login response ({ token, csrfToken, user }), so
+  // the name lives one level down. Read through the slice's own selector rather
+  // than reaching into that shape here — a hand-written `state.auth.currentUser`
+  // is what produced a greeting of "שלום !" for every signed-in member.
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -108,7 +112,10 @@ const NavBarButton = () => {
             onClick={closeDrawer}
             className={SECONDARY_ACTION}
           >
-            התחבר
+            {/* "התחברות" and not "התחבר": the board's members-only banner already
+                labels the same action that way, and one action should not have
+                two names. */}
+            התחברות
           </Link>
         </>
       )}

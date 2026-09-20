@@ -1,7 +1,7 @@
-// Shared visual style for a matched search term. Kept in one place so the
-// plain-text (React node) path and the rich-text (HTML string) path look
-// identical. These literal class strings are picked up by Tailwind's content
-// scanner (src/**/*.{js,jsx}), so they are safe to inject as an HTML attribute.
+// Shared visual style for a matched search term. Kept in one place so every
+// caller of highlightText() — message titles and message bodies alike — looks
+// identical. This literal class string is picked up by Tailwind's content
+// scanner (src/**/*.{js,jsx}).
 export const MARK_CLASS =
   "kh-mark rounded-[3px] px-[1px] bg-yellow-200 text-inherit dark:bg-yellow-500/40 dark:text-yellow-50";
 
@@ -32,24 +32,8 @@ export function highlightText(text, term) {
   );
 }
 
-// Highlight an ALREADY-SANITIZED HTML string by inserting <mark> only inside
-// text segments (never inside a tag). The term is regex-escaped and the matched
-// text comes verbatim from the sanitized input, so no new markup is introduced
-// beyond the fixed <mark class="…"> wrapper. Callers must still run the result
-// back through DOMPurify (with `mark` allowed) as a belt-and-braces final pass.
-export function highlightHtml(html, term) {
-  const source = html == null ? "" : String(html);
-  const t = (term || "").trim();
-  if (!t) return source;
-
-  const re = new RegExp(escapeRegExp(t), "gi");
-  // Split into tag tokens (<…>) and text tokens; only text tokens are touched.
-  return source
-    .split(/(<[^>]+>)/g)
-    .map((token) =>
-      token.startsWith("<")
-        ? token
-        : token.replace(re, (m) => `<mark class="${MARK_CLASS}">${m}</mark>`)
-    )
-    .join("");
-}
+// There is deliberately no HTML-string highlighter here. Highlighting a message
+// body happens on parsed React nodes (src/utils/linkify.jsx); a version that
+// spliced <mark> into markup with a regex existed, lost its last caller when
+// that move happened, and was removed rather than left as a tempting shortcut
+// back to rewriting HTML by string surgery.

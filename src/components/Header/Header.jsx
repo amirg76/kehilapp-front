@@ -13,11 +13,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { uiActions } from "@store/slices/uiSlice";
 // routeConstants
 import { ROOT } from "@routes/routeConstants";
+import { useIsAuthCtaBannerOnScreen } from "@hooks/useAuthCtaBanner";
 
 const Header = () => {
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isBannerOnScreen = useIsAuthCtaBannerOnScreen();
   const dispatch = useDispatch();
   const hamburgerRef = useRef(null);
+
+  // ONE call to action above the fold, not two.
+  //
+  // A signed-out visitor was getting the header's הרשמה/התחברות pair AND the
+  // board's members-only banner — which carries the same pair plus the padlock
+  // and the sentence explaining what an account unlocks — both on screen at
+  // once. The banner is the one that gives a reason to act, so it wins the
+  // fold; the header pair steps aside while the banner is on screen and comes
+  // back the moment it scrolls behind the header, so the way in is never gone.
+  //
+  // Only the signed-out branch is affected. When authenticated this is false,
+  // and the greeting + התנתק render exactly as before.
+  const deferAuthActionsToBanner = !isAuthenticated && isBannerOnScreen;
 
   const onOpenNavbar = () => {
     dispatch(uiActions.openModal());
@@ -51,7 +67,22 @@ const Header = () => {
         </NavLink>
         <div className="hidden md:flex items-center gap-3 shrink-0">
           <NavBarContact />
-          <NavBarButton />
+          {/* Kept in the layout rather than unmounted: the pair reserves its
+              width so the theme toggle does not jump sideways when it returns
+              on scroll. `invisible` (visibility:hidden) is what actually takes
+              the links out of the tab order in every browser — the same idiom
+              the drawer below relies on — and the delayed visibility
+              transition lets the buttons fade instead of blinking away. */}
+          <div
+            className={
+              deferAuthActionsToBanner
+                ? "invisible opacity-0 [transition:opacity_200ms,visibility_0s_200ms]"
+                : "visible opacity-100 [transition:opacity_200ms]"
+            }
+            {...(deferAuthActionsToBanner && { inert: "", "aria-hidden": "true" })}
+          >
+            <NavBarButton />
+          </div>
           <ThemeToggle />
         </div>
         {/* The drawer used to carry opacity-90: page content bled through it and

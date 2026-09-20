@@ -11,6 +11,7 @@ import Spinner from "@components/ui/Spinner/Spinner";
 
 import { REGISTER_URL } from "@api/apiConstants";
 import { httpService } from "@/services/httpService";
+import { validatePassword } from "@/utils/passwordPolicy";
 
 // routeConstants
 import { LOGIN, VERIFY_EMAIL } from "@routes/routeConstants";
@@ -50,14 +51,10 @@ const RegisterForm = () => {
         else setError((p) => ({ ...p, email: "" }));
         break;
       case "password":
-        if (!value || !value.length)
-          setError((p) => ({ ...p, password: "שדה חובה" }));
-        else if (!/^.{8,20}$/.test(value))
-          setError((p) => ({
-            ...p,
-            password: "הסיסמא צריכה להיות באורך של 8 תווים לפחות",
-          }));
-        else setError((p) => ({ ...p, password: "" }));
+        // Same shared policy the login form uses — see src/utils/passwordPolicy.js.
+        // The two forms used to hold identical regexes, which is how they drifted
+        // away from the server's Joi.string().min(8).max(128) together.
+        setError((p) => ({ ...p, password: validatePassword(value) }));
         // re-check confirm against the new password
         if (all?.confirmPassword?.length) {
           setError((p) => ({

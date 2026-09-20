@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
-import { highlightHtml } from "@utils/highlight";
+import { messageBodyParserOptions } from "@utils/linkify";
 /////--///
 
 // Message bodies are authored in a rich-text editor and stored as raw HTML, then
@@ -10,10 +10,10 @@ import { highlightHtml } from "@utils/highlight";
 // on click and — since the auth token lives in localStorage — steals it. Every
 // body is scrubbed through DOMPurify before any styling or parsing touches it.
 const ALLOWED_TAGS = ["a", "strong", "em", "u", "b", "i", "br", "p", "ul", "ol", "li", "h1", "h2", "h3", "span"];
-const sanitize = (dirty, extraTags = []) =>
+const sanitize = (dirty) =>
   DOMPurify.sanitize(dirty ?? "", {
     // Allow only the formatting the editor actually produces.
-    ALLOWED_TAGS: [...ALLOWED_TAGS, ...extraTags],
+    ALLOWED_TAGS,
     ALLOWED_ATTR: ["href", "class"],
     // Drop javascript:/data: URLs; keep normal links.
     ALLOWED_URI_REGEXP: /^(?:https?|mailto|tel):/i,
@@ -29,39 +29,23 @@ const TextPreview = ({
 }) => {
   const containerRef = useRef(null);
   const [isOverflowed, setIsOverflowed] = useState(false);
-  // Function to process HTML content and apply styles to anchor tags
-  const processHtmlContent = () => {
-    const replacedHtml = sanitize(txt)
-      .replace(/<a(.*?)<\/a>/g, (match) => {
-        // Replace anchor tags with span tags having Tailwind CSS styles
-        return `<span class="underline text-blue-500">${match}</span>`;
-      })
-      .replace(/<strong(.*?)<\/strong>/g, (match) => {
-        // Replace strong tags with span tags having bold styling
-        return `<span class="font-bold">${match}</span>`;
-      })
-      .replace(/<h1(.*?)<\/h1>/g, (match) => {
-        // Replace h1 tags with span tags having custom styling
-        return `<span class="text-4xl font-semibold">${match}</span>`;
-      })
-      .replace(/<h2(.*?)<\/h2>/g, (match) => {
-        // Replace h2 tags with span tags having custom styling
-        return `<span class="text-3xl font-semibold">${match}</span>`;
-      })
-      .replace(/<h3(.*?)<\/h3>/g, (match) => {
-        // Replace h3 tags with span tags having custom styling
-        return `<span class="text-2xl font-semibold">${match}</span>`;
-      });
-
-    // Wrap the searched term in <mark> inside text nodes only (the input is
-    // already sanitized and the term is regex-escaped), then run one more
-    // DOMPurify pass — now permitting <mark> — so nothing can slip through.
-    const highlighted = searchTerm
-      ? sanitize(highlightHtml(replacedHtml, searchTerm), ["mark"])
-      : replacedHtml;
-
-    return parse(highlighted);
-  };
+  // Sanitise, then parse ONCE. Everything that used to be done to the HTML
+  // string in between — wrapping <a>/<strong>/<h1..h3> in styled spans, and
+  // before that injecting <mark> for the search term — now happens on the
+  // parsed React nodes in messageBodyParserOptions(). Two reasons, in order:
+  //
+  // 1. Styling by regex over markup made this component's correctness depend on
+  //    DOMPurify escaping `<` inside attribute values. Measured in a real
+  //    browser with this project's DOMPurify build, it does, and no live hole
+  //    existed — but nothing in this repo would have failed if that ever
+  //    stopped being true. On parsed nodes a class is a React prop; no markup
+  //    string is ever rebuilt, so the question does not arise.
+  // 2. Linkification has to see each text run whole: a <mark> inserted mid-URL
+  //    would hide the URL from the scanner.
+  //
+  // See src/utils/linkify.jsx for the styling map and the layer ordering.
+  const processHtmlContent = () =>
+    parse(sanitize(txt), messageBodyParserOptions(searchTerm));
 
   useEffect(() => {
     const container = containerRef.current;

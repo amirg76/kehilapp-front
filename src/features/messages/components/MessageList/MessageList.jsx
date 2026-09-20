@@ -9,6 +9,7 @@ import SkeletonLoading from "@components/ui/skeletonLoading/SkeletonLoading";
 import { getCategoryImage } from "@utils/categoryImage";
 import usePins from "@hooks/usePins";
 import { getUrgencyRank } from "@utils/urgency";
+import { useAuthCtaBannerRef } from "@hooks/useAuthCtaBanner";
 // routes
 import { LOGIN, REGISTER } from "@routes/routeConstants";
 // redux selectors
@@ -25,6 +26,8 @@ const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) 
   const canSeeMembersContent = useSelector(selectCanSeeMembersContent);
   const isPendingApproval = isAuthenticated && !canSeeMembersContent;
   const { pinnedIds } = usePins();
+  // Lets the header know when this banner is on screen (see useAuthCtaBanner).
+  const authCtaBannerRef = useAuthCtaBannerRef();
 
   // Ordering precedence: pin, then urgency, then whatever order the API returned
   // (the board's date order).
@@ -65,9 +68,13 @@ const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) 
   return (
     <div className="mx-auto max-w-[1410px]">
       {/* Anonymous visitors see only public posts — make the members tier visible
-          and invite them to log in for the full board. Hidden once authenticated. */}
+          and invite them to log in for the full board. Hidden once authenticated.
+          This banner is the single above-the-fold call to action: the ref below
+          tells the header to stand its own pair down while this one is on
+          screen, so the visitor is not asked to sign up twice at once. */}
       {!isAuthenticated && (
         <div
+          ref={authCtaBannerRef}
           data-testid="anon-banner"
           className="mx-6 mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3
                      rounded-2xl border border-primary-200 dark:border-primary-700
