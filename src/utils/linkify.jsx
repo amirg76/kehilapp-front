@@ -2,6 +2,7 @@ import React from "react";
 import { domToReact } from "html-react-parser";
 import { splitTextIntoSegments } from "./urlSafety";
 import { highlightText } from "./highlight";
+import { stripBidiControls } from "./bidiText";
 
 // Turn a run of PLAIN TEXT into React nodes, with http(s) URLs rendered as
 // anchors and the search term still highlighted inside them.
@@ -111,8 +112,41 @@ export function messageBodyParserOptions(searchTerm = "") {
   const options = {
     replace(domNode) {
       if (domNode.type === "text") {
-        const value = domNode.data;
-        if (!value) return undefined;
+        // BIDI CONTROLS COME OFF HERE, and here only, for the whole body.
+        //
+        // WHY AT THE TEXT NODE. The body is author-authored HTML: sanitised by
+        // DOMPurify in TextPreview, then parsed once into React nodes. Stripping
+        // by running a .replace() over the sanitised HTML STRING would put this
+        // module back on the pattern the repo deliberately removed — see the
+        // STYLED_TAGS note below and TextPreview's header — where correctness
+        // depended on a third-party serializer's attribute escaping rather than
+        // on anything here. A text node's `data` carries no markup at all, so
+        // there is no such question: what is removed can only be text.
+        //
+        // WHY THIS HOOK AND NOT A SECOND ONE. Every run of author text in a
+        // body reaches the screen through this branch — plain runs on their way
+        // to renderTextWithLinks(), and runs inside an editor-authored <a> on
+        // their way to highlightText(). One strip above the fork covers both; a
+        // second mechanism somewhere else would be one more thing to keep in
+        // step with this one.
+        //
+        // This does NOT weaken urlSafety.js. splitTextIntoSegments() still
+        // rejoins its segment values to the string it was handed verbatim; that
+        // string is now simply the cleaned run. A URL that carried a bidi
+        // control is still refused a link there — the control is gone by the
+        // time the scanner sees the text, so what is left is judged on its own
+        // merits like any other candidate, and safeHttpUrl's own bidi refusal
+        // stays exactly as it was for every other caller.
+        const raw = domNode.data;
+        if (!raw) return undefined;
+
+        const value = stripBidiControls(raw);
+        // A run that was NOTHING BUT bidi controls must return an element, not
+        // undefined. `undefined` means "I decline to replace this node", and
+        // html-react-parser then renders the ORIGINAL text node — i.e. the
+        // controls would survive precisely in the case this code exists for.
+        // An empty fragment renders nothing and removes them.
+        if (!value) return <></>;
 
         if (isInsideAnchor(domNode)) {
           // Already a link: highlight only, never linkify again.

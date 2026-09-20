@@ -12,6 +12,7 @@ import Spinner from "@components/ui/Spinner/Spinner";
 import { REGISTER_URL } from "@api/apiConstants";
 import { httpService } from "@/services/httpService";
 import { validatePassword } from "@/utils/passwordPolicy";
+import { validateEmail } from "@/utils/emailPolicy";
 
 // routeConstants
 import { LOGIN, VERIFY_EMAIL } from "@routes/routeConstants";
@@ -44,11 +45,10 @@ const RegisterForm = () => {
   const validateField = (name, value, all) => {
     switch (name) {
       case "email":
-        if (!value || !value.length)
-          setError((p) => ({ ...p, email: "שדה חובה" }));
-        else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value))
-          setError((p) => ({ ...p, email: "כתובת המייל אינה תקינה" }));
-        else setError((p) => ({ ...p, email: "" }));
+        // Same shared policy the login form uses — see src/utils/emailPolicy.js.
+        // The two forms held identical regexes here too, which is the same setup
+        // that let the password rule drift away from the server.
+        setError((p) => ({ ...p, email: validateEmail(value) }));
         break;
       case "password":
         // Same shared policy the login form uses — see src/utils/passwordPolicy.js.
@@ -192,11 +192,25 @@ const RegisterForm = () => {
           הרשמה לקהילה
         </h2>
 
+        {/* maxLength, not a validator. The server's rule is
+            Joi.string().max(120).optional()
+            (kehilapp-backend-hardened/src/apps/auth/entryPoints/authValidation.js:21),
+            and this field had no rule at all — so a 121st character produced a
+            generic 400 after submit with nothing pointing at the name. The
+            deviation is in the safe direction (client looser than server), so
+            the fix is to stop the 121st character from being typed rather than
+            to add a third place that can disagree with the server. Same
+            treatment the message form already gives its own caps
+            (MessageFormSection.jsx: maxLength="25" on the title). The number is
+            written here literally because this repo has no shared limits module
+            to put it in — passwordPolicy.js and emailPolicy.js are per-field and
+            this is the only place the name cap is needed. */}
         <InputCmp
           label="שם מלא"
           name="name"
           value={credentials.name}
           onChange={handleChange}
+          maxLength={120}
           inputStyle="py-3 dark:bg-slate-700 dark:text-slate-100"
           containerStyle="flex flex-col"
           labelStyle={labelStyle}

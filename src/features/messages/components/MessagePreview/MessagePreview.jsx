@@ -17,6 +17,12 @@ import { useSelector } from "react-redux";
 import useFormattedDate from "../../../../hooks/useFormattedDate";
 import usePins from "@hooks/usePins";
 import { highlightText } from "@utils/highlight";
+// Bidi controls come off every piece of author-supplied text this card shows.
+// See src/utils/bidiText.js for what they are and why this strips rather than
+// refuses. The body is handled one layer down, at the text-node hook in
+// src/utils/linkify.jsx, because it is HTML and must not be rewritten as a
+// string; everything this file renders is plain text and is cleaned here.
+import { labelText, stripBidiControls } from "@utils/bidiText";
 
 const MessagePreview = ({ message, onRemoveMessage }) => {
   const [isLongTextShown, setIsLongTextShown] = useState(false);
@@ -62,7 +68,13 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
 
   const onShare = async () => {
     const url = buildShareUrl();
-    const shareData = { title: message.title || "Kehilapp", url };
+    // The share sheet hands this title to another application entirely — a
+    // messaging app, a mail client — which will render it with no idea where it
+    // came from and, on a Hebrew phone, with the same RTL default that hides
+    // the reversal here. Clean it on the way out. labelText, not plain
+    // stripBidiControls: this is a one-line label in somebody else's UI, so
+    // collapsing whitespace is right here even though it is wrong for the <h1>.
+    const shareData = { title: labelText(message.title) || "Kehilapp", url };
     // Prefer the native share sheet on mobile; fall back to clipboard copy.
     if (navigator.share) {
       try {
@@ -110,6 +122,13 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
         className="flex flex-col p-[15px] relative bottom-[50px]"
         ref={contentRef}
       >
+        {/* The attachment name is author-supplied and reaches the DOM twice in
+            DocumentPreview: as the visible (CSS-truncated) caption, and as the
+            `download` attribute of the anchor it builds — which becomes the name
+            of a file on the reader's disk. "invoice<RLO>gnp.exe" reads as
+            "invoiceexe.png" in both places. Cleaned here, at the only caller of
+            FilePreview, so the prop is already safe wherever it is used.
+            labelText because that caption is a single truncated line. */}
         <FilePreview
           attachmentType={message.attachmentType}
           attachmentUrl={
@@ -117,7 +136,7 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
               ? message.attachmentUrl
               : message.category.coverImgUrl
           }
-          attachmentName={message.attachmentName}
+          attachmentName={labelText(message.attachmentName)}
         />
 
         <div className="flex flex-col flex-1 mt-[10px]">
@@ -137,7 +156,14 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
             </span>
           )}
           <h1 className="text-[20px] font-semibold mb-[2px] dark:text-slate-100">
-            {highlightText(message.title, searchTerm)}
+            {/* Strip BEFORE highlighting, not after: highlightText splits the
+                string on the search term and returns React nodes, so a later
+                pass would have to walk an array of nodes instead of a string,
+                and a control sitting inside a match would be missed entirely.
+                stripBidiControls, not labelText — the heading may legitimately
+                wrap, and collapsing its whitespace would change how a title
+                the author spaced out is laid out. */}
+            {highlightText(stripBidiControls(message.title), searchTerm)}
           </h1>
           <TextPreview
             txt={message.text}
@@ -150,9 +176,16 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
           <section className="flex items-center">
             <Avatar classes="ml-[17px]" />
             <h6 className="w-fit dark:text-slate-200">
+              {/* The sender name is author-supplied too — typed at registration
+                  rather than with the message, but it renders on this card, next
+                  to this message, and an override left open in a first name
+                  flips the direction of the date and the badges drawn after it.
+                  Same treatment, same reason. The `||` fallbacks stay on the
+                  OUTSIDE of the strip so a name made only of controls becomes ""
+                  and falls back to the default, instead of rendering blank. */}
               <span className="font-semibold text-[18px]">
-                {message.sender.firstName || "קיבוץ"}{" "}
-                {message.sender.lastName || "כיסופים"}
+                {labelText(message.sender.firstName) || "קיבוץ"}{" "}
+                {labelText(message.sender.lastName) || "כיסופים"}
               </span>
             </h6>
           </section>

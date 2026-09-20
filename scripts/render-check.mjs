@@ -155,6 +155,62 @@ console.log(`\n[16] ${out}`);
 expect("nested styled tags wrapped once each", out, (o) => (o.match(/<span /g) || []).length === 2, "expected exactly 2 wrapper spans");
 expect("…in the right order", out, has('<span class="text-2xl font-semibold"><h3><span class="font-bold"><strong>t</strong></span></h3></span>'), "nesting shape changed");
 
+// --- bidi controls are stripped at the TEXT-NODE hook (src/utils/bidiText.js).
+// Written with String.fromCodePoint, never pasted: these characters are
+// invisible, so a literal one in this file would be unreviewable — and an
+// earlier agent on this project pasted 22 real invisible characters into source
+// by doing exactly that.
+const cpt = (...points) => String.fromCodePoint(...points);
+const RLO = 0x202e; // RIGHT-TO-LEFT OVERRIDE
+const ALM = 0x061c; // ARABIC LETTER MARK — the one an earlier list missed
+const BIDI_RE = /\p{Bidi_Control}/u;
+const noBidi = (o) => !BIDI_RE.test(o);
+
+out = render(`<p>הודעה${cpt(RLO)}חשובה</p>`, "");
+console.log(`\n[17] ${JSON.stringify(out)}`);
+expect("RLO gone from a rendered body", out, noBidi, "a bidi control survived");
+expect("…and the surrounding text is intact", out, has("הודעהחשובה"), "text changed beyond the control");
+
+// A text node made of NOTHING but controls. This is the case that fails if the
+// hook returns undefined for an empty strip result: html-react-parser would
+// then render the original node and the controls would survive.
+out = render(`<p>${cpt(RLO, ALM, 0x2066)}</p>`, "");
+console.log(`\n[18] ${JSON.stringify(out)}`);
+expect("a text node of only controls renders as nothing", out, (o) => o === "<p></p>", "node not emptied");
+
+// Inside an editor-authored anchor the text takes the OTHER branch of the same
+// hook (highlight only, never re-linkified). It must be cleaned too.
+out = render(`<p><a href="https://example.com">קישור${cpt(RLO)}כאן</a></p>`, "");
+console.log(`\n[19] ${JSON.stringify(out)}`);
+expect("RLO gone from an editor anchor's label", out, noBidi, "a bidi control survived");
+expect("…anchor still rendered once", out, (o) => (o.match(/<a /g) || []).length === 1, "anchor lost or nested");
+
+// All twelve at once, across several tags and a search term, so the strip is
+// proven on the styled/highlighted path too.
+const allTwelve = [0x061c, 0x200e, 0x200f, 0x202a, 0x202b, 0x202c, 0x202d,
+  0x202e, 0x2066, 0x2067, 0x2068, 0x2069].map((p) => cpt(p)).join("x");
+out = render(`<h2>${allTwelve}</h2><p><strong>${allTwelve}</strong></p>`, "x");
+console.log(`\n[20] ${JSON.stringify(out)}`);
+expect("all twelve gone from a styled body", out, noBidi, "a bidi control survived");
+expect("…and the search term still highlighted", out, has("<mark"), "no mark rendered");
+
+// A URL carrying a control. safeHttpUrl() REFUSES such a candidate, and that is
+// unchanged — but the control is now removed before the scanner sees the run,
+// so what it judges is an ordinary URL. The point of this case is that the
+// label and the href name the SAME host, which is what the whole urlSafety
+// mismatch rule exists to guarantee; nothing is spoofable here.
+out = render(`<p>see https://exam${cpt(RLO)}ple.com now</p>`, "");
+console.log(`\n[21] ${JSON.stringify(out)}`);
+expect("no control left anywhere in the output", out, noBidi, "a bidi control survived");
+expect("href is the clean host", out, has('href="https://example.com/"'), "href wrong");
+expect("…and the visible label is the same host", out, has(">https://example.com</a>"), "label/href disagree");
+
+// Ordinary Hebrew must still come through byte-for-byte — the strip must not be
+// touching anything but the twelve.
+out = render("<p>אין כאן קישור</p>", "");
+console.log(`\n[22] ${out}`);
+expect("ordinary Hebrew still unchanged", out, (o) => o === "<p>אין כאן קישור</p>", "markup changed");
+
 console.log("");
 console.log(`TOTAL: ${passed} passed, ${failed} failed`);
 process.exit(failed === 0 ? 0 : 1);

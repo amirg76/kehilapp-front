@@ -10,6 +10,7 @@ import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import ErrorMessage from "@components/ui/ErrorMessage";
 import { validatePassword } from "@/utils/passwordPolicy";
+import { validateEmail } from "@/utils/emailPolicy";
 
 import { LOGIN_URL, RESEND_VERIFICATION_URL } from "../../../../api/apiConstants";
 import { httpService, queryClient } from "../../../../services/httpService";
@@ -55,16 +56,17 @@ const LoginForm = () => {
     // console.log('validate', name, value);
     switch (name) {
       case "email":
-        if (!value || !value.length) {
-          setError((prevErrors) => ({ ...prevErrors, email: "שדה חובה" }));
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-          setError((prevErrors) => ({
-            ...prevErrors,
-            email: "כתובת המייל אינה תקינה",
-          }));
-        } else {
-          setError((prevErrors) => ({ ...prevErrors, email: "" }));
-        }
+        // Structural check only, shared with the register form — see
+        // src/utils/emailPolicy.js. The rule that used to live here allowed only
+        // ._%+- in the local part, so o'brien@example.com (and four other
+        // measured shapes) left its owner in front of a permanently disabled
+        // "כניסה לחשבון" button for an account that exists and a password that
+        // is correct. The server decides what an address is; this only catches
+        // the obvious typo.
+        setError((prevErrors) => ({
+          ...prevErrors,
+          email: validateEmail(value),
+        }));
         break;
       case "password":
         // Length policy lives in one place and mirrors the server's
@@ -134,6 +136,35 @@ const LoginForm = () => {
       setIsUnverified(true);
       setLoginErrorMessage(
         "המייל שלך עדיין לא אומת. בדוק את תיבת הדואר או שלח מייל אימות מחדש."
+      );
+    } else if (status === 400) {
+      // Now reachable, and it was not before. The field rule above deliberately
+      // stops mirroring the server's Joi.string().email(), so an address the
+      // server refuses (an unknown TLD, a local part over its length cap) now
+      // gets as far as a request instead of being stopped by a dead button.
+      // That trade is only honest if the answer says which field to fix — the
+      // generic branch below would have told them the server was unreachable,
+      // which is a different problem and sends them looking in the wrong place.
+      setIsUnverified(false);
+      setLoginErrorMessage("כתובת המייל או הסיסמא אינן בפורמט תקין");
+    } else if (status === 429) {
+      // Rate limited, and the server really does answer this: app.js mounts
+      // loginLimiter on /api/auth/login ahead of the auth router — 10 requests
+      // per 15-minute window, with skipSuccessfulRequests, so only FAILED
+      // attempts spend the budget (middlewares/rateLimit.js). Without this
+      // branch the generic message below said "לא ניתן להתחבר" — which reads as
+      // a network or server fault and sends someone who is simply throttled off
+      // to check their connection, restart the browser, or conclude the account
+      // is locked. Nothing is locked and nothing is broken; the only fix is
+      // waiting, so the message has to say that. RegisterForm.jsx already
+      // carries the same branch for registerLimiter.
+      //
+      // Mapped by status, never by printing the server's text: the body is the
+      // API's English AppError message, and matching or echoing prose breaks
+      // the day someone rewords it.
+      setIsUnverified(false);
+      setLoginErrorMessage(
+        "יותר מדי ניסיונות כניסה שנכשלו. החשבון לא ננעל — זו הגבלה זמנית, והיא מתאפסת מעצמה. המתן כרבע שעה ונסה שוב."
       );
     } else {
       setIsUnverified(false);
