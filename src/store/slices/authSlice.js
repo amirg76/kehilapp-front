@@ -34,6 +34,16 @@ export const authActions = authSlice.actions;
 // is the full axios response body `{ token, csrfToken, user: {...} }`.
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 
+// The signed-in person's own fields ({ id, name, email, role, approved } — the
+// `user` object POST /api/auth/login returns), or undefined when signed out.
+//
+// Exists so no component has to know that `currentUser` is the whole login
+// response and not the user. The header did read `currentUser?.name` directly
+// and rendered "שלום !" for every signed-in member, because that level holds
+// `token`/`csrfToken`/`user` and no `name`. One selector means the next
+// component to need the name cannot repeat that.
+export const selectCurrentUser = (state) => state.auth.currentUser?.user;
+
 // Mirrors the server's canSeeMembersContent (messagesController.js): approved
 // OR admin. Both signals must come from the freshest data we have (post /me
 // merge), which is exactly what `updateUser` keeps current.

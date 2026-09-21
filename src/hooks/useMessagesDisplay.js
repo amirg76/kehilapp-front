@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { getCategoryImage } from "@utils/categoryImage";
+import { normalizeUrgency } from "@utils/urgency";
 
 const useMessagesDisplay = (messages, categories, users) => {
   const displayInfo = useMemo(() => {
@@ -25,6 +26,10 @@ const useMessagesDisplay = (messages, categories, users) => {
         text: message.text,
         createdAt: message.createdAt,
         category,
+        // Normalize here, once, rather than in every consumer: the card and the
+        // list ordering must agree on what a message's urgency is, and messages
+        // written before the field existed arrive without it at all.
+        urgency: normalizeUrgency(message.urgency),
 
         attachmentName: message.attachmentName,
         attachmentType: message.attachmentType,

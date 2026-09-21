@@ -9,6 +9,9 @@ import { authActions } from "@store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 //components
 import Header from "@components/Header/Header";
+// Shares "is the members-only banner on screen?" between the board and the
+// header, so only one sign-up call to action shows at a time.
+import { AuthCtaBannerProvider } from "@hooks/useAuthCtaBanner";
 // api
 import { ME_URL } from "@api/apiConstants";
 import { httpService } from "@/services/httpService";
@@ -108,7 +111,8 @@ const App = () => {
   // chrome, matching the existing login layout.
   const hideHeaderOn = [LOGIN, REGISTER, VERIFY_EMAIL];
   return (
-    <div className="w-screen flex flex-col bg-white dark:bg-slate-900 min-h-screen">
+    <AuthCtaBannerProvider>
+      <div className="w-screen flex flex-col bg-white dark:bg-slate-900 min-h-screen">
       {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
 
       {/* //TODO: when logged out, disable Header component */}
@@ -135,7 +139,8 @@ const App = () => {
           ))}
         </Routes>
       </main>
-    </div>
+      </div>
+    </AuthCtaBannerProvider>
   );
 };
 
