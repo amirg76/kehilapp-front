@@ -33,8 +33,15 @@ const RegisterForm = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [serverErrorMessage, setServerErrorMessage] = useState("");
   // On success we keep the dev-only verification token so the whole flow is
-  // demoable without a real inbox (the backend returns it in dev responses).
+  // demoable without a real inbox. The server returns it only when it is running
+  // in development AND has been told to by name, so on a real deployment this
+  // stays the empty string and the demo shortcut below never renders.
   const [verificationToken, setVerificationToken] = useState(null);
+  // Whether a verification email actually left the server. Previously this was
+  // inferred from the presence of the token — which, with no mail provider
+  // configured, was always present, so "check your inbox" was shown for an inbox
+  // nothing had been sent to. The server now answers it outright.
+  const [emailDelivered, setEmailDelivered] = useState(true);
 
   useEffect(() => {
     setIsButtonDisabled(
@@ -104,6 +111,10 @@ const RegisterForm = () => {
           ? new URL(data.verificationLink).searchParams.get("token")
           : null);
       setVerificationToken(token || "");
+      // Treat a missing field as "delivered" so an older server — or any response
+      // shape we did not anticipate — does not tell the user their email failed
+      // when it may well have arrived. Only an explicit `false` is a failure.
+      setEmailDelivered(data?.emailDelivered !== false);
     },
     onError: (err) => {
       const status = err?.response?.status;
@@ -139,20 +150,41 @@ const RegisterForm = () => {
     const demoVerifyLink = verificationToken
       ? `${VERIFY_EMAIL}?token=${verificationToken}`
       : null;
+    // Three outcomes, and they must not be told apart by guesswork:
+    //   delivered            → check your inbox
+    //   not delivered + link → the local demo, which has no inbox at all
+    //   not delivered, no link → a real send failure. Saying "check your inbox"
+    //                            here sends the user to wait for nothing.
+    const sendFailed = !emailDelivered && !demoVerifyLink;
     return (
       <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 px-4 md:w-1/2">
         <img className="w-[11em] mb-2" src={logoKisufim} alt="כיסופים" />
         <div className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg text-center">
-          <div className="text-5xl mb-4">📧</div>
-          <h1 className="mb-3 dark:text-slate-100">כמעט שם!</h1>
+          <div className="text-5xl mb-4">{sendFailed ? "⚠️" : "📧"}</div>
+          <h1 className="mb-3 dark:text-slate-100">
+            {sendFailed ? "החשבון נוצר" : "כמעט שם!"}
+          </h1>
           <h2 className="text-xl font-bold mb-4 dark:text-slate-100">
-            בדוק את תיבת המייל שלך
+            {sendFailed
+              ? "לא הצלחנו לשלוח את מייל האימות"
+              : "בדוק את תיבת המייל שלך"}
           </h2>
           <p className="text-slate-600 dark:text-slate-300 mb-6">
-            שלחנו קישור אימות לכתובת{" "}
-            <span className="font-semibold">{credentials.email}</span>. לחץ עליו
-            כדי לאמת את החשבון. לאחר האימות מנהל הקהילה יצטרך לאשר את החשבון —
-            כך שאם לא תראו מיד את כל התוכן, זה צפוי.
+            {sendFailed ? (
+              <>
+                החשבון של{" "}
+                <span className="font-semibold">{credentials.email}</span> נוצר,
+                אבל שליחת מייל האימות נכשלה. אפשר לבקש מייל חדש ממסך ההתחברות —
+                החשבון ממתין שם.
+              </>
+            ) : (
+              <>
+                שלחנו קישור אימות לכתובת{" "}
+                <span className="font-semibold">{credentials.email}</span>. לחץ
+                עליו כדי לאמת את החשבון. לאחר האימות מנהל הקהילה יצטרך לאשר את
+                החשבון — כך שאם לא תראו מיד את כל התוכן, זה צפוי.
+              </>
+            )}
           </p>
 
           {demoVerifyLink && (
