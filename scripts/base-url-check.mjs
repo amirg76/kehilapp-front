@@ -108,5 +108,41 @@ expectValue(
 );
 
 console.log("");
+console.log("--- the returned value is the PARSED form, not the typed one ---");
+// Built with String.fromCharCode, not typed: a literal backslash in this file is
+// easy to lose to an editor or a shell heredoc, and the case would silently test
+// something else.
+const BS = String.fromCharCode(92);
+expectValue(
+  "backslashes (read as slashes by URL) give a clean base, not a trailing backslash",
+  `https:${BS}${BS}api.example.com${BS}`,
+  "https://api.example.com/",
+);
+// The end-to-end form of the same bug: the request the app would actually make.
+{
+  const base = normalizeBaseUrl(`https:${BS}${BS}api.example.com${BS}`);
+  const request = new URL(`${base}api/messages`).href;
+  if (request === "https://api.example.com/api/messages") {
+    passed += 1;
+    console.log(
+      "PASS  request built from that base has a single slash before api/",
+    );
+  } else {
+    failed += 1;
+    console.log(`FAIL  request built from that base is ${request}`);
+  }
+}
+expectValue(
+  "scheme and host are lower-cased",
+  "HTTPS://Api.Example.COM/",
+  "https://api.example.com/",
+);
+expectValue(
+  "a port is kept",
+  "https://api.example.com:8443",
+  "https://api.example.com:8443/",
+);
+
+console.log("");
 console.log(`TOTAL: ${passed} passed, ${failed} failed`);
 process.exit(failed === 0 ? 0 : 1);

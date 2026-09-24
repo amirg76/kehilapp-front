@@ -48,5 +48,11 @@ export function normalizeBaseUrl(raw) {
     );
   }
 
-  return value.replace(/\/+$/, "") + "/";
+  // Return the PARSED form, not the typed one. They differ in ways that matter:
+  // `https:\\api.example.com\` passes `new URL()` (backslashes read as slashes)
+  // but, returned as typed, its trailing backslash is not a slash, so the app
+  // requested `https://api.example.com//api/messages` (found by the merge gate,
+  // reproduced). The parsed form also lower-cases the scheme and host.
+  parsed.pathname = parsed.pathname.replace(/\/+$/, "") + "/";
+  return parsed.href;
 }
