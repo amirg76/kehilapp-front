@@ -53,5 +53,12 @@ jobs:
 
       # The build is the only step that catches an import that resolves in the
       # editor and not in the bundler, and a syntax the target browsers reject.
+      #
+      # vite.config.js refuses to build without a valid API address, because a
+      # build without one used to load blank. CI has no .env, so it passes one
+      # explicitly. `.invalid` is a reserved TLD (RFC 2606): it can never resolve,
+      # so this bundle cannot talk to anything real even if someone ships it.
       - name: Build
         run: npm run build
+        env:
+          VITE_REACT_APP_BASE_URL: https://api.ci.invalid/
