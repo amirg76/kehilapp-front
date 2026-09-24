@@ -1,0 +1,57 @@
+name: CI
+
+# The resident app had no CI at all. Every check below existed and passed —
+# on one developer's machine. A pull request could break any of them and merge
+# green, because the only status on the PR was the GitGuardian app.
+#
+# What runs here is deliberately what needs nothing else: no browser, no backend,
+# no database. The Playwright suites under e2e/ need a running API and a seeded
+# database, and are not run here. The server side of those flows is covered by
+# the backend repo's CI.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  floor:
+    name: "Floor: lint, checks, build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same major as the backend repo's CI, so both halves of the app are
+      # checked on the same runtime.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      # Errors only. The repo carries warnings (unused React imports and the
+      # like) that predate this workflow; failing on them would make the first
+      # run red for reasons unrelated to any change under review.
+      - name: Lint
+        run: npm run lint
+
+      # url-safety, render, password-policy, email-policy and bidi-text checks.
+      # Each script ends with process.exit(failed === 0 ? 0 : 1), and `check`
+      # chains them with &&, so one failed assertion fails the step.
+      - name: Checks
+        run: npm run check
+
+      # The build is the only step that catches an import that resolves in the
+      # editor and not in the bundler, and a syntax the target browsers reject.
+      - name: Build
+        run: npm run build
