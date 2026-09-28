@@ -24,6 +24,21 @@ function expectValue(name, raw, expected) {
     console.log(`FAIL  ${name} -> threw: ${err.message}`);
     return;
   }
+  // For every accepted root-relative value, also prove the invariant the app
+  // depends on: the string the app actually sends — `${base}api/...` — stays on
+  // the page's own origin. This is the check "/.//evil.com" slipped past when
+  // only the value was judged (merge gate, 28.9).
+  if (got.startsWith("/")) {
+    const page = "https://demo.example.com/some/page";
+    const sent = new URL(`${got}api/probe`, page);
+    if (sent.origin !== "https://demo.example.com") {
+      failed += 1;
+      console.log(
+        `FAIL  ${name} -> accepted, but the request would go to ${sent.origin}`,
+      );
+      return;
+    }
+  }
   if (got === expected) {
     passed += 1;
     console.log(`PASS  ${name}`);
@@ -136,6 +151,16 @@ for (const [name, code] of [
     `/${String.fromCharCode(code)}/evil.example.com/`,
   );
 }
+// A dot segment between two empty segments: the parser drops the dot and keeps
+// "//evil.example.com" as the PATH of the same origin — so the origin check
+// passes — but the app then sends "//evil.example.com/api/...", which is a
+// protocol-relative URL to another host. Caught by judging the result, not
+// the value.
+expectRefused(
+  "dot segment that leaves a leading // in the path",
+  "/.//evil.example.com",
+);
+expectRefused("the same with more dots", "/././/evil.example.com/");
 // Not a disguise: percent-encoding is NOT decoded during resolution, so this
 // stays on the page's own origin as a (silly) path.
 expectValue(

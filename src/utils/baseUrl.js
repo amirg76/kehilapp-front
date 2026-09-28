@@ -70,7 +70,24 @@ export function normalizeBaseUrl(raw) {
           `after it, so it must end at the path.`,
       );
     }
-    return resolved.pathname.replace(/\/+$/, "") + "/";
+    // The origin check above judges the VALUE. The consumer does not use the
+    // value: it builds `${result}api/...` as a fresh string and hands that to
+    // the browser. "/.//evil.com" passes the origin check (its dot segment is
+    // removed and two empty segments are left), resolves to a pathname of
+    // "//evil.com", and the fresh string "//evil.com/api/..." is a
+    // protocol-relative URL — another host again. So the check that matters is
+    // on the RESULT, exactly as it will be used.
+    const result = resolved.pathname.replace(/\/+$/, "") + "/";
+    if (new URL(`${result}api/probe`, PLACEHOLDER).origin !== PLACEHOLDER) {
+      throw new Error(
+        `${BASE_URL_VAR}=${JSON.stringify(value)} resolves to the path ` +
+          `${JSON.stringify(
+            result,
+          )}, which a browser would read as another host ` +
+          `once an endpoint is appended. Use "/" for same-origin.`,
+      );
+    }
+    return result;
   }
 
   let parsed;
