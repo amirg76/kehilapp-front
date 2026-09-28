@@ -90,13 +90,22 @@ expectValue(
 );
 
 console.log("");
-console.log("--- root-relative = same origin as the page (one image, any domain) ---");
+console.log(
+  "--- root-relative = same origin as the page (one image, any domain) ---",
+);
 expectValue("bare slash", "/", "/");
-expectValue("a path prefix without trailing slash gets one", "/kehilapp", "/kehilapp/");
+expectValue(
+  "a path prefix without trailing slash gets one",
+  "/kehilapp",
+  "/kehilapp/",
+);
 expectValue("several trailing slashes collapse", "/kehilapp///", "/kehilapp/");
 {
   // The request the app would make from a page at https://demo.example.com.
-  const request = new URL(`${normalizeBaseUrl("/")}api/messages`, "https://demo.example.com/x").href;
+  const request = new URL(
+    `${normalizeBaseUrl("/")}api/messages`,
+    "https://demo.example.com/x",
+  ).href;
   if (request === "https://demo.example.com/api/messages") {
     passed += 1;
     console.log("PASS  '/' resolves against the page's own origin");
@@ -108,13 +117,34 @@ expectValue("several trailing slashes collapse", "/kehilapp///", "/kehilapp/");
 
 console.log("");
 console.log("--- refused ---");
-expectRefused("protocol-relative //host (another host in disguise)", "//evil.example.com/");
-// Same disguise with a backslash: browsers read "\" as "/" in URLs. Built with
-// String.fromCharCode so the backslash cannot be lost by an editor or shell.
 expectRefused(
-  "root-relative with a backslash (/\\host = //host)",
-  `/${String.fromCharCode(92)}evil.example.com/`,
+  "protocol-relative //host (another host in disguise)",
+  "//evil.example.com/",
 );
+// Disguises a browser un-disguises before parsing. Built with String.fromCharCode
+// so no editor, shell or copy-paste can turn them into something else:
+//   92 = backslash (read as a slash), 9 = tab, 10 = newline, 13 = carriage
+//   return (all three are stripped from a URL before it is parsed).
+for (const [name, code] of [
+  ["backslash", 92],
+  ["tab", 9],
+  ["newline", 10],
+  ["carriage return", 13],
+]) {
+  expectRefused(
+    `root-relative with a ${name} = //host in disguise`,
+    `/${String.fromCharCode(code)}/evil.example.com/`,
+  );
+}
+// Not a disguise: percent-encoding is NOT decoded during resolution, so this
+// stays on the page's own origin as a (silly) path.
+expectValue(
+  "percent-encoded backslash stays same-origin",
+  "/%5Cevil.example.com",
+  "/%5Cevil.example.com/",
+);
+// The parser normalises what it keeps.
+expectValue("dot segments are resolved", "/kehilapp/./api/../", "/kehilapp/");
 expectRefused("root-relative with a query", "/?x=1");
 expectRefused("undefined (variable not set at all)", undefined);
 expectRefused("empty string", "");

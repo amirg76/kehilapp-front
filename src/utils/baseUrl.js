@@ -35,25 +35,42 @@ export function normalizeBaseUrl(raw) {
   // page": the browser resolves `/api/messages` against wherever the site was
   // loaded from. This is what a deployment behind one reverse proxy wants, and
   // it is the ONLY form that lets a single built image serve any domain; an
-  // absolute URL bakes the host into the bundle. Exactly one leading slash:
-  // "//host" is protocol-relative and would silently point at another host.
+  // absolute URL bakes the host into the bundle.
+  //
+  // The check does not enumerate disguises. Two merge gates in a row found one
+  // each ("//host", then "/\host" — browsers read a backslash as a slash), and
+  // the third would have been a tab or newline, which browsers strip before
+  // parsing, so "/<TAB>/host" is "//host" too. Instead the value is resolved the
+  // way a browser would, against a placeholder origin, and accepted only if it
+  // is STILL on that origin. Any spelling that reaches another host — known or
+  // not yet — fails the same test. The returned path is the parser's normalised
+  // form, which is what the browser will use anyway.
   if (value.startsWith("/")) {
-    // Browsers read a backslash as a slash in URLs, so "/\evil.com" is
-    // "//evil.com" in disguise: another host. Refuse both spellings.
-    if (value.startsWith("//") || value.includes("\\")) {
+    const PLACEHOLDER = "http://same-origin.invalid";
+    let resolved;
+    try {
+      resolved = new URL(value, PLACEHOLDER);
+    } catch {
       throw new Error(
-        `${BASE_URL_VAR}=${value} would be read by the browser as another host ` +
-          `(two leading slashes, or a backslash). Use "/" for same-origin, or a ` +
-          `full https:// URL.`,
+        `${BASE_URL_VAR}=${value} is not a path a browser can resolve.`,
       );
     }
-    if (/[?#]/.test(value)) {
+    if (resolved.origin !== PLACEHOLDER) {
+      throw new Error(
+        `${BASE_URL_VAR}=${JSON.stringify(
+          value,
+        )} would be read by the browser as ` +
+          `another host (${resolved.host}). Use "/" for same-origin, or a full ` +
+          `https:// URL.`,
+      );
+    }
+    if (resolved.search || resolved.hash) {
       throw new Error(
         `${BASE_URL_VAR}=${value} has a query or fragment; endpoints are appended ` +
           `after it, so it must end at the path.`,
       );
     }
-    return value.replace(/\/+$/, "") + "/";
+    return resolved.pathname.replace(/\/+$/, "") + "/";
   }
 
   let parsed;
