@@ -18,6 +18,9 @@ export const BASE_URL_VAR = "VITE_REACT_APP_BASE_URL";
  * Returns the base URL with exactly one trailing slash, or throws an Error whose
  * message names the variable and says what was wrong. Pure: no import.meta, no
  * process.env, so node scripts and the browser can both call it.
+ *
+ * Two accepted forms: an absolute http(s) origin (optionally with a path), or a
+ * root-relative path such as "/" for same-origin deployments.
  */
 export function normalizeBaseUrl(raw) {
   const value = typeof raw === "string" ? raw.trim() : "";
@@ -28,13 +31,35 @@ export function normalizeBaseUrl(raw) {
     );
   }
 
+  // A root-relative path — "/" or "/some/prefix/" — means "same origin as the
+  // page": the browser resolves `/api/messages` against wherever the site was
+  // loaded from. This is what a deployment behind one reverse proxy wants, and
+  // it is the ONLY form that lets a single built image serve any domain; an
+  // absolute URL bakes the host into the bundle. Exactly one leading slash:
+  // "//host" is protocol-relative and would silently point at another host.
+  if (value.startsWith("/")) {
+    if (value.startsWith("//")) {
+      throw new Error(
+        `${BASE_URL_VAR}=${value} starts with two slashes, which the browser ` +
+          `reads as another host. Use "/" for same-origin, or a full https:// URL.`,
+      );
+    }
+    if (/[?#]/.test(value)) {
+      throw new Error(
+        `${BASE_URL_VAR}=${value} has a query or fragment; endpoints are appended ` +
+          `after it, so it must end at the path.`,
+      );
+    }
+    return value.replace(/\/+$/, "") + "/";
+  }
+
   let parsed;
   try {
     parsed = new URL(value);
   } catch {
     throw new Error(
       `${BASE_URL_VAR}=${value} is not an absolute URL. Include the scheme, ` +
-        `e.g. https://api.example.com/.`,
+        `e.g. https://api.example.com/ — or use "/" for same-origin.`,
     );
   }
   if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {

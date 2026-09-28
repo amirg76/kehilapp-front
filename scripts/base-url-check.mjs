@@ -90,7 +90,26 @@ expectValue(
 );
 
 console.log("");
+console.log("--- root-relative = same origin as the page (one image, any domain) ---");
+expectValue("bare slash", "/", "/");
+expectValue("a path prefix without trailing slash gets one", "/kehilapp", "/kehilapp/");
+expectValue("several trailing slashes collapse", "/kehilapp///", "/kehilapp/");
+{
+  // The request the app would make from a page at https://demo.example.com.
+  const request = new URL(`${normalizeBaseUrl("/")}api/messages`, "https://demo.example.com/x").href;
+  if (request === "https://demo.example.com/api/messages") {
+    passed += 1;
+    console.log("PASS  '/' resolves against the page's own origin");
+  } else {
+    failed += 1;
+    console.log(`FAIL  '/' resolved to ${request}`);
+  }
+}
+
+console.log("");
 console.log("--- refused ---");
+expectRefused("protocol-relative //host (another host in disguise)", "//evil.example.com/");
+expectRefused("root-relative with a query", "/?x=1");
 expectRefused("undefined (variable not set at all)", undefined);
 expectRefused("empty string", "");
 expectRefused("whitespace only", "   ");
