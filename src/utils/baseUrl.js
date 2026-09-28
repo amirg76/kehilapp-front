@@ -38,10 +38,13 @@ export function normalizeBaseUrl(raw) {
   // absolute URL bakes the host into the bundle. Exactly one leading slash:
   // "//host" is protocol-relative and would silently point at another host.
   if (value.startsWith("/")) {
-    if (value.startsWith("//")) {
+    // Browsers read a backslash as a slash in URLs, so "/\evil.com" is
+    // "//evil.com" in disguise: another host. Refuse both spellings.
+    if (value.startsWith("//") || value.includes("\\")) {
       throw new Error(
-        `${BASE_URL_VAR}=${value} starts with two slashes, which the browser ` +
-          `reads as another host. Use "/" for same-origin, or a full https:// URL.`,
+        `${BASE_URL_VAR}=${value} would be read by the browser as another host ` +
+          `(two leading slashes, or a backslash). Use "/" for same-origin, or a ` +
+          `full https:// URL.`,
       );
     }
     if (/[?#]/.test(value)) {

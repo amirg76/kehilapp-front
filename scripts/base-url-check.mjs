@@ -109,6 +109,12 @@ expectValue("several trailing slashes collapse", "/kehilapp///", "/kehilapp/");
 console.log("");
 console.log("--- refused ---");
 expectRefused("protocol-relative //host (another host in disguise)", "//evil.example.com/");
+// Same disguise with a backslash: browsers read "\" as "/" in URLs. Built with
+// String.fromCharCode so the backslash cannot be lost by an editor or shell.
+expectRefused(
+  "root-relative with a backslash (/\\host = //host)",
+  `/${String.fromCharCode(92)}evil.example.com/`,
+);
 expectRefused("root-relative with a query", "/?x=1");
 expectRefused("undefined (variable not set at all)", undefined);
 expectRefused("empty string", "");
