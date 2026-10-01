@@ -51,3 +51,7 @@ id_rsa
 # (`git check-ignore -v token.json`), not against a pattern — nothing of the sort
 # exists in this tree, and the point is that it can no longer arrive by accident.
 token*.json
+
+# Logs. The two real leaks in this project's history were in a .log and a .md,
+# not in code — see the global CLAUDE.md. Nothing of the sort is tracked today.
+*.log

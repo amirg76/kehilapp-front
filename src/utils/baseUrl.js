@@ -18,6 +18,9 @@ export const BASE_URL_VAR = "VITE_REACT_APP_BASE_URL";
  * Returns the base URL with exactly one trailing slash, or throws an Error whose
  * message names the variable and says what was wrong. Pure: no import.meta, no
  * process.env, so node scripts and the browser can both call it.
+ *
+ * Two accepted forms: an absolute http(s) origin (optionally with a path), or a
+ * root-relative path such as "/" for same-origin deployments.
  */
 export function normalizeBaseUrl(raw) {
   const value = typeof raw === "string" ? raw.trim() : "";
@@ -28,13 +31,72 @@ export function normalizeBaseUrl(raw) {
     );
   }
 
+  // A root-relative path — "/" or "/some/prefix/" — means "same origin as the
+  // page": the browser resolves `/api/messages` against wherever the site was
+  // loaded from. This is what a deployment behind one reverse proxy wants, and
+  // it is the ONLY form that lets a single built image serve any domain; an
+  // absolute URL bakes the host into the bundle.
+  //
+  // The check does not enumerate disguises. Two merge gates in a row found one
+  // each ("//host", then "/\host" — browsers read a backslash as a slash), and
+  // the third would have been a tab or newline, which browsers strip before
+  // parsing, so "/<TAB>/host" is "//host" too. Instead the value is resolved the
+  // way a browser would, against a placeholder origin, and accepted only if it
+  // is STILL on that origin. Any spelling that reaches another host — known or
+  // not yet — fails the same test. The returned path is the parser's normalised
+  // form, which is what the browser will use anyway.
+  if (value.startsWith("/")) {
+    const PLACEHOLDER = "http://same-origin.invalid";
+    let resolved;
+    try {
+      resolved = new URL(value, PLACEHOLDER);
+    } catch {
+      throw new Error(
+        `${BASE_URL_VAR}=${value} is not a path a browser can resolve.`,
+      );
+    }
+    if (resolved.origin !== PLACEHOLDER) {
+      throw new Error(
+        `${BASE_URL_VAR}=${JSON.stringify(
+          value,
+        )} would be read by the browser as ` +
+          `another host (${resolved.host}). Use "/" for same-origin, or a full ` +
+          `https:// URL.`,
+      );
+    }
+    if (resolved.search || resolved.hash) {
+      throw new Error(
+        `${BASE_URL_VAR}=${value} has a query or fragment; endpoints are appended ` +
+          `after it, so it must end at the path.`,
+      );
+    }
+    // The origin check above judges the VALUE. The consumer does not use the
+    // value: it builds `${result}api/...` as a fresh string and hands that to
+    // the browser. "/.//evil.com" passes the origin check (its dot segment is
+    // removed and two empty segments are left), resolves to a pathname of
+    // "//evil.com", and the fresh string "//evil.com/api/..." is a
+    // protocol-relative URL — another host again. So the check that matters is
+    // on the RESULT, exactly as it will be used.
+    const result = resolved.pathname.replace(/\/+$/, "") + "/";
+    if (new URL(`${result}api/probe`, PLACEHOLDER).origin !== PLACEHOLDER) {
+      throw new Error(
+        `${BASE_URL_VAR}=${JSON.stringify(value)} resolves to the path ` +
+          `${JSON.stringify(
+            result,
+          )}, which a browser would read as another host ` +
+          `once an endpoint is appended. Use "/" for same-origin.`,
+      );
+    }
+    return result;
+  }
+
   let parsed;
   try {
     parsed = new URL(value);
   } catch {
     throw new Error(
       `${BASE_URL_VAR}=${value} is not an absolute URL. Include the scheme, ` +
-        `e.g. https://api.example.com/.`,
+        `e.g. https://api.example.com/ — or use "/" for same-origin.`,
     );
   }
   if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
