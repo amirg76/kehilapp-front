@@ -53,7 +53,6 @@ const LoginForm = () => {
 
   const validateForm = (ev) => {
     const { name, value } = ev.target;
-    // console.log('validate', name, value);
     switch (name) {
       case "email":
         // Structural check only, shared with the register form — see
@@ -130,7 +129,9 @@ const LoginForm = () => {
     const status = err?.response?.status;
     if (status === 401) {
       setIsUnverified(false);
-      setLoginErrorMessage("שם משתמש או סיסמא שגויים");
+      // Login is by email, so the message names the field the form actually
+      // has — there is no "username" anywhere in this app.
+      setLoginErrorMessage("האימייל או הסיסמה שגויים");
     } else if (status === 403) {
       // Account exists but email is unverified.
       setIsUnverified(true);
@@ -146,7 +147,7 @@ const LoginForm = () => {
       // generic branch below would have told them the server was unreachable,
       // which is a different problem and sends them looking in the wrong place.
       setIsUnverified(false);
-      setLoginErrorMessage("כתובת המייל או הסיסמא אינן בפורמט תקין");
+      setLoginErrorMessage("כתובת המייל או הסיסמה אינן בפורמט תקין");
     } else if (status === 429) {
       // Rate limited, and the server really does answer this: app.js mounts
       // loginLimiter on /api/auth/login ahead of the auth router — 10 requests
@@ -199,7 +200,7 @@ const LoginForm = () => {
           />
           <ErrorMessage msg={error.email} style="h-[20px]  mr-3" />
           <InputCmp
-            label="סיסמא"
+            label="סיסמה"
             type="password"
             name="password"
             value={userCredentials.password}
@@ -229,7 +230,7 @@ const LoginForm = () => {
                 disabled={isResending}
                 className="text-primary-700 dark:text-primary-300 font-semibold hover:underline disabled:opacity-50"
               >
-                {isResending ? "שולח..." : "שלח מייל אימות שוב"}
+                {isResending ? "שולח…" : "שלח מייל אימות שוב"}
               </button>
               {resendMessage && (
                 <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
