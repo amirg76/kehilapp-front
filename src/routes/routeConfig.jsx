@@ -8,6 +8,7 @@ import Messages from "@pages/Messages.jsx";
 import Login from "@pages/Login.jsx";
 import Register from "@pages/Register.jsx";
 import VerifyEmail from "@pages/VerifyEmail.jsx";
+import NotFound from "@pages/NotFound.jsx";
 
 const routeConfig = [
   {
@@ -45,12 +46,11 @@ const routeConfig = [
     element: <Messages />,
     exact: true,
   },
-  //TODO: create a 404 Page for non-existing pages and import here
-  //   {
-  //     path: "*",
-  //     element: "", //404 page
-  //     exact: true,
-  //   },
+  {
+    // Anything else: a Hebrew 404 with a way back to the board. Must stay last.
+    path: "*",
+    element: <NotFound />,
+  },
 ];
 
 export default routeConfig;

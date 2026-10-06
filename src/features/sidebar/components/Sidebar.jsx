@@ -9,10 +9,8 @@ import { useQuery } from "react-query";
 import { httpService } from "../../../services/httpService";
 
 //redux use functions
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-//redux actions
-import { categoryActions } from "@store/slices/categorySlice";
 import MessageForm from "../../messageForm/components/MessageForm/MessageForm";
 import NavBarButton from "@components/Header/NavBarButton";
 
@@ -38,13 +36,9 @@ const Sidebar = ({ classes, onCloseNavbar, open, variant = "page", ...rest }) =>
     setIsModalOpen(boolean);
   };
 
-  //TODO: imlemet redux for categories
-  // useEffect(() => {
-  //   console.log(fetchedCategories);
-  //   if (fetchedCategories) {
-  //     dispatch(messageActions.loadMessages(fetchedMessages));
-  //   }
-  // }, [fetchedCategories, dispatch]);
+  // Categories live in react-query's cache (the useQuery above), not in redux:
+  // nothing else needs them, so a second store copy would only be a place for
+  // the two to drift apart.
 
   return (
     <aside
@@ -95,10 +89,7 @@ const Sidebar = ({ classes, onCloseNavbar, open, variant = "page", ...rest }) =>
           <button
             data-testid={`sidebar-compose-${variant}`}
             className="p-2 rounded-md text-lg mx-10 bg-primary-700 hover:bg-primary-600 active:bg-primary-800 text-white"
-            onClick={() => {
-              // TODO: open a new message model on click
-              setIsModalOpen(true);
-            }}
+            onClick={() => setIsModalOpen(true)}
           >
             הוסף הודעה
           </button>
