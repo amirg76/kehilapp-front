@@ -33,11 +33,10 @@ const uniqueEmail = () => `approval-test-${Date.now()}-${Math.random().toString(
 const TEST_PASSWORD = 'ApprovalFlow123';
 
 // Count of visible message cards, anchored on a stable per-card hook rather
-// than every <h1> on the page (MessagePreview's <h1> is its title, but this
-// project already has more than one h1 as a documented smell — counting all
-// of them silently starts counting the wrong thing the moment that changes
-// elsewhere). data-testid="message-card" is added on MessagePreview's root
-// for exactly this.
+// than on heading elements (MessagePreview's title is an <h2>; the category
+// title above the list is another, so counting headings would count the wrong
+// thing the moment the markup moves). data-testid="message-card" is added on
+// MessagePreview's root for exactly this.
 const messageCardCount = (page) => page.getByTestId('message-card').count();
 
 test('unapproved member sees public-only + pending banner; admin approval unlocks members tier @approval', async ({

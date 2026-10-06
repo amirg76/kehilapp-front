@@ -73,7 +73,7 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
     // came from and, on a Hebrew phone, with the same RTL default that hides
     // the reversal here. Clean it on the way out. labelText, not plain
     // stripBidiControls: this is a one-line label in somebody else's UI, so
-    // collapsing whitespace is right here even though it is wrong for the <h1>.
+    // collapsing whitespace is right here even though it is wrong for the <h2>.
     const shareData = { title: labelText(message.title) || "Kehilapp", url };
     // Prefer the native share sheet on mobile; fall back to clipboard copy.
     if (navigator.share) {
@@ -155,7 +155,10 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
               🔒 לחברים בלבד
             </span>
           )}
-          <h1 className="text-[20px] font-semibold mb-[2px] dark:text-slate-100">
+          {/* <h2>, not <h1>: the page's single h1 is the category title in
+              HeroSection, and every card is one entry under it. Same Tailwind
+              classes as before, so the look is unchanged. */}
+          <h2 className="text-[20px] font-semibold mb-[2px] dark:text-slate-100">
             {/* Strip BEFORE highlighting, not after: highlightText splits the
                 string on the search term and returns React nodes, so a later
                 pass would have to walk an array of nodes instead of a string,
@@ -164,7 +167,7 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
                 wrap, and collapsing its whitespace would change how a title
                 the author spaced out is laid out. */}
             {highlightText(stripBidiControls(message.title), searchTerm)}
-          </h1>
+          </h2>
           <TextPreview
             txt={message.text}
             isLongTxtShown={isLongTextShown}
@@ -175,7 +178,9 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
           />
           <section className="flex items-center">
             <Avatar classes="ml-[17px]" />
-            <h6 className="w-fit dark:text-slate-200">
+            {/* Sender, date and time are metadata, not headings: as <h6> they
+                put three empty-feeling levels into every card's outline. */}
+            <p className="w-fit dark:text-slate-200">
               {/* The sender name is author-supplied too — typed at registration
                   rather than with the message, but it renders on this card, next
                   to this message, and an override left open in a first name
@@ -187,12 +192,12 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
                 {labelText(message.sender.firstName) || "קיבוץ"}{" "}
                 {labelText(message.sender.lastName) || "כיסופים"}
               </span>
-            </h6>
+            </p>
           </section>
           <div className="flex items-end justify-between">
             <section className="flex items-center w-fit dark:text-slate-300">
-              <h6 className="ml-[15px]">{formattedDate.date}</h6>
-              <h6 className="font-light ml-[15px]">{formattedDate.time}</h6>
+              <p className="ml-[15px]">{formattedDate.date}</p>
+              <p className="font-light ml-[15px]">{formattedDate.time}</p>
             </section>
             <div className="flex items-center gap-2 relative">
               {/* pin / important toggle — per-browser, works for anonymous viewers */}
