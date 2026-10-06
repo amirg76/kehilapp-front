@@ -5,11 +5,13 @@
  *  - Make the app installable + give it an offline fallback shell.
  *  - Never break Vite's dev server / HMR: navigations are network-FIRST (dev
  *    always gets fresh HTML), and dev module requests are passed straight to the
- *    network. Only same-origin built assets (/assets/, /img/) are cached.
+ *    network. Only same-origin built assets (/assets/, /img/, /icons/) are cached.
  *  - Ignore the API (different origin, http://localhost:5001) entirely.
  */
-const CACHE = "kehilapp-shell-v1";
-const SHELL = ["/", "/manifest.webmanifest", "/img/company-logo.png"];
+// Bumped with the icon move so installed clients drop the shell that still
+// pre-cached the old logo; activate() deletes every other cache name.
+const CACHE = "kehilapp-shell-v2";
+const SHELL = ["/", "/manifest.webmanifest", "/icons/icon-192.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -52,7 +54,11 @@ self.addEventListener("fetch", (event) => {
   }
 
   // Built static assets only (present in production, absent in dev → passthrough).
-  if (url.pathname.startsWith("/assets/") || url.pathname.startsWith("/img/")) {
+  if (
+    url.pathname.startsWith("/assets/") ||
+    url.pathname.startsWith("/img/") ||
+    url.pathname.startsWith("/icons/")
+  ) {
     event.respondWith(
       caches.match(req).then(
         (cached) =>
