@@ -1,37 +1,94 @@
-# Kibbutz Kissufim — Community Messages App
+# Kehilapp — resident app
 
-A React web app built after October 7th to help the evacuated Kibbutz Kissufim community collect, organize and search the important messages that flooded their WhatsApp groups after the move to a Dead Sea hotel — turning an endless chat stream into clear, browsable categories.
+[![CI](https://github.com/amirg76/kehilapp-front/actions/workflows/ci.yml/badge.svg)](https://github.com/amirg76/kehilapp-front/actions/workflows/ci.yml)
 
-Built as a pilot by a volunteer team, in collaboration with the AppleSeeds (Tapuach) nonprofit (two senior developers and a senior product manager accompanied the project). Covered by *Yediot HaNegev*.
+A Hebrew, right-to-left community notice board: residents read, search and post
+categorised messages, and the community's admins decide who sees what.
 
-<img src="public/screenshots/desktop-screenshot.png" width="500">
-<img src="public/screenshots/login-screenshot.png" width="500">
+**Live demo:** coming soon — see [kehilapp-devops](https://github.com/amirg76/kehilapp-devops).
 
-> Part of a 3-tier system: [Backend API](https://github.com/amirg76/kehilapp-backend) · **User App (this repo)** · [Admin Dashboard](https://github.com/amirg76/kehilapp-admin)
+## Why it exists
 
-### Tech Stack
+After October 7th the Kibbutz Kissufim community was evacuated to a Dead Sea
+hotel, and every important notice drowned in WhatsApp groups. This app was
+built in 2024 by a volunteer team (with two senior developers and a product
+manager from the AppleSeeds / Tapuach nonprofit accompanying it) to turn that
+stream into browsable categories. It ran as a pilot and was not taken to
+production.
 
-**Client**
-- React + Vite
-- Tailwind CSS
-- Redux Toolkit (state management)
-- React Query (data fetching & caching)
-- React Router (routing)
-- Quill (rich-text editing)
+In August–October 2026 it was rebuilt and hardened as a portfolio project: the
+security work, the tests and the CI below are from that pass.
+[`HARDENING.md`](HARDENING.md) tells the security story, finding by finding.
 
-**Server** ([kehilapp-backend](https://github.com/amirg76/kehilapp-backend))
-- Node.js + Express (REST API)
-- MongoDB + Mongoose
-- Joi (validation), Multer (file uploads)
-- AWS EC2 (dev & prod) with CI/CD
+## What is notable
 
-### Contributors
-- Amir Gilboa — full-stack
-- Dafna Bashan
-- Samir Khoury
+- **Session in an httpOnly cookie, with CSRF double-submit.** The browser sends
+  the cookie; page script cannot read it, so an XSS cannot steal the session.
+  Every mutating request echoes the readable `csrfToken` cookie in an
+  `X-CSRF-Token` header, and the server rejects a mismatch.
+- **Three layers on user-supplied text:** DOMPurify on message bodies (tag
+  allowlist + `http/https/mailto/tel` only), a URL-safety filter on links, and
+  stripping of Unicode bidi control characters (the `invoice<RLO>gnp.exe` trick)
+  from every title, name and attachment name.
+- **Email verification** on sign-up, and **three visibility tiers:** public
+  (anonymous visitors), pending (verified, awaiting an admin's approval) and
+  member (approved).
+- **Dark mode** (class-based Tailwind) and an installable **PWA** with an
+  offline shell.
+- **Playwright + axe-core** accessibility probes, plus browser flows for login,
+  approval and cookie security (those need a live backend).
+- **CI on every pull request:** `npm run lint` (0 errors), `npm run check`
+  (307 assertions across six standalone scripts: URL safety, HTML rendering,
+  password policy, email policy, bidi text, API base URL) and a production
+  build.
 
-### Status
-Pilot — built with a volunteer team, not taken to production.
+## Stack
 
----
+React 18 + Vite · Tailwind CSS · Redux Toolkit · React Query · React Router ·
+Quill (rich text) · DOMPurify · Playwright + axe-core
+
+## Running it
+
+```bash
+cp .env.example .env          # then set VITE_REACT_APP_BASE_URL
+npm ci
+npm run dev -- --port 5180
+```
+
+The app needs the API from [kehilapp-backend](https://github.com/amirg76/kehilapp-backend)
+running on port 5001.
+
+`VITE_REACT_APP_BASE_URL` is the API's base URL and is baked into the bundle at
+build time. Two forms are accepted:
+
+- an absolute origin, e.g. `http://localhost:5001/` for local development;
+- `/` — "same origin as the page", for a deployment where one reverse proxy
+  serves both the app and the API (this is how the devops repo deploys it).
+
+Without a valid value the build refuses, instead of producing a site that
+loads blank.
+
+Useful scripts:
+
+| command | what it does |
+|---|---|
+| `npm run lint` | ESLint incl. `jsx-a11y` and `eslint-plugin-security`; `no-console` is an error in app code |
+| `npm run check` | the six standalone check scripts, no browser or backend needed |
+| `npm run build` | production build into `build/` |
+| `npm run test:a11y` | serves the build and runs axe-core against it |
+| `npm run test:e2e` | all Playwright flows; point `E2E_BASE_URL` at a live stack |
+
+## The other repos
+
+| repo | role |
+|---|---|
+| [kehilapp-backend](https://github.com/amirg76/kehilapp-backend) | Node + Express REST API, MongoDB, sessions and approval logic |
+| [kehilapp-admin](https://github.com/amirg76/kehilapp-admin) | admin dashboard: approve users, manage categories and messages |
+| [kehilapp-devops](https://github.com/amirg76/kehilapp-devops) | Docker images, reverse proxy and deployment |
+
+## Credits
+
+Built in 2024 by Amir Gilboa (full-stack), Dafna Bashan and Samir Khoury, with
+the AppleSeeds (Tapuach) nonprofit. Rebuilt and hardened in 2026 by Amir Gilboa.
+
 © Amir Gilboa
