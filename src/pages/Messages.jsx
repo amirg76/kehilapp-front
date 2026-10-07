@@ -115,9 +115,6 @@ const Messages = () => {
       <div className="w-full h-full">
         <HeroSection currentCategory={currentCategory} />
         {!isModalOpen && <SearchMessages />}
-        {/* {isLoading && <LoadingPage />} */}
-        {/* //TODO: add an error modal? */}
-        {/* {error && <p>Error: {error.message}</p>} */}
         <MessageList
           messages={messagesToDisplay}
           currentCategory={currentCategory}

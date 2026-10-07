@@ -51,8 +51,8 @@ export const PASSWORD_MAX_LENGTH = 128;
 export function validatePassword(value) {
   if (!value || !value.length) return "שדה חובה";
   if (value.length < PASSWORD_MIN_LENGTH)
-    return `הסיסמא צריכה להכיל לפחות ${PASSWORD_MIN_LENGTH} תווים`;
+    return `הסיסמה צריכה להכיל לפחות ${PASSWORD_MIN_LENGTH} תווים`;
   if (value.length > PASSWORD_MAX_LENGTH)
-    return `הסיסמא יכולה להכיל עד ${PASSWORD_MAX_LENGTH} תווים`;
+    return `הסיסמה יכולה להכיל עד ${PASSWORD_MAX_LENGTH} תווים`;
   return "";
 }

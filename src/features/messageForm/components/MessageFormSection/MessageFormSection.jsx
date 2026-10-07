@@ -39,10 +39,7 @@ const MessageFormSection = ({
   const navigate = useNavigate()
 
   const handleChange = (ev) => {
-    // console.log(ev);
     const { name, value } = ev.target === undefined ? ev : ev.target;
-    // console.log("name:" + name, "value:" + value);
-
     setMessage({ ...message, [name]: value });
     validateForm(ev);
   };
@@ -126,7 +123,6 @@ const MessageFormSection = ({
     }
   };
 
-  // TODO: Change Loading page UI
   return (
     <>
       {isPending ? (
@@ -170,7 +166,7 @@ const MessageFormSection = ({
 
           <TextareaCmp
             name="text"
-            placeholder="כתיבת הודעה..."
+            placeholder="כתיבת הודעה…"
             value={message?.text}
             onChange={handleChange}
             rows="10"

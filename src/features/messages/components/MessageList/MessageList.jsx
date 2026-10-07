@@ -16,8 +16,6 @@ import { LOGIN, REGISTER } from "@routes/routeConstants";
 import { selectCanSeeMembersContent } from "@store/slices/authSlice";
 
 const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) => {
-  //TODO - what is the best practice to get the sender's name? from where should i send the request to the backend?
-
   const SkeletonLoadingArray = Array.from({ length: 12 });
   const currentCategoryTitle = currentCategory?.title || "כל ההודעות";
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

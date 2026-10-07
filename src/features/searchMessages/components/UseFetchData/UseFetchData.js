@@ -41,8 +41,9 @@ const useFetchData = (searchTerm = "") => {
         dispatch(loadingActions.toggle());
         dispatch(messageActions.loadMessages(json.data));
       }
-    } catch (error) {
-      console.log(error.message);
+    } catch {
+      // Nothing imports this hook (search goes through SearchMessages +
+      // redux); kept only until its removal is approved. No console output.
     }
   };
 

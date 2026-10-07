@@ -67,7 +67,7 @@ const RegisterForm = () => {
           setError((p) => ({
             ...p,
             confirmPassword:
-              all.confirmPassword === value ? "" : "הסיסמאות אינן תואמות",
+              all.confirmPassword === value ? "" : "הסיסמות אינן תואמות",
           }));
         }
         break;
@@ -75,7 +75,7 @@ const RegisterForm = () => {
         if (!value || !value.length)
           setError((p) => ({ ...p, confirmPassword: "שדה חובה" }));
         else if (value !== all.password)
-          setError((p) => ({ ...p, confirmPassword: "הסיסמאות אינן תואמות" }));
+          setError((p) => ({ ...p, confirmPassword: "הסיסמות אינן תואמות" }));
         else setError((p) => ({ ...p, confirmPassword: "" }));
         break;
       default:
@@ -262,7 +262,7 @@ const RegisterForm = () => {
         <ErrorMessage msg={error.email} style="h-[20px] mr-3" />
 
         <InputCmp
-          label="סיסמא"
+          label="סיסמה"
           type="password"
           name="password"
           value={credentials.password}
@@ -275,7 +275,7 @@ const RegisterForm = () => {
         <ErrorMessage msg={error.password} style="h-[20px] mr-3" />
 
         <InputCmp
-          label="אימות סיסמא"
+          label="אימות סיסמה"
           type="password"
           name="confirmPassword"
           value={credentials.confirmPassword}

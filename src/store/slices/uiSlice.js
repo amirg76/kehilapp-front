@@ -8,15 +8,14 @@ const uiSlice = createSlice({
     name: 'ui',
     initialState,
     reducers: {
-        //TODO: we need to choose if we want to use toggle or open/close actions.
+        // Explicit open/close only. A toggle reads the current state, and two
+        // callers (header button + drawer backdrop) can fire for one gesture,
+        // which would flip the drawer twice and leave it where it started.
         openModal(state) {
             state.isModalOpen = true
         },
         closeModal(state) {
             state.isModalOpen = false
-        },
-        toggleModal(state) {
-            state.isModalOpen = !state.isModalOpen
         }
     }
 })

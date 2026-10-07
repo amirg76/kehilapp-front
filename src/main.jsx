@@ -31,6 +31,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").catch((err) => {
+      // eslint-disable-next-line no-console -- deliberate: the app works without the worker, but a silent failure would hide why "install" never appears
       console.warn("Service worker registration failed:", err);
     });
   });

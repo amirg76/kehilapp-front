@@ -52,7 +52,7 @@ const SearchMessages = () => {
       <FaSearch className="mr-4 text-gray-400" />
       <input
         type="text"
-        placeholder="חיפוש..."
+        placeholder="חיפוש…"
         className="px-4 py-2 focus:outline-none w-full rounded-xl"
         value={searchTerm}
         onChange={(ev) => setSearchTerm(ev.target.value)}

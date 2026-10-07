@@ -21,7 +21,6 @@ const App = () => {
   const dispatch = useDispatch();
   //
   useEffect(() => {
-    // const token = localStorage.getItem("token");
     const storedRaw = sessionStorage.getItem("loggedInUser");
     const stored = storedRaw ? JSON.parse(storedRaw) : null;
 
@@ -55,6 +54,7 @@ const App = () => {
           typeof user.id === "string" &&
           typeof user.email === "string";
         if (!isValidUser) {
+          // eslint-disable-next-line no-console -- deliberate: a malformed /me answer is a server/proxy fault that must be visible, and `res` carries no credentials
           console.error(
             "GET /api/auth/me returned an unexpected shape — treating as signed-out",
             res
@@ -96,6 +96,7 @@ const App = () => {
         // "unknown" must not be left rendering as "still approved". Log it
         // (a real failure, not something to swallow) and fail closed rather
         // than leave a possibly-stale approved state standing.
+        // eslint-disable-next-line no-console -- deliberate: see the comment above; GET /me sends no body, so `err` holds no credentials
         console.error("GET /api/auth/me failed (not a 401) — signing out locally", err);
         if (stored) {
           sessionStorage.removeItem("loggedInUser");
@@ -113,19 +114,9 @@ const App = () => {
   return (
     <AuthCtaBannerProvider>
       <div className="w-screen flex flex-col bg-white dark:bg-slate-900 min-h-screen">
-      {/* //TODO: when is logged in redirect to the corresponding page, else redirect to login page */}
-
-      {/* //TODO: when logged out, disable Header component */}
-      {/* {isAuthenticated && <Header />} */}
+      {/* The board is public (anonymous visitors see the public tier), so the
+          header shows for everyone; there is no redirect-to-login gate. */}
       {!hideHeaderOn.includes(pathname) && <Header />}
-      {/*
-
-        <Route
-          path={MESSAGES}
-          element={isAuthenticated ? <Messages /> : <Navigate to={LOGIN} />}
-          exact:true
-          />
-        */}
 
       <main className="flex flex-col flex-1">
         <Routes>

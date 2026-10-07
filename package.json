@@ -11,9 +11,10 @@
       "prettier --write"
     ]
   },
-  "name": "react-boiler-plate",
+  "name": "kehilapp-front",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Kehilapp resident app: a Hebrew, RTL community notice board (React + Vite) built for the evacuated Kibbutz Kissufim community and hardened as a portfolio project",
   "type": "module",
   "scripts": {
     "dev": "vite --host",

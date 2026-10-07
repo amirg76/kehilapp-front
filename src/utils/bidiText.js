@@ -48,7 +48,9 @@
 import { BIDI_CONTROL_CODE_POINTS } from "./urlSafety.js";
 
 /**
- * The shared list as a character class, e.g. "[؜‎…]". Built once at
+ * The shared list as a character class, e.g. "[<ALM><LRM>...]", every member
+ * spelled as a \uXXXX escape. No raw control character lives in this file --
+ * scripts/bidi-text-check.mjs scans src/ for exactly that. Built once at
  * module load from the imported code points.
  */
 const BIDI_CONTROL_CLASS = `[${BIDI_CONTROL_CODE_POINTS.map(

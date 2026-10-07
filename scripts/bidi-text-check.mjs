@@ -12,12 +12,20 @@
 // mistake is cheap to make and expensive to find. Building them here also means
 // the test names can spell out which code point each case is about.
 
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import {
   hasBidiControls,
   labelText,
   stripBidiControls,
 } from "../src/utils/bidiText.js";
 import { BIDI_CONTROL_CODE_POINTS } from "../src/utils/urlSafety.js";
+
+// Resolved from this file, not from process.cwd(): `npm run check` and a bare
+// `node scripts/...` from another directory must scan the same tree.
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 let passed = 0;
 let failed = 0;
@@ -132,7 +140,7 @@ check(
   "שלום"
 );
 
-// stripBidiControls must NOT collapse whitespace — the <h1> keeps the author's
+// stripBidiControls must NOT collapse whitespace — the card's <h2> keeps the author's
 // spacing, and only labelText is allowed to touch it.
 check(
   "stripBidiControls leaves whitespace exactly as typed",
@@ -206,6 +214,51 @@ check("first hasBidiControls call", hasBidiControls(sample), true);
 check("second hasBidiControls call agrees", hasBidiControls(sample), true);
 check("third hasBidiControls call agrees", hasBidiControls(sample), true);
 check("strip is idempotent", stripBidiControls(stripBidiControls(sample)), "xy");
+
+// ---------------------------------------------------------------------------
+console.log("\n--- no raw bidi control character in the source tree ---");
+
+// The functions above strip these characters out of DATA. This section is
+// about the CODE: a raw U+202E pasted into a comment or a string literal is
+// invisible in an editor and in a diff, yet it is exactly what the module
+// exists to defend against, and one did sit in bidiText.js's own JSDoc until
+// this scan was written. A control character that belongs in source is written
+// as a \uXXXX escape, which this scan cannot match and a reviewer can read.
+// Text files only: PNGs under src/ legitimately contain these bytes.
+// e2e/ is code that runs in CI too; a scan scoped by folder misses what it does not list.
+const SOURCE_ROOTS = ["src", "scripts", "e2e", "index.html"];
+const TEXT_EXTENSIONS = new Set([
+  ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".css", ".html", ".json", ".md",
+]);
+const RAW_BIDI = new RegExp(
+  `[${fromUnicode.map((p) => `\\u${p.toString(16).padStart(4, "0")}`).join("")}]`
+);
+
+function* walk(entry) {
+  const stat = fs.statSync(entry);
+  if (stat.isDirectory()) {
+    for (const name of fs.readdirSync(entry)) yield* walk(path.join(entry, name));
+  } else if (TEXT_EXTENSIONS.has(path.extname(entry))) {
+    yield entry;
+  }
+}
+
+const offenders = [];
+let scanned = 0;
+for (const root of SOURCE_ROOTS) {
+  for (const file of walk(path.join(REPO_ROOT, root))) {
+    scanned += 1;
+    fs.readFileSync(file, "utf8").split("\n").forEach((line, i) => {
+      if (!RAW_BIDI.test(line)) return;
+      const points = [...line]
+        .filter((ch) => RAW_BIDI.test(ch))
+        .map((ch) => hex(ch.codePointAt(0)));
+      offenders.push(`${path.relative(REPO_ROOT, file)}:${i + 1} ${points.join(" ")}`);
+    });
+  }
+}
+check(`scanned a non-trivial number of source files (${scanned})`, scanned > 20, true);
+check("no raw bidi control character in src/, scripts/, e2e/ or index.html", offenders, []);
 
 console.log("");
 console.log(`TOTAL: ${passed} passed, ${failed} failed`);
