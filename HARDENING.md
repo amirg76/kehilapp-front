@@ -47,7 +47,7 @@ Running it surfaced and fixed real bugs:
 - Two `switch` fall-throughs, an SVG typo (`stroklinecap`), and decorative `<h1>`
   loading bars using heading semantics — all corrected.
 
-Result: **0 lint errors** (94 warnings tracked — mostly interactive-element a11y
+Result: **0 lint errors** (91 warnings tracked — mostly interactive-element a11y
 debt to fix incrementally). `npm run lint` passes.
 
 ## 4. Playwright E2E + axe accessibility (added)

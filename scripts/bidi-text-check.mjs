@@ -225,7 +225,8 @@ console.log("\n--- no raw bidi control character in the source tree ---");
 // this scan was written. A control character that belongs in source is written
 // as a \uXXXX escape, which this scan cannot match and a reviewer can read.
 // Text files only: PNGs under src/ legitimately contain these bytes.
-const SOURCE_ROOTS = ["src", "scripts", "index.html"];
+// e2e/ is code that runs in CI too; a scan scoped by folder misses what it does not list.
+const SOURCE_ROOTS = ["src", "scripts", "e2e", "index.html"];
 const TEXT_EXTENSIONS = new Set([
   ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".css", ".html", ".json", ".md",
 ]);
@@ -257,7 +258,7 @@ for (const root of SOURCE_ROOTS) {
   }
 }
 check(`scanned a non-trivial number of source files (${scanned})`, scanned > 20, true);
-check("no raw bidi control character in src/, scripts/ or index.html", offenders, []);
+check("no raw bidi control character in src/, scripts/, e2e/ or index.html", offenders, []);
 
 console.log("");
 console.log(`TOTAL: ${passed} passed, ${failed} failed`);
