@@ -65,9 +65,15 @@ const MessageFormSection = ({
     formData.append("categoryId", message.categoryId);
     formData.append("title", message.title);
     formData.append("text", message.text);
-    formData.append("file", message.file);
+    // Only when a file was chosen: appending the initial "" (or undefined)
+    // sends the literal string "undefined" as the file field.
+    if (message.file) {
+      formData.append("file", message.file);
+    }
 
-    setMessage(formData);
+    // `message` must stay the form's own state object. It used to be replaced
+    // with the FormData here, which was harmless on success (the modal closes)
+    // but on error blanked every controlled field when the form came back.
     mutate(formData);
   };
 
@@ -78,8 +84,19 @@ const MessageFormSection = ({
     error: errorMsg,
   } = useMutation({
     mutationFn: (formData) => httpService.post(MESSAGES_URL, formData),
-    onSuccess: (data) => onMessageSent(data)
+    onSuccess: (data) => onMessageSent(data),
+    onError: () => onMessageFailed(),
   });
+
+  // The modal stays open with the typed text intact so the user can retry.
+  // The file is dropped on purpose: the form subtree unmounts while pending,
+  // so the file input comes back empty and keeping the File in state would
+  // silently resend the attachment that just failed.
+  const onMessageFailed = () => {
+    setMessage((prev) => ({ ...prev, file: "" }));
+    setIsButtonDisabled(false);
+    toggleLoading(false);
+  };
 
   const onMessageSent = (data) => {
     queryClient.invalidateQueries({ queryKey: ["messages"] });
@@ -125,6 +142,22 @@ const MessageFormSection = ({
 
   return (
     <>
+      {/* Always mounted, outside the pending/form switch: a live region that is
+          created together with its message is usually not announced by screen
+          readers (merge gate, 29.10). Fixed wording on purpose: the server's
+          error text may be English or internal, and a 500 from a failed upload
+          must still tell the user what to do. */}
+      <div role="alert">
+        <ErrorMessage
+          msg={
+            isError
+              ? "שליחת ההודעה נכשלה. נסו שוב; אם צירפתם קובץ, הוא הוסר מהטופס — נסו לשלוח בלי הקובץ או לצרף אותו מחדש."
+              : ""
+          }
+          style="mb-2"
+        />
+      </div>
+
       {isPending ? (
         <LoadingPage />
       ) : (
