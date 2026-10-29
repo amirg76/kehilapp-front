@@ -10,6 +10,7 @@ import SearchMessages from "@features/searchMessages/components/SearchMessages/S
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "@store/slices/authSlice";
 import { messageActions } from "@store/slices/messageSlice";
 import { userActions } from "@store/slices/userSlice";
 import { categoryActions } from "@store/slices/categorySlice";
@@ -28,6 +29,8 @@ const Messages = () => {
   const categories = useSelector((state) => state.category.categories);
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const currentUser = useSelector(selectCurrentUser);
+  const isAdmin = currentUser?.role === "admin";
   const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   const {
@@ -72,9 +75,13 @@ const Messages = () => {
     queryFn: () => {
       return httpService.get(USERS_URL);
     },
-    // The user directory is auth-only; a public visitor shouldn't trigger it
-    // (it would 401). Sender-name enrichment simply no-ops when logged out.
-    enabled: isAuthenticated,
+    // GET /api/users is admin-only on the server (requireRole('admin')), so a
+    // logged-out visitor would get a 401 and a non-admin resident a 403 on
+    // every visit. Sender-name enrichment simply no-ops without the list
+    // (useMessagesDisplay searches an empty array), so only admins fetch it.
+    enabled: isAuthenticated && isAdmin,
+    // A 403 is a stable answer, not a transient failure: never retry it.
+    retry: false,
   });
 
   const {
