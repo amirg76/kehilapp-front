@@ -142,6 +142,22 @@ const MessageFormSection = ({
 
   return (
     <>
+      {/* Always mounted, outside the pending/form switch: a live region that is
+          created together with its message is usually not announced by screen
+          readers (merge gate, 29.10). Fixed wording on purpose: the server's
+          error text may be English or internal, and a 500 from a failed upload
+          must still tell the user what to do. */}
+      <div role="alert">
+        <ErrorMessage
+          msg={
+            isError
+              ? "שליחת ההודעה נכשלה. נסו שוב; אם צירפתם קובץ, הוא הוסר מהטופס — נסו לשלוח בלי הקובץ או לצרף אותו מחדש."
+              : ""
+          }
+          style="mb-2"
+        />
+      </div>
+
       {isPending ? (
         <LoadingPage />
       ) : (
@@ -212,20 +228,6 @@ const MessageFormSection = ({
           />
 
           <h5 className="mb-1">* שדות המסומנים בכוכבית הם שדות חובה</h5>
-
-          {/* Fixed wording on purpose: the server's error text may be English
-              or internal, and a 500 from a failed upload must still tell the
-              user what to do. */}
-          <div role="alert">
-            <ErrorMessage
-              msg={
-                isError
-                  ? "שליחת ההודעה נכשלה. נסו שוב; אם צירפתם קובץ, הוא הוסר מהטופס — נסו לשלוח בלי הקובץ או לצרף אותו מחדש."
-                  : ""
-              }
-              style="mb-2"
-            />
-          </div>
 
           <ButtonCmp
             data-testid="message-submit-button"
