@@ -47,7 +47,7 @@ Running it surfaced and fixed real bugs:
 - Two `switch` fall-throughs, an SVG typo (`stroklinecap`), and decorative `<h1>`
   loading bars using heading semantics — all corrected.
 
-Result: **0 lint errors** (91 warnings tracked — mostly interactive-element a11y
+Result: **0 lint errors** (90 warnings tracked — mostly interactive-element a11y
 debt to fix incrementally). `npm run lint` passes.
 
 ## 4. Playwright E2E + axe accessibility (added)
@@ -110,7 +110,7 @@ Everything listed as "open" in earlier drafts of this file (the token in
 `localStorage`, the broken ESLint config) is closed above (sections 3 and 6).
 What is genuinely still open today:
 
-- **Lint warnings: 91** (`npm run lint`, 0 errors). Mostly unused React imports
+- **Lint warnings: 90** (`npm run lint`, 0 errors). Mostly unused React imports
   and `jsx-a11y` interactive-element debt; each is a small, testable fix.
 - **`npm audit` reports 32 advisories today** (1 critical, 19 high) — up from
   the 9 left after the dependency pass in section 2, because advisories keep
