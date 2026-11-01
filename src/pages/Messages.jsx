@@ -144,6 +144,7 @@ const Messages = () => {
           currentCategory={currentCategory}
           isLoading={isLoading}
           onRemoveMessage={onRemoveMessage}
+          isRemoving={isPending}
         />
       </div>
     </div>

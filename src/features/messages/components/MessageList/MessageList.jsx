@@ -15,7 +15,7 @@ import { LOGIN, REGISTER } from "@routes/routeConstants";
 // redux selectors
 import { selectCanSeeMembersContent } from "@store/slices/authSlice";
 
-const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) => {
+const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage, isRemoving }) => {
   const SkeletonLoadingArray = Array.from({ length: 12 });
   const currentCategoryTitle = currentCategory?.title || "כל ההודעות";
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -147,7 +147,7 @@ const MessageList = ({ messages, currentCategory, isLoading, onRemoveMessage }) 
         {isLoading && SkeletonLoadingArray.map((_, i) => <SkeletonLoading key={i} />)}
         {orderedMessages.length ?
           orderedMessages.map((message) => (
-            <MessagePreview key={message._id} message={message} onRemoveMessage={onRemoveMessage}/>
+            <MessagePreview key={message._id} message={message} onRemoveMessage={onRemoveMessage} isRemoving={isRemoving}/>
           )) :
           <div className="text-center dark:text-slate-200">
             <div className="text-2xl font-semibold">לא נמצאו הודעות </div>

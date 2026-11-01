@@ -64,6 +64,10 @@ test('a signed-in member gets no delete control at all', async ({ page }) => {
   await page.goto('/');
 
   await expect(card(page)).toHaveCount(1);
+  // The list is public, so the card can render before GET /me answers. Only
+  // once the header greets the member is "no delete control" a statement
+  // about the member rather than about an anonymous visitor (merge gate, 1.11).
+  await expect(page.getByTestId('header-greeting')).toBeVisible();
   // The card did render its other controls, so the absence below is a choice.
   await expect(page.getByRole('button', { name: 'שיתוף ההודעה' })).toHaveCount(1);
   await expect(deleteButton(page)).toHaveCount(0);

@@ -25,7 +25,7 @@ import { highlightText } from "@utils/highlight";
 // string; everything this file renders is plain text and is cleaned here.
 import { labelText, stripBidiControls } from "@utils/bidiText";
 
-const MessagePreview = ({ message, onRemoveMessage }) => {
+const MessagePreview = ({ message, onRemoveMessage, isRemoving }) => {
   const [isLongTextShown, setIsLongTextShown] = useState(false);
   const contentRef = useRef();
   const [containerHeight, setContainerHeight] = useState(0);
@@ -235,6 +235,7 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
                 <button
                   type="button"
                   onClick={() => onRemoveMessage(message._id)}
+                  disabled={isRemoving}
                   aria-label="מחיקת ההודעה"
                   title="מחיקה"
                   className="p-2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:text-red-600 transition-colors"
