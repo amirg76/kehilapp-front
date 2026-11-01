@@ -6,11 +6,12 @@ import Sidebar from "@features/sidebar/components/Sidebar";
 import MessageList from "@features/messages/components/MessageList";
 import HeroSection from "../features/heroSection/components/HeroSection";
 import LoadingPage from "@components/ui/LoadingPage/LoadingPage";
+import ErrorMessage from "@components/ui/ErrorMessage/ErrorMessage";
 import SearchMessages from "@features/searchMessages/components/SearchMessages/SearchMessages";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "@store/slices/authSlice";
+import { selectIsAdmin } from "@store/slices/authSlice";
 import { messageActions } from "@store/slices/messageSlice";
 import { userActions } from "@store/slices/userSlice";
 import { categoryActions } from "@store/slices/categorySlice";
@@ -29,8 +30,7 @@ const Messages = () => {
   const categories = useSelector((state) => state.category.categories);
   const isModalOpen = useSelector((state) => state.ui.isModalOpen);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const currentUser = useSelector(selectCurrentUser);
-  const isAdmin = currentUser?.role === "admin";
+  const isAdmin = useSelector(selectIsAdmin);
   const messagesToDisplay = useMessagesDisplay(messages, categories, users);
 
   const {
@@ -96,8 +96,20 @@ const Messages = () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
       dispatch(messageActions.removeMessage(messageId));
     },
-    onError: () => {},
+    // No onError: react-query exposes the failure through isError/error below
+    // and the alert under the hero renders it. The previous empty handler
+    // meant a refused delete (403: the route is admin-only) looked like a
+    // button that does nothing (1.11.2026).
   });
+
+  // Fixed wording, like the compose form's alert: the server's error text may
+  // be English or internal. 403 is the one case with a specific cause worth
+  // naming; everything else (network, 5xx) gets the generic line.
+  const deleteErrorText = !isError
+    ? ""
+    : errorMsg?.response?.status === 403
+      ? "אין לך הרשאה למחוק הודעות: מחיקה אפשרית למנהל בלבד."
+      : "מחיקת ההודעה נכשלה. נסו שוב.";
 
   useEffect(() => {
     if (fetchedMessages) {
@@ -122,11 +134,17 @@ const Messages = () => {
       <div className="w-full h-full">
         <HeroSection currentCategory={currentCategory} />
         {!isModalOpen && <SearchMessages />}
+        {/* Always mounted (see MessageFormSection): a live region created
+            together with its text is usually not announced. */}
+        <div role="alert">
+          <ErrorMessage msg={deleteErrorText} style="text-center mt-2" />
+        </div>
         <MessageList
           messages={messagesToDisplay}
           currentCategory={currentCategory}
           isLoading={isLoading}
           onRemoveMessage={onRemoveMessage}
+          isRemoving={isPending}
         />
       </div>
     </div>

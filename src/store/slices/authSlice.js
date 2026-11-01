@@ -53,4 +53,12 @@ export const selectCanSeeMembersContent = (state) => {
   return user.approved === true || user.role === "admin";
 };
 
+// Mirrors the server's requireRole('admin') (messageRoutes.js): DELETE
+// /api/messages/:id is admin-only. The card used to show the trash icon to
+// every signed-in member and the server refused the click with a 403 the UI
+// never showed (1.11.2026, eight silent attempts on one message). Any control
+// that only an admin can use must gate on this, not on isAuthenticated.
+export const selectIsAdmin = (state) =>
+  state.auth.isAuthenticated && state.auth.currentUser?.user?.role === "admin";
+
 export default authSlice;
