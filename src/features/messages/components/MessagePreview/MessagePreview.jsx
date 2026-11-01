@@ -12,6 +12,7 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { useSelector } from "react-redux";
+import { selectIsAdmin } from "@store/slices/authSlice";
 
 //utils
 import useFormattedDate from "../../../../hooks/useFormattedDate";
@@ -30,7 +31,10 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [shareToast, setShareToast] = useState("");
   const formattedDate = useFormattedDate(message.createdAt);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // Delete is admin-only on the server (DELETE /api/messages/:id has
+  // requireRole('admin')). Showing the control to a member produced a click
+  // that was refused with 403 and reported nothing (1.11.2026).
+  const isAdmin = useSelector(selectIsAdmin);
   const searchTerm = useSelector((state) => state.message.searchTerm);
 
   const { isPinned, toggle } = usePins();
@@ -225,12 +229,18 @@ const MessagePreview = ({ message, onRemoveMessage }) => {
               >
                 <FontAwesomeIcon icon={faShareNodes} />
               </button>
-              {isAuthenticated && (
-                <FontAwesomeIcon
-                  icon={faTrash}
+              {/* delete — admins only; a real button like its siblings so it
+                  is reachable by keyboard and named for screen readers */}
+              {isAdmin && (
+                <button
+                  type="button"
                   onClick={() => onRemoveMessage(message._id)}
-                  className="cursor-pointer p-2 rounded-full bg-slate-200 dark:bg-slate-700 dark:text-slate-300 hover:text-gray-600"
-                />
+                  aria-label="מחיקת ההודעה"
+                  title="מחיקה"
+                  className="p-2 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:text-red-600 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
               )}
               {shareToast && (
                 <span
