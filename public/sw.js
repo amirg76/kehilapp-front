@@ -10,7 +10,17 @@
  */
 // Bumped with the icon move so installed clients drop the shell that still
 // pre-cached the old logo; activate() deletes every other cache name.
-const CACHE = "kehilapp-shell-v2";
+//
+// v3 (1.11.2026): purges caches poisoned with a 404. Between 29.10 16:39 and
+// 1.11 10:20 the server's internal proxy served the admin panel at "/" and
+// this app at "/admin/" (stale upstream addresses after a redeploy). A browser
+// that opened /admin/ got this app's index.html, requested /assets/index-<hash>.js
+// through this worker, received the admin container's 404, and the worker
+// STORED that 404 (cache-first, no status check). After the proxy was fixed
+// the page stayed white: the bundle came from the cache as a 404 and never
+// reached the server again. Reproduced in a fresh headless browser by putting
+// a 404 Response for the bundle into the cache: #root rendered empty.
+const CACHE = "kehilapp-shell-v3";
 const SHELL = ["/", "/manifest.webmanifest", "/icons/icon-192.png"];
 
 self.addEventListener("install", (event) => {
@@ -44,8 +54,10 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((cache) => cache.put("/", copy)).catch(() => {});
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((cache) => cache.put("/", copy)).catch(() => {});
+          }
           return res;
         })
         .catch(() => caches.match("/").then((r) => r || caches.match(req)))
@@ -64,8 +76,13 @@ self.addEventListener("fetch", (event) => {
         (cached) =>
           cached ||
           fetch(req).then((res) => {
-            const copy = res.clone();
-            caches.open(CACHE).then((cache) => cache.put(req, copy)).catch(() => {});
+            // Only a successful response is worth keeping. A 404/5xx stored
+            // here is served FIRST on every later visit (cache-first) and the
+            // server never gets another chance — see the v3 note above.
+            if (res.ok) {
+              const copy = res.clone();
+              caches.open(CACHE).then((cache) => cache.put(req, copy)).catch(() => {});
+            }
             return res;
           })
       )
