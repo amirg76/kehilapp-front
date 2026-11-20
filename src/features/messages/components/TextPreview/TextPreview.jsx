@@ -10,14 +10,26 @@ import { messageBodyParserOptions } from "@utils/linkify";
 // on click and — since the auth token lives in localStorage — steals it. Every
 // body is scrubbed through DOMPurify before any styling or parsing touches it.
 // "s" and "blockquote" came with the Tiptap editor (strikethrough and quote
-// buttons, 20.11.2026). Like every other tag here they can carry `class`
-// (ALLOWED_ATTR below), which the editor never writes; that is pre-existing.
+// buttons, 20.11.2026).
 const ALLOWED_TAGS = ["a", "strong", "em", "u", "s", "b", "i", "br", "p", "ul", "ol", "li", "h1", "h2", "h3", "blockquote", "span"];
 const sanitize = (dirty) =>
   DOMPurify.sanitize(dirty ?? "", {
     // Allow only the formatting the editor actually produces.
     ALLOWED_TAGS,
-    ALLOWED_ATTR: ["href", "class"],
+    // No `class`. A body is whatever reaches the API, not only what the editor
+    // writes, and this app ships Tailwind: `<p class="fixed inset-0 z-50 ...">`
+    // would let one message cover the whole screen with a fake page. The
+    // editor writes no classes. Old Quill bodies carry `ql-*` ones, but every
+    // ql-* content rule in Quill's stylesheet sat under `.ql-editor`
+    // (react-quill 2.0.0 quill.snow.css, checked 20.11.2026) and this display
+    // was never inside one, so dropping them changes nothing a reader sees.
+    ALLOWED_ATTR: ["href"],
+    // DOMPurify keeps data-* and aria-* even with ALLOWED_ATTR. A body could
+    // then give a screen reader a different text from the one on screen
+    // (aria-label, aria-hidden), announce itself (aria-live), or pose as an
+    // app element (data-testid). The editor writes neither.
+    ALLOW_DATA_ATTR: false,
+    ALLOW_ARIA_ATTR: false,
     // Drop javascript:/data: URLs; keep normal links.
     ALLOWED_URI_REGEXP: /^(?:https?|mailto|tel):/i,
   });

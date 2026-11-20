@@ -124,7 +124,9 @@ expect("h2 styled", out, has('<span class="text-3xl font-semibold"><h2>two</h2><
 expect("h3 styled", out, has('<span class="text-2xl font-semibold"><h3>three</h3></span>'), "h3 styling missing");
 
 // The wrapper must not swallow the element's own class (the old chain kept it,
-// because it wrapped the matched markup verbatim).
+// because it wrapped the matched markup verbatim). render() skips DOMPurify,
+// and in the app `class` no longer survives sanitising (TextPreview.jsx); this
+// case pins the parser layer only.
 out = render('<p><strong class="ql-size-large">x</strong></p>', "");
 console.log(`\n[12] ${out}`);
 expect("editor's own class preserved under the wrapper", out, has('<strong class="ql-size-large">'), "author class lost");
@@ -210,6 +212,102 @@ expect("…and the visible label is the same host", out, has(">https://example.c
 out = render("<p>אין כאן קישור</p>", "");
 console.log(`\n[22] ${out}`);
 expect("ordinary Hebrew still unchanged", out, (o) => o === "<p>אין כאן קישור</p>", "markup changed");
+
+// --- author-written <a href> gets the same host test as a URL found in text.
+// DOMPurify only checks the scheme; these all pass it. (render() skips
+// DOMPurify, so these are fed to the parser layer directly.)
+
+out = render('<p><a href="https://www.paypal.com@evil.example.com/login">PayPal</a></p>', "");
+console.log(`\n[23] ${out}`);
+expect("userinfo href: no anchor", out, lacks("<a "), "anchor rendered");
+expect("…no link styling either", out, lacks("underline"), "still looks like a link");
+expect("…but the text stays", out, has("PayPal"), "text lost");
+
+out = render(`<p><a href="https://${cpt(0x0430)}pple.com">Apple</a></p>`, "");
+console.log(`\n[24] ${out}`);
+expect("look-alike (Cyrillic a) host href: no anchor", out, lacks("<a "), "anchor rendered");
+
+out = render('<p><a href="https://user@evil.example.com">https://example.com</a></p>', "");
+console.log(`\n[25] ${out}`);
+expect("refused anchor whose text is a URL is not re-linked", out, lacks("<a "), "text was turned back into a link");
+
+out = render("<p><a>no address</a></p>", "");
+console.log(`\n[26] ${out}`);
+expect("anchor without href (as DOMPurify leaves a javascript: link): no anchor", out, lacks("<a"), "dead anchor rendered");
+
+out = render('<p><a href="https://evil.example.com/login">https://www.paypal.com</a></p>', "");
+console.log(`\n[26c] ${out}`);
+expect("text names another host than the href: no anchor", out, lacks("<a "), "label/target mismatch rendered as a link");
+
+out = render('<p><a href="https://evil.example.com/x">התחברו ב-<strong>www.paypal.com</strong></a></p>', "");
+console.log(`\n[26d] ${out}`);
+expect("…also when the address sits in a nested tag", out, lacks("<a "), "nested label mismatch rendered as a link");
+
+out = render('<p><a href="https://www.example.com/a">https://example.com/a</a> <a href="https://example.com/x">לפרטים</a></p>', "");
+console.log(`\n[26e] ${out}`);
+expect("same host (www. aside) and plain-word text stay links", out, (o) => (o.match(/<a /g) || []).length === 2, "expected 2 anchors");
+expect("…the plain-word one shows its real host", out, has('לפרטים</a></span> <span class="text-xs text-gray-500" dir="ltr">(example.com)</span>'), "host not shown");
+expect("…the one whose text is its address does not", out, (o) => (o.match(/\(example\.com\)/g) || []).length === 1, "host shown twice");
+
+// Addresses written in ways the text check does not recognise (20.11 review):
+// the link stays, and the real host is printed next to it. Code points are
+// built, not pasted: fullwidth w and full stop, a zero width space.
+const fwW = cpt(0xff57);
+const fwDot = cpt(0xff0e);
+out = render(
+  '<p><a href="https://evil.example.com/">paypal.com</a></p>' +
+  `<p><a href="https://evil.example.com/">${fwW}${fwW}${fwW}${fwDot}paypal${fwDot}com</a></p>` +
+  `<p><a href="https://evil.example.com/">w${cpt(0x200b)}ww.paypal.com</a></p>` +
+  '<p><a href="https://evil.example.com/">https:/paypal.com</a></p>',
+  ""
+);
+console.log(`\n[26g] ${JSON.stringify(out)}`);
+expect("unrecognised look-alike texts each show the real host", out, (o) => (o.match(/\(evil\.example\.com\)/g) || []).length === 4, "expected 4 host notes");
+
+out = render(`<p><a href="https://example.com/">בקרו בwww.example.comבלבד, ${cpt(0x201c)}www.example.com${cpt(0x201d)} או www.example.com${cpt(0x2026)}</a></p>`, "");
+console.log(`\n[26h] ${out}`);
+expect("an address touching Hebrew letters, quotes or an ellipsis is still matched", out, has("<a "), "legitimate link refused");
+expect("…and, being more than the address, gets the host note", out, has("(example.com)"), "host note missing");
+
+// The note is left out only when the whole text IS the address (20.11 review:
+// containing the right host somewhere is not enough).
+out = render(
+  '<p><a href="https://evil.example.com/">paypal.com/login?next=https://evil.example.com</a></p>' +
+  '<p><a href="https://evil.example.com/">paypal.com https://evil.example.com</a></p>',
+  ""
+);
+console.log(`\n[26i] ${out}`);
+expect("right host hidden inside a misleading text still gets the note", out, (o) => (o.match(/\(evil\.example\.com\)/g) || []).length === 2, "expected 2 host notes");
+
+out = render(
+  '<p><a href="https://www.example.com/a?b=1">example.com/a?b=1</a> ' +
+  '<a href="https://example.com:8080/x">HTTPS://WWW.EXAMPLE.COM:8080/x.</a></p>',
+  ""
+);
+console.log(`\n[26j] ${out}`);
+expect("a text that is exactly the address needs no note", out, lacks("(example.com)"), "needless host note");
+
+out = render(
+  '<p><a href="https://example.com/a">ראו www.example.com/a, או https://EXAMPLE.com:443/b.</a></p>' +
+  `<p><a href="https://example.com/">https://${cpt(0x0430)}pple.example.com</a></p>` +
+  '<p><a href="https://evil.example.com/">https://paypal.com@evil.example.com</a></p>',
+  ""
+);
+console.log(`\n[26f] ${out}`);
+expect("matching addresses with path, port, case and trailing dot keep the link", out, (o) => (o.match(/<a /g) || []).length === 1, "expected exactly the first anchor");
+expect("…and it is the first one", out, has('href="https://example.com/a"'), "first anchor refused");
+
+out = render('<p><a href=" https://example.com/ok ">ok</a></p>', "");
+console.log(`\n[26b] ${out}`);
+expect("href with surrounding spaces is still a link", out, has("<a "), "anchor refused");
+
+out = render('<p><a href="mailto:office@example.com">mail</a> <a href="tel:+97281234567">call</a></p>', "");
+console.log(`\n[27] ${out}`);
+expect("mailto: and tel: still links", out, (o) => (o.match(/<a /g) || []).length === 2, "expected 2 anchors");
+
+out = render('<p><a href="https://example.com/a?b=1">ok</a></p>', "");
+console.log(`\n[28] ${out}`);
+expect("ordinary https href kept as written", out, has('href="https://example.com/a?b=1"'), "href changed or dropped");
 
 console.log("");
 console.log(`TOTAL: ${passed} passed, ${failed} failed`);

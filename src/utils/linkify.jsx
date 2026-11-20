@@ -1,6 +1,6 @@
 import React from "react";
 import { domToReact } from "html-react-parser";
-import { splitTextIntoSegments } from "./urlSafety";
+import { safeHttpUrl, splitTextIntoSegments } from "./urlSafety";
 import { highlightText } from "./highlight";
 import { stripBidiControls } from "./bidiText";
 
@@ -70,6 +70,77 @@ function isInsideAnchor(domNode) {
     node = node.parent;
   }
   return false;
+}
+
+// An author-written <a href> gets the same test as an address found in plain
+// text. DOMPurify only checks the scheme, so before this a body sent straight
+// to the API could carry `https://www.bank.co.il@evil.example.com` or a
+// Cyrillic look-alike host as a clickable link; safeHttpUrl() refuses both
+// (userinfo, written host != parsed host, bidi controls). mailto: and tel:
+// open the reader's own mail or phone app, not a page, so they stay.
+//
+// The link TEXT is checked too. In plain text label and href are the same
+// string by construction; an author-written link can say "www.paypal.com"
+// and point at another site whose address is itself clean. So: anything in
+// the text that starts like an address (http://, https:// or www.) must name
+// the href's host, "www." aside, or the link is refused. This is a wider net
+// than the plain-text scanner on purpose: "ב-www.paypal.com" is not
+// linkified there (no word boundary), but a reader still reads it as an
+// address. Any other text ("click here", "לפרטים", or an address written in
+// a way this does not recognise) keeps the link and gets the real host
+// printed next to it; see checkAuthoredAnchor().
+//
+// Same accepted cost as in urlSafety.js: a link to an internationalised
+// (e.g. Hebrew) domain is refused here too and shows as plain text.
+//
+// The raw href is kept when accepted (not safeHttpUrl's normalised form):
+// it names the same host, and rewriting it would add a trailing slash to
+// every link already on the board. Surrounding whitespace is ignored for the
+// check, as the browser ignores it when following the link.
+const bareHost = (host) => host.toLowerCase().replace(/^www\./, "").replace(/\.$/, "");
+const textOf = (node) => (node.type === "text" ? node.data || "" : (node.children || []).map(textOf).join(""));
+// The host as written in the text: after the scheme (or from "www."), up to
+// a path, query, fragment, port, space or bracket. "@" is kept in, so
+// "paypal.com@evil.com" never equals a real host.
+// Hebrew letters and punctuation (U+0590-U+05FF: geresh, gershayim, maqaf),
+// the ellipsis and curly quotes also end a host: "בקרו בwww.example.comבלבד"
+// names example.com.
+const ADDRESS_IN_TEXT = /(?:https?:\/\/|(?=www\.))([^\s/?#:<>"'()[\]{}\\֐-׿…‘’“”]+)/gi;
+// A text that is one address and nothing else: optional scheme, the host,
+// then optionally a path, query, fragment or port with no spaces.
+const WHOLE_ADDRESS = /^(?:https?:\/\/)?([^\s/?#:<>"'()[\]{}\\]+)(?:[/?#:]\S*)?$/i;
+const hostsWritten = (text) =>
+  [...text.matchAll(ADDRESS_IN_TEXT)].map((m) => bareHost(m[1].replace(/[.,;!]+$/, "")));
+
+// Returns null to refuse the link, or { shownHost } where shownHost is the
+// real host to print next to the link (null when the text already shows it).
+//
+// Why print the host: matching the text against the href can only catch
+// addresses it recognises, and the ways to write one that a person reads as
+// "paypal.com" do not end — no "www." at all, fullwidth letters, a zero-width
+// character inside "www", a middle dot for a dot, "https:/". Measured in the
+// 20.11.2026 review: every one of those kept a live link to another site. So
+// any link whose text does not spell out its own host gets that host next to
+// it, "(evil.example.com)", whatever the text says. Then the text can say
+// anything and the reader still sees where the link goes.
+function checkAuthoredAnchor(anchor) {
+  const href = anchor.attribs?.href;
+  if (typeof href !== "string") return null;
+  const value = href.trim();
+  if (/^(?:mailto|tel):/i.test(value)) return { shownHost: null };
+  const safe = safeHttpUrl(value);
+  if (safe === null) return null;
+  // Same text the reader sees: bidi controls are stripped on display.
+  const target = bareHost(new URL(safe).hostname);
+  const text = stripBidiControls(textOf(anchor)).trim();
+  if (hostsWritten(text).some((h) => h !== target)) return null;
+  // The note is left out only when the WHOLE text is the address itself.
+  // "Contains the right host somewhere" is not enough (20.11 review):
+  // "paypal.com/login?next=https://evil.com" contains evil.com but reads
+  // as paypal.com.
+  const whole = text.match(WHOLE_ADDRESS);
+  const textIsTheAddress = whole !== null && bareHost(whole[1].replace(/[.,;!]+$/, "")) === target;
+  return { shownHost: textIsTheAddress ? null : target };
 }
 
 // Editor-authored tags that get Tailwind styling, and the classes each one
@@ -154,6 +225,30 @@ export function messageBodyParserOptions(searchTerm = "") {
         }
         // Plain run: linkify (outer) with highlighting composed inside it.
         return <>{renderTextWithLinks(value, searchTerm)}</>;
+      }
+
+      if (domNode.name === "a" && !wrapped.has(domNode)) {
+        const verdict = checkAuthoredAnchor(domNode);
+        if (verdict === null) {
+          // Refused link: keep its text, drop the anchor and the link styling.
+          // The text nodes still have this <a> as their DOM parent, so the
+          // text branch above treats them as "inside an anchor" and does not
+          // turn them back into a link.
+          return <>{domToReact(domNode.children, options)}</>;
+        }
+        if (verdict.shownHost) {
+          // Same wrapper STYLED_TAGS gives every link, plus the real host.
+          // dir="ltr" keeps the parentheses around the host on a Hebrew page.
+          wrapped.add(domNode);
+          return (
+            <>
+              <span className={STYLED_TAGS.get("a")}>{domToReact([domNode], options)}</span>{" "}
+              <span className="text-xs text-gray-500" dir="ltr">
+                ({verdict.shownHost})
+              </span>
+            </>
+          );
+        }
       }
 
       const className = STYLED_TAGS.get(domNode.name);

@@ -243,3 +243,27 @@ test('readers see lists, quotes and strikethrough the way the author did', async
   await expect(card.locator('blockquote')).toHaveText('ציטוט');
   expect(await style('blockquote', 'borderRightWidth')).toBe('4px'); // inline-start in RTL
 });
+
+test('a body sent straight to the API cannot cover the screen or link to a disguised host', async ({ page }) => {
+  // Not something the editor writes: a body posted to the API directly. The
+  // app ships Tailwind, so a kept class attribute is a full-screen overlay.
+  await mockApi(page, {
+    listText:
+      '<p class="fixed inset-0 z-50 bg-white" aria-label="הודעה רשמית" data-testid="header-greeting">התחברו מחדש</p>' +
+      '<p><a href="https://www.paypal.com@evil.example.com/login">PayPal</a> ' +
+      '<a href="https://evil.example.com/login">https://www.paypal.com</a> ' +
+      '<a href="https://example.com/ok">תקין</a></p>',
+  });
+  await page.goto('/');
+  const card = page.getByTestId('message-card');
+  await expect(card).toHaveCount(1);
+  await expect(card.getByText('התחברו מחדש')).toBeVisible();
+
+  expect(await card.locator('[class*="fixed"]').count()).toBe(0);
+  expect(await card.locator('p').first().getAttribute('class')).toBeNull();
+  await expect(card.locator('[aria-label="הודעה רשמית"], [data-testid="header-greeting"]')).toHaveCount(0);
+  await expect(card.locator('a[href*="evil.example.com"]')).toHaveCount(0);
+  // Refused links stay as plain text in the same paragraph.
+  await expect(card).toContainText('PayPal https://www.paypal.com תקין (example.com)');
+  await expect(card.locator('a[href="https://example.com/ok"]')).toHaveText('תקין');
+});
