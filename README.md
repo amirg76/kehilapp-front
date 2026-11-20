@@ -45,7 +45,7 @@ security work, the tests and the CI below are from that pass.
 ## Stack
 
 React 18 + Vite · Tailwind CSS · Redux Toolkit · React Query · React Router ·
-Quill (rich text) · DOMPurify · Playwright + axe-core
+Tiptap (rich text) · DOMPurify · Playwright + axe-core
 
 ## Running it
 

@@ -48,17 +48,14 @@ test('sign in, post a message, and see it @flow', async ({ page }) => {
   // button becomes enabled -- the previous version of this test never filled
   // either, so the submit click below always no-opped on a disabled button.
   await dialog.getByRole('combobox').selectOption({ index: 1 });
-  await dialog.getByRole('textbox').fill(`E2E ${Date.now()}`);
+  // The body editor (Tiptap, 20.11.2026) is a textbox too, with its own
+  // accessible name, so the title is picked by its placeholder.
+  await dialog.getByPlaceholder('* כותרת').fill(`E2E ${Date.now()}`);
 
-  // The message body is a Quill rich-text editor (react-quill): its
-  // `.ql-editor` region is `contenteditable`, not a real <textarea>, and
-  // Quill does not give it an ARIA role, so `getByRole('textbox')` never
-  // matches it -- it only ever matched the title field above (the sole real
-  // textbox in the form). That's a second, independent test defect: even
-  // with the compose button reachable, the old locator could never have
-  // filled the real message body. Playwright's `.fill()` does support
-  // `contenteditable` elements directly.
-  await dialog.locator('.ql-editor').fill(body);
+  // The message body is a contenteditable with role="textbox" and the
+  // accessible name of its placeholder. Playwright's `.fill()` supports
+  // contenteditable elements directly.
+  await dialog.getByRole('textbox', { name: 'כתיבת הודעה…' }).fill(body);
 
   // The "שלח" (send) button shares a data-testid pattern with the compose
   // button above for the same reason: a broad name regex like

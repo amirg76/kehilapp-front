@@ -9,7 +9,10 @@ import { messageBodyParserOptions } from "@utils/linkify";
 // `javascript:` link (verified to survive html-react-parser + React) that runs
 // on click and — since the auth token lives in localStorage — steals it. Every
 // body is scrubbed through DOMPurify before any styling or parsing touches it.
-const ALLOWED_TAGS = ["a", "strong", "em", "u", "b", "i", "br", "p", "ul", "ol", "li", "h1", "h2", "h3", "span"];
+// "s" and "blockquote" came with the Tiptap editor (strikethrough and quote
+// buttons, 20.11.2026). Like every other tag here they can carry `class`
+// (ALLOWED_ATTR below), which the editor never writes; that is pre-existing.
+const ALLOWED_TAGS = ["a", "strong", "em", "u", "s", "b", "i", "br", "p", "ul", "ol", "li", "h1", "h2", "h3", "blockquote", "span"];
 const sanitize = (dirty) =>
   DOMPurify.sanitize(dirty ?? "", {
     // Allow only the formatting the editor actually produces.
@@ -60,7 +63,7 @@ const TextPreview = ({
   return (
     <section className="font-light mb-[15px] text-slate-700 dark:text-slate-200">
       <div
-        className={isLongTxtShown ? expandedClasses : baseClasses}
+        className={`message-body ${isLongTxtShown ? expandedClasses : baseClasses}`}
         ref={containerRef}
       >
         {processHtmlContent()}

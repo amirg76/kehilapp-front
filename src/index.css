@@ -18,9 +18,46 @@
   }
 }
 
-.ql-editor {
-  direction: rtl;
-  text-align: right;
+/* Message body, shared by the editor and the display so what the author sees
+   is what readers see. Tailwind's base layer removes list bullets and quote
+   spacing; these bring them back for message bodies only. */
+.message-body ul {
+  list-style: disc;
+  padding-inline-start: 1.5rem;
+}
+.message-body ol {
+  list-style: decimal;
+  padding-inline-start: 1.5rem;
+}
+.message-body blockquote {
+  border-inline-start: 4px solid #cbd5e1;
+  padding-inline-start: 0.75rem;
+  margin-block: 0.25rem;
+  color: #475569;
+}
+.message-body s {
+  text-decoration: line-through;
+}
+
+/* Editor only: the display styles headings and links through linkify.jsx
+   (STYLED_TAGS); these match those sizes inside the editor. */
+.message-editor-content h2 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 600;
+}
+.message-editor-content h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+.message-editor-content a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+.message-editor-content {
+  overflow-y: auto;
+  word-break: break-word;
 }
 .text-preview {
   display: -webkit-box;
