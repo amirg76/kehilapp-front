@@ -111,9 +111,12 @@ const App = () => {
   // The auth screens (login/register/verify) render full-bleed without the app
   // chrome, matching the existing login layout.
   const hideHeaderOn = [LOGIN, REGISTER, VERIFY_EMAIL];
+  // w-full, not w-screen: 100vw includes a classic (Windows) scrollbar, so every
+  // page with a vertical scrollbar was 15px too wide and scrolled sideways
+  // (measured on the live site, 22.11.2026; e2e/desktopScroll.spec.js).
   return (
     <AuthCtaBannerProvider>
-      <div className="w-screen flex flex-col bg-white dark:bg-slate-900 min-h-screen">
+      <div className="w-full flex flex-col bg-white dark:bg-slate-900 min-h-screen">
       {/* The board is public (anonymous visitors see the public tier), so the
           header shows for everyone; there is no redirect-to-login gate. */}
       {!hideHeaderOn.includes(pathname) && <Header />}

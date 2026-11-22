@@ -214,15 +214,18 @@ const RegisterForm = () => {
   }
 
   // --- Registration form -----------------------------------------------------
+  // The md: sizes keep the form inside a desktop window: it was 991px tall and
+  // scrolled on a 1080p screen (22.11.2026; e2e/desktopScroll.spec.js). The
+  // phone layout is unchanged.
   return (
-    <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 px-4 md:w-1/2">
-      <img className="w-[11em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
+    <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 md:py-6 px-4 md:w-1/2">
+      <img className="w-[11em] md:w-[8em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
       <form
-        className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg"
+        className="w-full max-w-md px-8 py-10 md:py-7 bg-white dark:bg-slate-800 rounded-2xl shadow-lg"
         onSubmit={handleSubmit}
       >
         <h1 className="mb-3 dark:text-slate-100">ברוכים הבאים!</h1>
-        <h2 className="text-xl font-bold mb-6 dark:text-slate-100">
+        <h2 className="text-xl font-bold mb-6 md:mb-4 dark:text-slate-100">
           הרשמה לקהילה
         </h2>
 
@@ -312,15 +315,16 @@ const RegisterForm = () => {
         )}
 
         {/* Mirror of the login screen's cross-link — a real action, not body copy. */}
-        <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-600">
-          <p className="mb-3 text-center text-sm text-slate-600 dark:text-slate-300">
+        {/* One row from md: up (the text beside a smaller button), to save height. */}
+        <div className="mt-8 pt-6 md:mt-5 md:pt-4 md:flex md:items-center md:justify-center md:gap-4 border-t border-slate-200 dark:border-slate-600">
+          <p className="mb-3 md:mb-0 text-center text-sm text-slate-600 dark:text-slate-300">
             כבר רשום?
           </p>
           <Link
             to={LOGIN}
             data-testid="link-to-login"
-            className="flex w-full items-center justify-center rounded-md border-2 border-solid
-                       border-primary-700 py-3 text-lg font-medium text-primary-700 transition-colors
+            className="flex w-full md:w-auto items-center justify-center rounded-md border-2 border-solid
+                       border-primary-700 py-3 md:py-2 md:px-6 text-lg md:text-base font-medium text-primary-700 transition-colors
                        hover:bg-primary-700 hover:text-white
                        focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500
                        focus-visible:ring-offset-2 focus-visible:ring-offset-white
