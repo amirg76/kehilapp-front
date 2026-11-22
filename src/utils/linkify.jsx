@@ -24,7 +24,9 @@ import { stripBidiControls } from "./bidiText";
 //    still work.
 
 // Matches the styling TextPreview already gives to editor-authored links.
-const LINK_CLASS = "underline text-blue-500 break-words";
+// Same colours as an authored link (STYLED_TAGS below): blue-500 was 3.7:1
+// on white and 3.98:1 on the dark card.
+const LINK_CLASS = "underline text-blue-600 dark:text-blue-300 break-words";
 
 export function renderTextWithLinks(text, searchTerm = "") {
   const segments = splitTextIntoSegments(text);
@@ -164,11 +166,14 @@ function checkAuthoredAnchor(anchor) {
 // `new Map().get("constructor")` is undefined. DOMPurify's ALLOWED_TAGS makes
 // that unreachable today, but the point of this refactor is not to rest on it.
 const STYLED_TAGS = new Map([
-  ["a", "underline text-blue-500"],
+  // blue-600 / blue-300: blue-500 read 3.7:1 on white and about 4:1 on the
+  // dark card, both under 4.5:1. Headings are kept under the card title
+  // (text-xl): an h2 at text-3xl used to be bigger than the message's name.
+  ["a", "underline text-blue-600 dark:text-blue-300"],
   ["strong", "font-bold"],
-  ["h1", "text-4xl font-semibold"],
-  ["h2", "text-3xl font-semibold"],
-  ["h3", "text-2xl font-semibold"],
+  ["h1", "text-xl font-semibold"],
+  ["h2", "text-lg font-semibold"],
+  ["h3", "text-base font-semibold"],
 ]);
 
 // Options for html-react-parser over an ALREADY-SANITISED message body. We
@@ -243,7 +248,7 @@ export function messageBodyParserOptions(searchTerm = "") {
           return (
             <>
               <span className={STYLED_TAGS.get("a")}>{domToReact([domNode], options)}</span>{" "}
-              <span className="text-xs text-gray-500" dir="ltr">
+              <span className="text-xs text-gray-500 dark:text-slate-400" dir="ltr">
                 ({verdict.shownHost})
               </span>
             </>

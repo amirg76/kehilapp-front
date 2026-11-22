@@ -142,6 +142,8 @@ const RegisterForm = () => {
     mutate();
   };
 
+  // The inputs use dark:!bg-slate-800, the card's colour: the floating label
+  // sits half on the card and half on the input, and its backing must match.
   const labelStyle =
     "relative w-fit bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 top-[10px] right-[10px] px-2";
 
@@ -158,7 +160,7 @@ const RegisterForm = () => {
     const sendFailed = !emailDelivered && !demoVerifyLink;
     return (
       <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 px-4 md:w-1/2">
-        <img className="w-[11em] mb-2" src={logoKisufim} alt="כיסופים" />
+        <img className="w-[11em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
         <div className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg text-center">
           <div className="text-5xl mb-4">{sendFailed ? "⚠️" : "📧"}</div>
           <h1 className="mb-3 dark:text-slate-100">
@@ -214,7 +216,7 @@ const RegisterForm = () => {
   // --- Registration form -----------------------------------------------------
   return (
     <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 px-4 md:w-1/2">
-      <img className="w-[11em] mb-2" src={logoKisufim} alt="כיסופים" />
+      <img className="w-[11em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
       <form
         className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg"
         onSubmit={handleSubmit}
@@ -243,11 +245,14 @@ const RegisterForm = () => {
           value={credentials.name}
           onChange={handleChange}
           maxLength={120}
-          inputStyle="py-3 dark:bg-slate-700 dark:text-slate-100"
+          inputStyle="py-3 dark:!bg-slate-800 dark:text-slate-100"
           containerStyle="flex flex-col"
           labelStyle={labelStyle}
           placeholder="איך לקרוא לך?"
         />
+        {/* Same gap as under the other fields, which keep a line for their
+            error message; the name has no rule of its own to report. */}
+        <div className="h-[20px]" aria-hidden="true" />
 
         <InputCmp
           label="אימייל"
@@ -255,7 +260,7 @@ const RegisterForm = () => {
           value={credentials.email}
           onChange={handleChange}
           onBlur={handleBlur}
-          inputStyle="py-3 dark:bg-slate-700 dark:text-slate-100"
+          inputStyle="py-3 dark:!bg-slate-800 dark:text-slate-100"
           containerStyle="flex flex-col"
           labelStyle={labelStyle}
         />
@@ -268,7 +273,7 @@ const RegisterForm = () => {
           value={credentials.password}
           onChange={handleChange}
           onBlur={handleBlur}
-          inputStyle="py-3 dark:bg-slate-700 dark:text-slate-100"
+          inputStyle="py-3 dark:!bg-slate-800 dark:text-slate-100"
           containerStyle="flex flex-col"
           labelStyle={labelStyle}
         />
@@ -281,7 +286,7 @@ const RegisterForm = () => {
           value={credentials.confirmPassword}
           onChange={handleChange}
           onBlur={handleBlur}
-          inputStyle="py-3 dark:bg-slate-700 dark:text-slate-100"
+          inputStyle="py-3 dark:!bg-slate-800 dark:text-slate-100"
           containerStyle="flex flex-col"
           labelStyle={labelStyle}
         />
@@ -297,7 +302,14 @@ const RegisterForm = () => {
           isDisabled={isButtonDisabled}
           onClick={handleSubmit}
           style="w-full py-3 h-[52px]"
+          aria-describedby={isButtonDisabled && !isLoading ? "register-submit-hint" : undefined}
         />
+        {/* A disabled button says nothing about why. */}
+        {isButtonDisabled && !isLoading && (
+          <p id="register-submit-hint" className="mt-2 text-center text-sm text-slate-600 dark:text-slate-300">
+            הכפתור יופעל אחרי שכל השדות ימולאו כראוי.
+          </p>
+        )}
 
         {/* Mirror of the login screen's cross-link — a real action, not body copy. */}
         <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-600">

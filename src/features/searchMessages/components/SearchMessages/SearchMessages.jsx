@@ -42,18 +42,21 @@ const SearchMessages = () => {
     dispatch(messageActions.setSearchTerm(searchTerm));
   }, [searchTerm, dispatch]);
 
+  // z-[45]: above the sticky header (z-40, Header.jsx), whose bottom edge this
+  // box overlaps by design; below the message dialog (z-50).
   return (
     <div
       className={`${
-        !isModalOpen && "z-10"
-      } flex items-center w-[90%] sm:w-[320px] border border-gray-300 rounded-xl bg-white sticky top-[80px] sm:top-[75px] mt-[-22px] mb-5 mx-auto shadow-md `}
+        !isModalOpen && "z-[45]"
+      } flex items-center w-[90%] sm:w-[320px] border border-gray-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-700 sticky top-[80px] sm:top-[75px] mt-[-22px] mb-5 mx-auto shadow-md `}
     >
       {/* <div className="flex items-center w-[90%] sm:w-[320px] border border-gray-300 rounded-xl bg-white sticky top-[80px] sm:top-[75px] mt-[-22px] mb-5 mx-auto z-10 shadow-md"> */}
-      <FaSearch className="mr-4 text-gray-400" />
+      <FaSearch aria-hidden="true" className="mr-4 text-gray-500 dark:text-slate-300" />
       <input
         type="text"
         placeholder="חיפוש…"
-        className="px-4 py-2 focus:outline-none w-full rounded-xl"
+        aria-label="חיפוש הודעות"
+        className="px-4 py-2 focus:outline-none w-full rounded-xl bg-transparent text-gray-900 placeholder-gray-500 dark:text-slate-100 dark:placeholder-slate-400"
         value={searchTerm}
         onChange={(ev) => setSearchTerm(ev.target.value)}
       />

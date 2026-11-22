@@ -99,7 +99,7 @@ const Sidebar = ({ classes, onCloseNavbar, open, variant = "page", ...rest }) =>
           toggleModal={toggleModal}
           categories={fetchedCategories}
         />
-        <hr className="mt-5" />
+        <hr className="mt-5 border-slate-200 dark:border-white/10" />
       </nav>
     </aside>
   );

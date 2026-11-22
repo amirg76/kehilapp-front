@@ -34,13 +34,15 @@ const ToolButton = ({ label, shortcut, icon: Icon, onClick, active, disabled = f
     className={`flex h-9 w-9 items-center justify-center rounded-md text-xl transition-colors
       focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-700
       disabled:cursor-not-allowed disabled:opacity-40
-      ${active ? "bg-primary-100 text-primary-800" : "text-gray-700 hover:bg-gray-100"}`}
+      ${active
+        ? "bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-100"
+        : "text-gray-700 hover:bg-gray-100 dark:text-slate-200 dark:hover:bg-slate-600"}`}
   >
     <Icon aria-hidden="true" className={mirror ? "-scale-x-100" : undefined} />
   </button>
 );
 
-const Divider = () => <span aria-hidden="true" className="mx-1 h-6 w-px self-center bg-gray-300" />;
+const Divider = () => <span aria-hidden="true" className="mx-1 h-6 w-px self-center bg-gray-300 dark:bg-slate-500" />;
 
 // Inline panel for adding, editing or removing a link. Replaces a browser
 // prompt(): it can show an error, keeps the author's selection, and works the
@@ -74,8 +76,8 @@ const LinkPanel = ({ editor, initialHref, onClose }) => {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 bg-gray-50 px-2 py-2">
-      <label htmlFor="message-editor-link" className="text-sm text-gray-700">
+    <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 bg-gray-50 px-2 py-2 dark:border-slate-600 dark:bg-slate-800">
+      <label htmlFor="message-editor-link" className="text-sm text-gray-700 dark:text-slate-200">
         כתובת הקישור
       </label>
       <input
@@ -105,13 +107,13 @@ const LinkPanel = ({ editor, initialHref, onClose }) => {
         }}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? "message-editor-link-error" : undefined}
-        className="min-w-0 flex-1 rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-primary-700 focus:outline-none"
+        className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:border-primary-700 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:focus:border-primary-400"
       />
       <button type="button" onClick={apply} className="rounded-md bg-primary-700 px-3 py-1 text-sm text-white hover:bg-primary-800">
         {editor.isActive("link") ? "עדכון" : "הוספה"}
       </button>
       {editor.isActive("link") && (
-        <button type="button" onClick={remove} className="rounded-md px-3 py-1 text-sm text-red-700 hover:bg-red-50">
+        <button type="button" onClick={remove} className="rounded-md px-3 py-1 text-sm text-red-700 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-900/30">
           הסרת קישור
         </button>
       )}
@@ -121,12 +123,12 @@ const LinkPanel = ({ editor, initialHref, onClose }) => {
           onClose();
           editor.commands.focus();
         }}
-        className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
+        className="rounded-md px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 dark:text-slate-200 dark:hover:bg-slate-600"
       >
         ביטול
       </button>
       {error && (
-        <p id="message-editor-link-error" role="alert" className="w-full text-sm text-red-700">
+        <p id="message-editor-link-error" role="alert" className="w-full text-sm text-red-700 dark:text-red-300">
           {error}
         </p>
       )}
@@ -160,7 +162,7 @@ const EditorToolbar = ({ editor, linkOpen, setLinkOpen }) => {
 
   return (
     <>
-      <div role="toolbar" aria-label="עיצוב טקסט" className="flex flex-wrap items-center gap-0.5 border-b border-gray-200 px-1 py-1">
+      <div role="toolbar" aria-label="עיצוב טקסט" className="flex flex-wrap items-center gap-0.5 border-b border-gray-200 px-1 py-1 dark:border-slate-600">
         <ToolButton label="מודגש" shortcut="Ctrl+B" icon={MdFormatBold} active={s.bold} onClick={run((c) => c.toggleBold())} />
         <ToolButton label="נטוי" shortcut="Ctrl+I" icon={MdFormatItalic} active={s.italic} onClick={run((c) => c.toggleItalic())} />
         <ToolButton label="קו תחתון" shortcut="Ctrl+U" icon={MdFormatUnderlined} active={s.underline} onClick={run((c) => c.toggleUnderline())} />

@@ -22,8 +22,8 @@ const DocumentPreview = ({ fileUrl, fileName, children, style }) => {
     shadow-0 shadow-md shadow-2 shadow-opacity-10] border-solid border border-black border-opacity-[0.1]
     ${style}`} onClick={handleShowFile}>
       {children}
-      <div className="w-full px-3 bg-[#78777778] rounded-b-[20px] flex items-center">
-        <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{ color: "rgb(31, 41, 55)" }} className="ml-2" />
+      <div className="w-full px-3 bg-[#78777778] dark:bg-black/40 rounded-b-[20px] flex items-center text-gray-800 dark:text-slate-100">
+        <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2" />
         <h6 className="leading-[40px] truncate">{fileName}</h6>
       </div>
     </div>

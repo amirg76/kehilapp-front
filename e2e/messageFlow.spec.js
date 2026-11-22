@@ -49,8 +49,8 @@ test('sign in, post a message, and see it @flow', async ({ page }) => {
   // either, so the submit click below always no-opped on a disabled button.
   await dialog.getByRole('combobox').selectOption({ index: 1 });
   // The body editor (Tiptap, 20.11.2026) is a textbox too, with its own
-  // accessible name, so the title is picked by its placeholder.
-  await dialog.getByPlaceholder('* כותרת').fill(`E2E ${Date.now()}`);
+  // accessible name, so the title is picked by its visible label.
+  await dialog.getByLabel('כותרת *').fill(`E2E ${Date.now()}`);
 
   // The message body is a contenteditable with role="textbox" and the
   // accessible name of its placeholder. Playwright's `.fill()` supports

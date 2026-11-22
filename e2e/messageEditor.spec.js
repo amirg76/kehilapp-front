@@ -31,8 +31,8 @@ const baseMessage = (text) => ({
   visibility: 'public',
 });
 
-async function mockApi(page, { listText = '<p>גוף</p>', postStatus = 201 } = {}) {
-  const user = { id: 'u'.repeat(24), name: 'בודק', email: 'tester@example.com', role: 'member', approved: true };
+async function mockApi(page, { listText = '<p>גוף</p>', postStatus = 201, role = 'member' } = {}) {
+  const user = { id: 'u'.repeat(24), name: 'בודק', email: 'tester@example.com', role, approved: true };
   const posts = [];
   await page.route('**/api/**', (route) => {
     const req = route.request();
@@ -104,7 +104,7 @@ test('an open link panel holding an address without http does not block sending'
   const posts = await mockApi(page);
   const dialog = await openComposer(page);
   await dialog.getByRole('combobox').selectOption({ index: 1 });
-  await dialog.getByPlaceholder('* כותרת').fill('פאנל פתוח');
+  await dialog.getByLabel('כותרת *').fill('פאנל פתוח');
   await editorOf(dialog).click();
   await page.keyboard.type('גוף');
   await dialog.getByRole('button', { name: 'קישור' }).click();
@@ -118,7 +118,7 @@ test('a failed send keeps the body, and the retry sends the same body', async ({
   const posts = await mockApi(page, { postStatus: (n) => (n === 1 ? 500 : 201) });
   const dialog = await openComposer(page);
   await dialog.getByRole('combobox').selectOption({ index: 1 });
-  await dialog.getByPlaceholder('* כותרת').fill('ניסיון שני');
+  await dialog.getByLabel('כותרת *').fill('ניסיון שני');
   await editorOf(dialog).click();
   await page.keyboard.type('טקסט שחייב לשרוד');
   await page.getByTestId('message-submit-button').click();
@@ -136,7 +136,7 @@ test('formatting, links and paste produce only display-safe HTML, and the title 
   const dialog = await openComposer(page);
 
   await dialog.getByRole('combobox').selectOption({ index: 1 });
-  await dialog.getByPlaceholder('* כותרת').fill('כותרת בדיקה');
+  await dialog.getByLabel('כותרת *').fill('כותרת בדיקה');
 
   const editor = editorOf(dialog);
   await editor.click();
@@ -187,7 +187,7 @@ test('formatting, links and paste produce only display-safe HTML, and the title 
   await expect(linkInput).toHaveCount(0);
 
   // The title was not wiped by typing in the body.
-  await expect(dialog.getByPlaceholder('* כותרת')).toHaveValue('כותרת בדיקה');
+  await expect(dialog.getByLabel('כותרת *')).toHaveValue('כותרת בדיקה');
 
   await page.getByTestId('message-submit-button').click();
   await expect.poll(() => posts.length).toBe(1);
@@ -215,7 +215,7 @@ test('an empty body is sent as an empty string, not an empty paragraph', async (
   const posts = await mockApi(page);
   const dialog = await openComposer(page);
   await dialog.getByRole('combobox').selectOption({ index: 1 });
-  await dialog.getByPlaceholder('* כותרת').fill('רק כותרת');
+  await dialog.getByLabel('כותרת *').fill('רק כותרת');
   const editor = editorOf(dialog);
   await editor.click();
   await page.keyboard.type('x');
@@ -266,4 +266,149 @@ test('a body sent straight to the API cannot cover the screen or link to a disgu
   // Refused links stay as plain text in the same paragraph.
   await expect(card).toContainText('PayPal https://www.paypal.com תקין (example.com)');
   await expect(card.locator('a[href="https://example.com/ok"]')).toHaveText('תקין');
+});
+
+// Relative luminance (WCAG) of an element's computed colour property.
+const luminance = (locator, prop = 'backgroundColor') =>
+  locator.evaluate((el, p) => {
+    const [r, g, b, a = 1] = getComputedStyle(el)[p].match(/[\d.]+/g).map(Number);
+    // A see-through colour is not "dark" or "light"; fail it outright.
+    if (a < 0.9) return NaN;
+    const lin = (c) => ((c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  }, prop);
+
+for (const theme of ['light', 'dark']) {
+  test(`in ${theme} mode the composer panel and its fields share one theme`, async ({ page }) => {
+    // 22.11.2026: in dark mode the panel stayed light grey while the title and
+    // file inputs turned dark inside it, and the title counter was unreadable.
+    await page.addInitScript((t) => localStorage.setItem('theme', t), theme);
+    await mockApi(page);
+    const dialog = await openComposer(page);
+    const parts = {
+      panel: dialog.locator('form').locator('xpath=..'),
+      category: dialog.getByRole('combobox'),
+      title: dialog.getByLabel('כותרת *'),
+      editor: dialog.locator('.message-editor'),
+      file: dialog.getByText('צירוף קובץ'),
+    };
+    for (const [name, el] of Object.entries(parts)) {
+      const l = await luminance(el);
+      if (theme === 'dark') expect(l, `${name} background`).toBeLessThan(0.1);
+      else expect(l, `${name} background`).toBeGreaterThan(0.6);
+    }
+    // The title counter sits inside the title input: its text must sit on the
+    // other side of the scale from the input's background.
+    const text = await luminance(dialog.getByText('25 / 0'), 'color');
+    if (theme === 'dark') expect(text).toBeGreaterThan(0.4);
+    else expect(text).toBeLessThan(0.2);
+  });
+}
+
+test('the file picker is in Hebrew and names the chosen file', async ({ page }) => {
+  await mockApi(page);
+  const dialog = await openComposer(page);
+  await expect(dialog.getByText('צירוף קובץ')).toBeVisible();
+  await expect(dialog.getByText('לא נבחר קובץ')).toBeVisible();
+  // The native input is still the control, named by the visible label.
+  const input = dialog.getByLabel('צירוף קובץ');
+  await input.setInputFiles({ name: 'פרוטוקול.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4') });
+  await expect(dialog.getByText('פרוטוקול.pdf')).toBeVisible();
+  await expect(dialog.getByText('לא נבחר קובץ')).toHaveCount(0);
+});
+
+test('a disabled send button says what is still missing', async ({ page }) => {
+  await mockApi(page);
+  const dialog = await openComposer(page);
+  const send = page.getByTestId('message-submit-button');
+  const hint = dialog.locator('#message-submit-hint');
+  await expect(send).toBeDisabled();
+  await expect(hint).toHaveText('כדי לשלוח צריך לבחור קטגוריה ולכתוב כותרת (2–25 תווים).');
+  await expect(send).toHaveAttribute('aria-describedby', 'message-submit-hint');
+  await dialog.getByRole('combobox').selectOption({ index: 1 });
+  await expect(hint).toHaveText('כדי לשלוח צריך לכתוב כותרת (2–25 תווים).');
+  await dialog.getByLabel('כותרת *').fill('כותרת');
+  await expect(send).toBeEnabled();
+  await expect(hint).toHaveCount(0);
+});
+
+test('a category tag draws its hex colour and a readable name, in dark mode too', async ({ page }) => {
+  // 22.11.2026: the API stores "#D97706"; the tag only knew colour names, so
+  // the bubble had no fill and the name was dark text on the dark card.
+  await page.addInitScript(() => localStorage.setItem('theme', 'dark'));
+  await mockApi(page);
+  // The card takes its category from the category list, by categoryId.
+  // Registered after mockApi, so it answers first.
+  const category = { ...CATEGORY, title: 'זכויות', categoryColor: '#D97706' };
+  await page.route('**/api/categories**', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify(new URL(route.request().url()).pathname.endsWith('/categories') ? [category] : category) }));
+  await page.goto('/');
+  const tag = page.getByTestId('message-card').getByRole('heading', { level: 6, name: 'זכויות' });
+  await expect(tag).toBeVisible();
+  const fill = await tag.locator('xpath=../following-sibling::*[local-name()="svg"]/*[local-name()="path"]')
+    .evaluate((el) => getComputedStyle(el).fill);
+  expect(fill).toBe('rgb(217, 119, 6)');
+  // Amber is light enough that the name goes dark: contrast at least 4.5:1.
+  const ratio = await tag.evaluate((el) => {
+    const lum = (s) => {
+      const [r, g, b] = s.match(/[\d.]+/g).slice(0, 3).map((c) => {
+        c /= 255;
+        return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const a = lum(getComputedStyle(el).color);
+    const b = lum('rgb(217, 119, 6)');
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  });
+  expect(ratio).toBeGreaterThanOrEqual(4.5);
+});
+
+test('the phone menu opens above the page title', async ({ page }) => {
+  // 22.11.2026: the hero title (z-10, later in the page) painted over the
+  // open drawer, which lives inside the header (was z-10 too).
+  await page.setViewportSize({ width: 390, height: 844 });
+  await mockApi(page);
+  await page.goto('/');
+  const heading = page.getByRole('heading', { level: 1 });
+  await expect(heading).toBeVisible();
+  await page.getByRole('button', { name: 'פתח תפריט קטגוריות' }).click();
+  const drawer = page.locator('header aside');
+  await expect(drawer).toBeVisible();
+  // Wait for the slide to finish: the drawer's left edge reaches 0.
+  await expect.poll(async () => Math.round((await drawer.boundingBox()).x)).toBe(0);
+  const box = await heading.boundingBox();
+  // A point on the title that the open drawer covers (it spans the left side).
+  const x = Math.min(box.x + box.width - 10, 280);
+  const y = box.y + box.height / 2;
+  const onTop = await page.evaluate(([px, py]) => Boolean(document.elementFromPoint(px, py)?.closest('header aside')), [x, y]);
+  expect(onTop, 'the drawer, not the hero title, is on top').toBe(true);
+});
+
+test('the search box stays above the sticky header when the page scrolls', async ({ page }) => {
+  // The header became z-40 for the phone menu; the search box overlaps its
+  // bottom edge by design and had been drawn over it only by DOM order.
+  await mockApi(page, { listText: '<p>' + 'שורה '.repeat(400) + '</p>' });
+  await page.goto('/');
+  const search = page.getByRole('textbox', { name: 'חיפוש הודעות' });
+  await expect(search).toBeVisible();
+  await page.mouse.wheel(0, 800);
+  await expect.poll(async () => Math.round((await search.boundingBox()).y)).toBeLessThan(100);
+  const box = await search.boundingBox();
+  // Its top edge, where it overlaps the header.
+  const hit = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('input, header')?.tagName, [box.x + box.width / 2, box.y + 4]);
+  expect(hit).toBe('INPUT');
+});
+
+test('the message list does not scroll sideways on a phone', async ({ page }) => {
+  // 22.11.2026: the category bubble hung 17px off the card, 8px past the edge
+  // of a 390px screen, and the whole page scrolled sideways (RTL: to the left).
+  await page.setViewportSize({ width: 390, height: 844 });
+  // An admin: the extra delete button is what pushes the bubble out that far.
+  await mockApi(page, { role: 'admin' });
+  await page.goto('/');
+  await expect(page.getByTestId('message-card')).toHaveCount(1);
+  const widths = await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth]);
+  expect(widths[0]).toBe(widths[1]);
 });

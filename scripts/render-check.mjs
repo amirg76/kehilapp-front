@@ -109,8 +109,8 @@ expect("trailing period left outside the link", out, has("</a>."), "period swall
 
 out = render('<p><a href="https://example.com">link</a></p>', "");
 console.log(`\n[9] ${out}`);
-expect("anchor wrapped in styled span", out, has('<span class="underline text-blue-500">'), "wrapper span missing");
-expect("…with the anchor still inside it", out, has('<span class="underline text-blue-500"><a '), "anchor not inside the wrapper");
+expect("anchor wrapped in styled span", out, has('<span class="underline text-blue-600 dark:text-blue-300">'), "wrapper span missing");
+expect("…with the anchor still inside it", out, has('<span class="underline text-blue-600 dark:text-blue-300"><a '), "anchor not inside the wrapper");
 expect("…and the href untouched", out, has('href="https://example.com"'), "href changed");
 
 out = render("<p><strong>bold</strong></p>", "");
@@ -119,9 +119,9 @@ expect("strong wrapped in font-bold span", out, has('<span class="font-bold"><st
 
 out = render("<h1>one</h1><h2>two</h2><h3>three</h3>", "");
 console.log(`\n[11] ${out}`);
-expect("h1 styled", out, has('<span class="text-4xl font-semibold"><h1>one</h1></span>'), "h1 styling missing");
-expect("h2 styled", out, has('<span class="text-3xl font-semibold"><h2>two</h2></span>'), "h2 styling missing");
-expect("h3 styled", out, has('<span class="text-2xl font-semibold"><h3>three</h3></span>'), "h3 styling missing");
+expect("h1 styled", out, has('<span class="text-xl font-semibold"><h1>one</h1></span>'), "h1 styling missing");
+expect("h2 styled", out, has('<span class="text-lg font-semibold"><h2>two</h2></span>'), "h2 styling missing");
+expect("h3 styled", out, has('<span class="text-base font-semibold"><h3>three</h3></span>'), "h3 styling missing");
 
 // The wrapper must not swallow the element's own class (the old chain kept it,
 // because it wrapped the matched markup verbatim). render() skips DOMPurify,
@@ -143,7 +143,7 @@ out = render("<h2>see https://example.com now</h2>", "");
 console.log(`\n[14] ${out}`);
 expect("URL inside a styled heading is linkified once", out, (o) => (o.match(/<a /g) || []).length === 1, "expected exactly 1 anchor");
 expect("…and that anchor carries rel", out, has('rel="noopener noreferrer"'), "rel missing");
-expect("…and the heading styling is still there", out, has('<span class="text-3xl font-semibold">'), "h2 styling missing");
+expect("…and the heading styling is still there", out, has('<span class="text-lg font-semibold">'), "h2 styling missing");
 
 // Unstyled allowed tags must pass through untouched — no stray wrappers.
 out = render("<p><em>x</em><u>y</u></p>", "");
@@ -155,7 +155,7 @@ expect("unstyled tags get no wrapper", out, (o) => o === "<p><em>x</em><u>y</u><
 out = render('<h3><strong>t</strong></h3>', "");
 console.log(`\n[16] ${out}`);
 expect("nested styled tags wrapped once each", out, (o) => (o.match(/<span /g) || []).length === 2, "expected exactly 2 wrapper spans");
-expect("…in the right order", out, has('<span class="text-2xl font-semibold"><h3><span class="font-bold"><strong>t</strong></span></h3></span>'), "nesting shape changed");
+expect("…in the right order", out, has('<span class="text-base font-semibold"><h3><span class="font-bold"><strong>t</strong></span></h3></span>'), "nesting shape changed");
 
 // --- bidi controls are stripped at the TEXT-NODE hook (src/utils/bidiText.js).
 // Written with String.fromCodePoint, never pasted: these characters are
@@ -246,7 +246,7 @@ expect("…also when the address sits in a nested tag", out, lacks("<a "), "nest
 out = render('<p><a href="https://www.example.com/a">https://example.com/a</a> <a href="https://example.com/x">לפרטים</a></p>', "");
 console.log(`\n[26e] ${out}`);
 expect("same host (www. aside) and plain-word text stay links", out, (o) => (o.match(/<a /g) || []).length === 2, "expected 2 anchors");
-expect("…the plain-word one shows its real host", out, has('לפרטים</a></span> <span class="text-xs text-gray-500" dir="ltr">(example.com)</span>'), "host not shown");
+expect("…the plain-word one shows its real host", out, has('לפרטים</a></span> <span class="text-xs text-gray-500 dark:text-slate-400" dir="ltr">(example.com)</span>'), "host not shown");
 expect("…the one whose text is its address does not", out, (o) => (o.match(/\(example\.com\)/g) || []).length === 1, "host shown twice");
 
 // Addresses written in ways the text check does not recognise (20.11 review):

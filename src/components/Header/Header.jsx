@@ -49,8 +49,11 @@ const Header = () => {
     }, 300);
   };
 
+  // z-40 on the header, not z-10: the phone drawer lives inside it, and at z-10
+  // the hero (also z-10, later in the page) painted its title over the open
+  // menu. Still under the message dialog (z-50).
   return (
-    <header className="sticky top-0 right-0 z-10 bg-white dark:bg-slate-800 border-[#0000001a] dark:border-white/10 border-solid shadow-navShadow">
+    <header className="sticky top-0 right-0 z-40 bg-white dark:bg-slate-800 border-[#0000001a] dark:border-white/10 border-solid shadow-navShadow">
       <div
         className={
           isModalOpen
@@ -63,7 +66,7 @@ const Header = () => {
       <nav className="flex h-24 items-center justify-between p-10 ">
         <NavLink to={ROOT}>
           {/* <NavBarLogo /> */}
-          <img src={kibbutzLogo} alt="כיסופים — דף הבית" className="h-20" />
+          <img src={kibbutzLogo} alt="כיסופים — דף הבית" className="h-20 dark:rounded-xl dark:bg-white/90 dark:px-2" />
         </NavLink>
         <div className="hidden md:flex items-center gap-3 shrink-0">
           <NavBarContact />

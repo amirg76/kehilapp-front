@@ -6,7 +6,7 @@ const LoginImage = () => {
   }
   return (
     <div
-      className="md:w-1/2 bg-cover bg-center"
+      className="md:w-1/2 bg-cover bg-center dark:brightness-50"
       style={{ backgroundImage: `url(${leftImg})` }}
     ></div>
   );

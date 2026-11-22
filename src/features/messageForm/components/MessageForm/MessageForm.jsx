@@ -17,7 +17,10 @@ const MessageForm = ({ isModalOpen, toggleModal, categories }) => {
   return (
     <>
       <ModalDialog isOpen={isModalOpen} onClose={closeMessageModal}>
-        <div className="bg-[#EFEFEF] w-screen sm:w-[700px] h-[100vh] xxs:h-fit p-8 sm:rounded-3xl shadow-md ">
+        {/* The panel needs its own dark colours: the fields inside it already
+            had dark: variants, so in dark mode they turned dark on a light
+            panel (seen 22.11.2026). */}
+        <div className="bg-[#EFEFEF] dark:bg-slate-800 text-gray-900 dark:text-slate-100 w-screen sm:w-[700px] h-[100vh] xxs:h-fit p-8 sm:rounded-3xl shadow-md ">
           {!isLoading && (
             <MessageFormHeader closeMessageModal={closeMessageModal} />
           )}

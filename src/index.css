@@ -35,25 +35,34 @@
   margin-block: 0.25rem;
   color: #475569;
 }
+.dark .message-body blockquote {
+  border-inline-start-color: #64748b;
+  color: #cbd5e1;
+}
 .message-body s {
   text-decoration: line-through;
 }
 
 /* Editor only: the display styles headings and links through linkify.jsx
-   (STYLED_TAGS); these match those sizes inside the editor. */
+   (STYLED_TAGS); these match those sizes inside the editor. Headings inside a
+   message stay smaller than the message's own title (text-xl on the card). */
 .message-editor-content h2 {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
   font-weight: 600;
 }
 .message-editor-content h3 {
-  font-size: 1.5rem;
-  line-height: 2rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 600;
 }
+/* blue-600 / blue-300: blue-500 was 3.7:1 on white and about 4:1 on slate. */
 .message-editor-content a {
-  color: #3b82f6;
+  color: #2563eb;
   text-decoration: underline;
+}
+.dark .message-editor-content a {
+  color: #93c5fd;
 }
 .message-editor-content {
   overflow-y: auto;

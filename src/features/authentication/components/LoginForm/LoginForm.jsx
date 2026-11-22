@@ -177,7 +177,7 @@ const LoginForm = () => {
     <>
       {/* Login Form on the Right */}
       <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 px-4 md:w-1/2">
-        <img className="w-[11em] mb-2" src={logoKisufim} alt="כיסופים" />
+        <img className="w-[11em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
         {/* Login Form */}
         <form
           className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg"
@@ -188,13 +188,16 @@ const LoginForm = () => {
             כניסה לחשבונך
           </h2>
 
+          {/* dark:!bg-slate-800 on the inputs: the floating label sits half on
+              the card and half on the input, so the input takes the card's
+              colour and the label's backing no longer shows as a dark box. */}
           <InputCmp
             label="אימייל"
             name="email"
             value={userCredentials.email}
             onChange={handleChange}
             onBlur={validateForm}
-            inputStyle="py-3 dark:bg-slate-700 dark:text-slate-100"
+            inputStyle="py-3 dark:!bg-slate-800 dark:text-slate-100"
             containerStyle="flex flex-col"
             labelStyle="relative w-fit bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 top-[10px] right-[10px] px-2"
           />
@@ -206,7 +209,7 @@ const LoginForm = () => {
             value={userCredentials.password}
             onChange={handleChange}
             onBlur={validateForm}
-            inputStyle="py-3 dark:bg-slate-700 dark:text-slate-100"
+            inputStyle="py-3 dark:!bg-slate-800 dark:text-slate-100"
             containerStyle="flex flex-col"
             labelStyle="relative w-fit bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 top-[10px] right-[10px] px-2"
           />
@@ -220,7 +223,14 @@ const LoginForm = () => {
             isDisabled={isButtonDisabled}
             onClick={handleSubmit}
             style="w-full py-3 h-[52px]"
+            aria-describedby={isButtonDisabled && !isLoading ? "login-submit-hint" : undefined}
           />
+          {/* A disabled button says nothing about why. */}
+          {isButtonDisabled && !isLoading && (
+            <p id="login-submit-hint" className="mt-2 text-center text-sm text-slate-600 dark:text-slate-300">
+              הכפתור יופעל אחרי שימולאו אימייל וסיסמה תקינים.
+            </p>
+          )}
 
           {isUnverified && (
             <div className="mt-4 rounded-xl border border-amber-300 dark:border-amber-500/40 bg-amber-50 dark:bg-amber-900/20 p-4 text-center">

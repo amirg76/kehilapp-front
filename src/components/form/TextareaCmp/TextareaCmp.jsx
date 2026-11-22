@@ -74,11 +74,11 @@ const TextareaCmp = ({ label, labelStyle, name, value, onChange, placeholder, st
           {label}
         </span>
       )}
-      <div className="message-editor relative rounded-md border border-gray-300 bg-white focus-within:border-primary-700">
+      <div className="message-editor relative rounded-md border border-gray-300 bg-white text-gray-900 focus-within:border-primary-700 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:focus-within:border-primary-400">
         {editor && <EditorToolbar editor={editor} linkOpen={linkOpen} setLinkOpen={setLinkOpen} />}
         <div className="relative">
           {isEmpty && placeholder && (
-            <span aria-hidden="true" className="pointer-events-none absolute right-3 top-2 text-gray-400">
+            <span aria-hidden="true" className="pointer-events-none absolute right-3 top-2 text-gray-500 dark:text-slate-400">
               {placeholder}
             </span>
           )}

@@ -18,7 +18,7 @@ const HeroSection = ({ currentCategory }) => {
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       {/* readability scrim */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-black/10 dark:from-black/70 dark:via-black/40 dark:to-black/30" />
       <div className="relative z-10 flex h-full flex-col items-center justify-end pb-8 px-6">
         <h1 className="text-4xl sm:text-6xl font-bold text-white text-center drop-shadow-lg text-balance">
           {title}

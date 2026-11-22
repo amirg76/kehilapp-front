@@ -29,7 +29,7 @@ const FilePreview = ({ attachmentType, attachmentUrl, attachmentName }) => {
       <DocumentPreview
         fileUrl={attachmentUrl}
         fileName={attachmentName}
-        style="bg-[#facbc8]"
+        style="bg-[#facbc8] dark:bg-slate-700"
       >
         <PdfIcon />
       </DocumentPreview>
