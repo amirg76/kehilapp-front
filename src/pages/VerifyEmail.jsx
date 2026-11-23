@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import logoKisufim from "@features/authentication/components/img/logo-kibbuttz-transpert.png";
+import AuthLogoHeader from "@features/authentication/components/AuthLogoHeader/AuthLogoHeader";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
 import Spinner from "@components/ui/Spinner/Spinner";
 
@@ -43,7 +43,7 @@ const VerifyEmail = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-[#EFEFEF] to-white dark:from-slate-900 dark:to-slate-800 px-4">
-      <img className="w-[11em] mb-4 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
+      <AuthLogoHeader className="mb-4" />
       <div className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg text-center">
         {status === "missing" && (
           <>

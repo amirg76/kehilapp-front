@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 
-import logoKisufim from "../img/logo-kibbuttz-transpert.png";
+import AuthLogoHeader from "../AuthLogoHeader/AuthLogoHeader";
 
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
@@ -160,7 +160,7 @@ const RegisterForm = () => {
     const sendFailed = !emailDelivered && !demoVerifyLink;
     return (
       <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 px-4 md:w-1/2">
-        <img className="w-[11em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
+        <AuthLogoHeader />
         <div className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg text-center">
           <div className="text-5xl mb-4">{sendFailed ? "⚠️" : "📧"}</div>
           <h1 className="mb-3 dark:text-slate-100">
@@ -218,8 +218,8 @@ const RegisterForm = () => {
   // scrolled on a 1080p screen (22.11.2026; e2e/desktopScroll.spec.js). The
   // phone layout is unchanged.
   return (
-    <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 md:py-6 px-4 md:w-1/2">
-      <img className="w-[11em] md:w-[8em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
+    <div className="flex flex-col justify-center items-center min-h-[100vh] pt-4 pb-10 md:py-6 px-4 md:w-1/2">
+      <AuthLogoHeader logoClassName="w-[11em] md:w-[8em]" />
       <form
         className="w-full max-w-md px-8 py-10 md:py-7 bg-white dark:bg-slate-800 rounded-2xl shadow-lg"
         onSubmit={handleSubmit}

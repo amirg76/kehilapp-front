@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { authActions } from "@store/slices/authSlice";
 import { useDispatch } from "react-redux";
 
-import logoKisufim from "../img/logo-kibbuttz-transpert.png";
+import AuthLogoHeader from "../AuthLogoHeader/AuthLogoHeader";
 
 import InputCmp from "@components/form/InputCmp/InputCmp";
 import ButtonCmp from "@components/form/ButtonCmp/ButtonCmp";
@@ -176,8 +176,10 @@ const LoginForm = () => {
   return (
     <>
       {/* Login Form on the Right */}
-      <div className="flex flex-col justify-center items-center min-h-[100vh] py-10 px-4 md:w-1/2">
-        <img className="w-[11em] mb-2 dark:rounded-xl dark:bg-white/90 dark:p-2" src={logoKisufim} alt="כיסופים" />
+      {/* pt-4: the back link at the top is itself spaced (py-2); with py-10 the
+          phone page scrolled a few pixels once the link was added. */}
+      <div className="flex flex-col justify-center items-center min-h-[100vh] pt-4 pb-10 px-4 md:w-1/2">
+        <AuthLogoHeader />
         {/* Login Form */}
         <form
           className="w-full max-w-md px-8 py-10 bg-white dark:bg-slate-800 rounded-2xl shadow-lg"
