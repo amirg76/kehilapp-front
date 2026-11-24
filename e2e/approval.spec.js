@@ -70,16 +70,17 @@ test('unapproved member sees public-only + pending banner; admin approval unlock
   expect(verificationToken, 'dev mailer must return the token (see registration/mailer)').toBeTruthy();
 
   const verifyResult = await page.evaluate(
-    async ({ api, token }) => {
+    async ({ api, token, password }) => {
       const r = await fetch(`${api}/api/auth/verify-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ token }),
+        // verify-email asks for the password chosen at registration.
+        body: JSON.stringify({ token, password }),
       });
       return { status: r.status, body: await r.json() };
     },
-    { api: API, token: verificationToken },
+    { api: API, token: verificationToken, password: TEST_PASSWORD },
   );
   expect(verifyResult.status, JSON.stringify(verifyResult.body)).toBe(200);
 
