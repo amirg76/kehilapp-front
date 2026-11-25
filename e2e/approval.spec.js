@@ -84,8 +84,8 @@ test('unapproved member sees public-only + pending banner; admin approval unlock
   );
   expect(verifyResult.status, JSON.stringify(verifyResult.body)).toBe(200);
 
-  // 2. Log in through the real UI (verified-but-unapproved logs in normally —
-  // 403 in LoginForm only means "email not verified", not "not approved").
+  // 2. Log in through the real UI (verified-but-unapproved logs in normally;
+  // "not approved" is never a login refusal).
   await page.getByLabel(/email|אימייל|מייל/i).fill(email);
   await page.getByLabel(/password|סיסמ/i).fill(TEST_PASSWORD);
   await page.getByRole('button', { name: /log ?in|התחבר|כניסה/i }).click();

@@ -34,8 +34,12 @@ const LoginForm = () => {
   });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
-  // A 403 means the account exists but the email isn't verified — surface a
-  // dedicated "resend verification" action instead of the generic error.
+  // Offered after EVERY refused login (25.11.2026). The server used to answer
+  // an unverified account 403, and that told a stranger who is a verified
+  // member (register with the address and your own password, then log in with
+  // it). Now an unverified account gets the same 401 as a wrong password, so
+  // the page cannot tell them apart either; the resend answer is the same for
+  // every address, so offering it always reveals nothing.
   const [isUnverified, setIsUnverified] = useState(false);
   const [resendMessage, setResendMessage] = useState("");
 
@@ -93,8 +97,11 @@ const LoginForm = () => {
       httpService.post(RESEND_VERIFICATION_URL, {
         email: userCredentials.email,
       }),
+    // Conditional on purpose: the server says the same for every address.
     onSuccess: () =>
-      setResendMessage("שלחנו מייל אימות חדש. בדוק את תיבת הדואר שלך."),
+      setResendMessage(
+        "אם הכתובת רשומה ועוד לא אומתה, שלחנו אליה מייל אימות חדש. בדוק את תיבת הדואר."
+      ),
     onError: () =>
       setResendMessage("שליחת מייל האימות נכשלה, נסה שוב מאוחר יותר."),
   });
@@ -128,16 +135,12 @@ const LoginForm = () => {
   const updateErrorMessage = (err) => {
     const status = err?.response?.status;
     if (status === 401) {
-      setIsUnverified(false);
+      // Wrong email, wrong password, or an address not yet verified: the
+      // server answers all three alike, so the page offers the resend too.
       // Login is by email, so the message names the field the form actually
       // has — there is no "username" anywhere in this app.
-      setLoginErrorMessage("האימייל או הסיסמה שגויים");
-    } else if (status === 403) {
-      // Account exists but email is unverified.
       setIsUnverified(true);
-      setLoginErrorMessage(
-        "המייל שלך עדיין לא אומת. בדוק את תיבת הדואר או שלח מייל אימות מחדש."
-      );
+      setLoginErrorMessage("האימייל או הסיסמה שגויים");
     } else if (status === 400) {
       // Now reachable, and it was not before. The field rule above deliberately
       // stops mirroring the server's Joi.string().email(), so an address the
@@ -236,6 +239,9 @@ const LoginForm = () => {
 
           {isUnverified && (
             <div className="mt-4 rounded-xl border border-amber-300 dark:border-amber-500/40 bg-amber-50 dark:bg-amber-900/20 p-4 text-center">
+              <p className="mb-2 text-sm text-slate-700 dark:text-slate-200">
+                נרשמת ועוד לא אימתת את המייל?
+              </p>
               <button
                 type="button"
                 onClick={() => resendVerification()}
