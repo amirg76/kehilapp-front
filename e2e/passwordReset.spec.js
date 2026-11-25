@@ -40,6 +40,18 @@ test('the login page links to "forgot password"', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'שכחת את הסיסמה?' })).toBeVisible();
 });
 
+// The form is Hebrew (RTL): the link belongs on the right, under the start of
+// the password field. It first shipped on the left (build-17).
+test('the "forgot password" link sits on the right, under the password field', async ({ page }) => {
+  await mockApi(page);
+  await page.goto('/login');
+  const link = await page.getByRole('link', { name: 'שכחת את הסיסמה?' }).boundingBox();
+  const field = await page.locator('input[name="password"]').boundingBox();
+  const fieldRight = field.x + field.width;
+  expect(fieldRight - (link.x + link.width)).toBeLessThan(24);
+  expect(link.x - field.x).toBeGreaterThan(field.width / 2);
+});
+
 test('the request sends the typed address and shows the same conditional message', async ({ page }) => {
   const bodies = await mockApi(page);
   await page.goto('/forgot-password');

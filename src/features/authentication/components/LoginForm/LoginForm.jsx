@@ -221,7 +221,9 @@ const LoginForm = () => {
           <ErrorMessage msg={error.password} style="h-[20px] mr-3" />
           {/* mb-2 on the link + the old mb-6 gap shrunk: the phone page was
               tuned not to scroll (see the pt-4 note above). */}
-          <div className="mb-2 text-left">
+          {/* Right-aligned: the form is Hebrew (RTL), so the link sits under the
+              start of the password field, where the eye already is. */}
+          <div className="mb-2 mr-3 text-right">
             <Link
               to={FORGOT_PASSWORD}
               className="text-sm text-primary-700 dark:text-primary-300 hover:underline"
