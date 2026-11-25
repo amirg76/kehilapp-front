@@ -22,7 +22,7 @@ async function mockApi(page) {
   });
 }
 
-for (const path of ['/login', '/register', '/verify-email']) {
+for (const path of ['/login', '/register', '/verify-email', '/forgot-password', '/reset-password']) {
   test(`${path}: the back link leads to the message board`, async ({ page }) => {
     await mockApi(page);
     // Opened directly, as from an email: there is no history to go back to.

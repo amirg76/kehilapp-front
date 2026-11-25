@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import routeConfig from "@routes/routeConfig";
 // routes constants
-import { LOGIN, REGISTER, VERIFY_EMAIL } from "@routes/routeConstants.js";
+import { LOGIN, REGISTER, VERIFY_EMAIL, FORGOT_PASSWORD, RESET_PASSWORD } from "@routes/routeConstants.js";
 // redux
 import { authActions } from "@store/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -108,9 +108,9 @@ const App = () => {
       cancelled = true;
     };
   }, []);
-  // The auth screens (login/register/verify) render full-bleed without the app
+  // The auth screens (login/register/verify/password reset) render full-bleed without the app
   // chrome, matching the existing login layout.
-  const hideHeaderOn = [LOGIN, REGISTER, VERIFY_EMAIL];
+  const hideHeaderOn = [LOGIN, REGISTER, VERIFY_EMAIL, FORGOT_PASSWORD, RESET_PASSWORD];
   // w-full, not w-screen: 100vw includes a classic (Windows) scrollbar, so every
   // page with a vertical scrollbar was 15px too wide and scrolled sideways
   // (measured on the live site, 22.11.2026; e2e/desktopScroll.spec.js).

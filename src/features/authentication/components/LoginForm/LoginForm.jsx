@@ -19,7 +19,7 @@ import LoadingPage from "../../../../components/ui/LoadingPage/LoadingPage";
 import Spinner from "../../../../components/ui/Spinner/Spinner";
 
 // routeConstants
-import { MESSAGES, REGISTER } from "@routes/routeConstants";
+import { FORGOT_PASSWORD, MESSAGES, REGISTER } from "@routes/routeConstants";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -218,7 +218,17 @@ const LoginForm = () => {
             containerStyle="flex flex-col"
             labelStyle="relative w-fit bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 top-[10px] right-[10px] px-2"
           />
-          <ErrorMessage msg={error.password} style="h-[20px] mb-6 mr-3" />
+          <ErrorMessage msg={error.password} style="h-[20px] mr-3" />
+          {/* mb-2 on the link + the old mb-6 gap shrunk: the phone page was
+              tuned not to scroll (see the pt-4 note above). */}
+          <div className="mb-2 text-left">
+            <Link
+              to={FORGOT_PASSWORD}
+              className="text-sm text-primary-700 dark:text-primary-300 hover:underline"
+            >
+              שכחת את הסיסמה?
+            </Link>
+          </div>
           <ErrorMessage
             msg={isLoading ? "" : loginErrorMessage}
             style="h-[25px] mr-3 text-center"

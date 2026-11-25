@@ -6,4 +6,6 @@ export const ROOT = "/";
 export const LOGIN = "/login";
 export const REGISTER = "/register";
 export const VERIFY_EMAIL = "/verify-email";
+export const FORGOT_PASSWORD = "/forgot-password";
+export const RESET_PASSWORD = "/reset-password";
 export const MESSAGES = "/messages";

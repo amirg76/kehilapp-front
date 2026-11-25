@@ -2,12 +2,22 @@ import React from "react";
 // routing
 import { Navigate } from "react-router-dom";
 // routes constants
-import { ROOT, MESSAGES, LOGIN, REGISTER, VERIFY_EMAIL } from "@routes/routeConstants.js";
+import {
+  ROOT,
+  MESSAGES,
+  LOGIN,
+  REGISTER,
+  VERIFY_EMAIL,
+  FORGOT_PASSWORD,
+  RESET_PASSWORD,
+} from "@routes/routeConstants.js";
 // pages
 import Messages from "@pages/Messages.jsx";
 import Login from "@pages/Login.jsx";
 import Register from "@pages/Register.jsx";
 import VerifyEmail from "@pages/VerifyEmail.jsx";
+import ForgotPassword from "@pages/ForgotPassword.jsx";
+import ResetPassword from "@pages/ResetPassword.jsx";
 import NotFound from "@pages/NotFound.jsx";
 
 const routeConfig = [
@@ -33,6 +43,18 @@ const routeConfig = [
     // Email verification Page (reads ?token= query param)
     path: VERIFY_EMAIL,
     element: <VerifyEmail />,
+    exact: true,
+  },
+  {
+    // Forgot password: asks for the address, always answers the same
+    path: FORGOT_PASSWORD,
+    element: <ForgotPassword />,
+    exact: true,
+  },
+  {
+    // New password from the emailed link (reads ?token= query param)
+    path: RESET_PASSWORD,
+    element: <ResetPassword />,
     exact: true,
   },
   {

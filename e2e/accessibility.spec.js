@@ -36,7 +36,7 @@ test('login page has no serious accessibility violations @a11y', async ({ page }
 // with the back link (22.11.2026): its first colour, primary-700 on the page's
 // #EFEFEF, was 4.35:1, under the 4.5:1 that 14px text needs. Both themes,
 // because each has its own colours.
-for (const path of ['/login', '/register', '/verify-email']) {
+for (const path of ['/login', '/register', '/verify-email', '/forgot-password', '/reset-password']) {
   for (const theme of ['light', 'dark']) {
     test(`${path} (${theme}) has no serious accessibility violations @a11y`, async ({ page }) => {
       await page.addInitScript((t) => { try { localStorage.setItem('theme', t); } catch { /* private mode */ } }, theme);
